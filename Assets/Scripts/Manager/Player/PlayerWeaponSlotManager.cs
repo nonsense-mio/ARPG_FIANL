@@ -74,7 +74,7 @@ namespace HT
             activeModelBomb.transform.position = rightHandSlot.transform.position;
             activeModelBomb.transform.rotation = player.cameraMgr.cameraPivotTransform.rotation;
             activeModelBomb.transform.rotation = Quaternion.Euler (player.cameraMgr.cameraPivotTransform.eulerAngles.x,player.cameraMgr.cameraPivotTransform.eulerAngles.y,0);
-            BombDamageCollider damageCollider = activeModelBomb.GetComponentInChildren<BombDamageCollider>();
+            BombDamageCollider damageCollider = activeModelBomb.GetComponent<BombDamageCollider>();
             //设置炸弹伤害
             damageCollider.explosionDamage = fireBombItem.baseDamage;
             damageCollider.explosionSplashDamage = fireBombItem.explosiveDamage;

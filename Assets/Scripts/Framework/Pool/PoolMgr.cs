@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 /// <summary>
 /// 抽屉对象(池子中的数据)
@@ -12,7 +10,7 @@ public class PoolData
     private int maxNum;
     private GameObject rootObj;
     private string drawerName;
-    
+
     public int Count => dataStack.Count;
     public int UsedCount => usedList.Count;
     public bool NeedCreate => usedList.Count < maxNum;
@@ -20,7 +18,7 @@ public class PoolData
     public PoolData(GameObject root, string name, GameObject usedObj)
     {
         drawerName = name;
-        
+
         if (PoolMgr.isOpenLayout)
         {
             rootObj = new GameObject(name);
@@ -51,11 +49,6 @@ public class PoolData
             usedList.Add(obj);
         }
 
-        IPoolObject[] resetters = obj.GetComponentsInChildren<IPoolObject>(true);
-        for (int i = 0; i < resetters.Length; i++)
-        {
-            resetters[i].ResetInfo();
-        }
 
         obj.SetActive(true);
 
@@ -72,6 +65,9 @@ public class PoolData
     /// <param name="poolRoot">柜子根对象，用于重建抽屉</param>
     public void Push(GameObject obj, GameObject poolRoot)
     {
+        //放入池子之前 先重置对象的数据
+        var poolObj = obj.GetComponent<IPoolObject>();
+        poolObj?.ResetInfo();
         obj.SetActive(false);
         if (PoolMgr.isOpenLayout)
         {
@@ -199,14 +195,6 @@ public class PoolMgr : BaseManager<PoolMgr>
             obj = GameObject.Instantiate(Resources.Load<GameObject>(name));
             obj.name = name;
 
-            // 虽然新对象通常是干净的，但为了逻辑统一，也执行一次重置
-            // 这样可以确保 ResetInfo 里的一些初始化逻辑被执行
-            IPoolObject[] resetters = obj.GetComponentsInChildren<IPoolObject>(true);
-            for (int i = 0; i < resetters.Length; i++)
-            {
-                resetters[i].ResetInfo();
-            }
-
             //创建抽屉
             if (!poolDic.ContainsKey(name))
                 poolDic.Add(name, new PoolData(poolObj, name, obj));
@@ -234,7 +222,7 @@ public class PoolMgr : BaseManager<PoolMgr>
         {
             poolObj = new GameObject("Pool");
         }
-        if(!poolDic.ContainsKey(obj.name))
+        if (!poolDic.ContainsKey(obj.name))
         {
             Debug.LogWarning($"缓存池中不存在名为 {obj.name} 的抽屉，无法放入对象。请确保该对象是通过 PoolMgr 获取的。");
             return;

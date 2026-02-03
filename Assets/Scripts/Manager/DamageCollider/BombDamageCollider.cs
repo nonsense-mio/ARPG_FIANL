@@ -25,15 +25,22 @@ namespace HT
         private void OnCollisionEnter(Collision collision)
         {
             Debug.Log("炸弹撞到了: " + collision.gameObject.name + " | Tag: " + collision.gameObject.tag);
+            CharacterManager hitCharacter = collision.gameObject.GetComponentInParent<CharacterManager>();
+            if (hitCharacter != null && hitCharacter.characterStatsManager.teamIDNumber == teamIDNumber)
+            {
+                return;
+            }
             if (!hasCollided)
             {
                 hasCollided = true;
+                Explode();
                 //将炸弹放回对象池
-                PoolMgr.Instance.PushObj(transform.parent.parent.gameObject);
-                CharacterStatsManager character = collision.gameObject.GetComponent<CharacterStatsManager>();
-                if (character != null && character.teamIDNumber != teamIDNumber)
+                PoolMgr.Instance.PushObj(transform.gameObject);
+                EnemyManager enemyManager = hitCharacter as EnemyManager;
+
+                if (enemyManager != null)
                 {
-                    character.TakeDamage(0, explosionDamage, currentDamageAnimation,characterManager);
+                    enemyManager.characterStatsManager.TakeDamage(0, explosionDamage, currentDamageAnimation, characterManager);
                     Debug.Log(explosionDamage);
                 }
 
@@ -47,9 +54,11 @@ namespace HT
                 CharacterStatsManager character = objectsInExplosion.GetComponent<CharacterStatsManager>();
                 if (character != null && character.teamIDNumber != teamIDNumber)
                 {
-                    character.TakeDamage(0, explosionSplashDamage, currentDamageAnimation,characterManager);
+                    character.TakeDamage(0, explosionSplashDamage, currentDamageAnimation, characterManager);
                 }
             }
+            //从对象池中取出爆炸特效 发布事件
+            EventCenter.Instance.EventTrigger<Transform>(E_EventType.E_BombHit, this.transform);
         }
         //重置炸弹信息
         public void ResetInfo()
@@ -64,9 +73,7 @@ namespace HT
         }
         void OnDisable()
         {
-            Explode();
-            //从对象池中取出爆炸特效 发布事件
-            EventCenter.Instance.EventTrigger<Transform>(E_EventType.E_BombHit, this.transform);
+            //Explode();
         }
     }
 }
