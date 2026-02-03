@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00ad040537773242a6085ae277c7628, type: 3}
+  m_Name: Player Complete
+  m_EditorClassIdentifier: 
+  dialoguePieces:
+  - ID: 01
+    image: {fileID: 0}
+    content: "\u545C\u547C! \u6700\u5927\u7684\u654C\u4EBA\u88AB\u6D88\u706D\u4E86\uFF0C\u8FD9\u662F\u9001\u4F60\u7684\uFF0C\u6211\u548C\u6770\u82E5\u7279\u5148\u56DE\u53BB\u4E86"
+    task: {fileID: 11400000, guid: 3eb1a2aff08f4b54ca06bbef69613300, type: 2}
+    options:
+    - text: "\u597D\u7684\uFF0C\u5F85\u4F1A\u89C1"
+      targetID: 
+      takeQuest: 1
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 5273471645064197340, guid: 44f976400c5662f4291794301038c0d4, type: 3}
+            m_TargetAssemblyTypeName: DialogueActionHelper, Assembly-CSharp
+            m_MethodName: NPCGoHome
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1976832674594900570, guid: 8c3284989524fd048a7624d07f84fb42, type: 3}
+            m_TargetAssemblyTypeName: DialogueActionHelper, Assembly-CSharp
+            m_MethodName: NPCGoHome
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2

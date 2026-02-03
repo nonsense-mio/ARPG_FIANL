@@ -1,0 +1,102 @@
+using System.Collections;
+using System.Collections.Generic;
+using HT;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+
+public class OptionUI : MonoBehaviour, IPoolObject
+{
+    public Text optionText;
+
+    private Button optionButton;
+
+    private DialoguePiece currentPiece;
+
+    private bool takeQuest;
+
+    private string nextPieceID;
+    
+    private UnityEvent onSelectAction;
+
+    private void Awake()
+    {
+        optionButton = GetComponent<Button>();
+        optionButton.onClick.AddListener(OnOptionClick);
+    }
+
+    public void InitOption(DialoguePiece piece, DialogueOption option)
+    {
+        currentPiece = piece;
+        optionText.text = option.text;
+        nextPieceID = option.targetID;
+        takeQuest = option.takeQuest;
+        onSelectAction = option.onSelectAction;
+    }
+
+    /// <summary>
+    /// 池对象重置方法
+    /// </summary>
+    public void ResetInfo()
+    {
+        currentPiece = null;
+        nextPieceID = null;
+        optionText.text = "";
+        onSelectAction = null;
+
+        // 重置Transform状态，让LayoutGroup能正确排列
+        transform.localScale = Vector3.one;
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        // 重置RectTransform的锚点位置
+        RectTransform rectTransform = transform as RectTransform;
+        if (rectTransform != null)
+        {
+            rectTransform.anchoredPosition = Vector2.zero;
+        }
+    }
+
+    //点击选项事件
+    public void OnOptionClick()
+    {
+        // 触发自定义事件
+        onSelectAction?.Invoke();
+        
+        //当前对话片段有任务
+        if (currentPiece.task != null && takeQuest)
+        {
+
+            //添加到任务列表里
+            //判断是否有任务
+            if (TaskManager.Instance.HaveTask(currentPiece.task))
+            {
+                //判断是否完成任务
+                if (TaskManager.Instance.GetTask(currentPiece.task).IsCompleted)
+                {
+                    //触发任务提交事件，通知任务系统和UI更新 发布奖励
+                    EventCenter.Instance.EventTrigger<TaskData_SO>(E_EventType.E_Task_TurnedIn, currentPiece.task);
+                }
+                
+            }
+            //如果没有任务，添加任务
+            else
+            {
+                EventCenter.Instance.EventTrigger<TaskData_SO>(E_EventType.E_Task_Started, currentPiece.task);
+            }
+        }
+        //根据选项的目标片段ID跳转到对应的对话片段
+        if (string.IsNullOrEmpty(nextPieceID))
+        {
+            UIMgr.Instance.HidePanel<DialoguePanel>();
+            UIMgr.Instance.ShowPanel<GamePanel>();
+        }
+        else
+        {
+            //获取当前面板并跳转到目标对话片段
+            UIMgr.Instance.GetPanel<DialoguePanel>((panel) =>
+            {
+                panel.JumpToPiece(nextPieceID);
+            });
+        }
+    }
+}

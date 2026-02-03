@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00ad040537773242a6085ae277c7628, type: 3}
+  m_Name: Level Up
+  m_EditorClassIdentifier: 
+  dialoguePieces:
+  - ID: 01
+    image: {fileID: 0}
+    content: "\u60F3\u53D8\u5F97\u66F4\u5F3A\u5417\uFF1F\u62FF\u654C\u4EBA\u7684\u7CBE\u9B44\u6765\u6362"
+    task: {fileID: 0}
+    options:
+    - text: "\u6211\u60F3\u53D8\u5F3A\uFF01"
+      targetID: 02
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 4163543842288550839, guid: 4c22b901b362cb54eb476d2e7064d7c8, type: 3}
+            m_TargetAssemblyTypeName: DialogueActionHelper, Assembly-CSharp
+            m_MethodName: OpenLevelUpPanel
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - text: "\u4E0D\u611F\u5174\u8DA3..."
+      targetID: 
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+  - ID: 02
+    image: {fileID: 0}
+    content: "\u4E0D\u9519\uFF0C\u4F46\u4F60\u6254\u9700\u8981\u66F4\u591A\u7684\u7ECF\u9A8C"
+    task: {fileID: 0}
+    options:
+    - text: ....
+      targetID: 
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []

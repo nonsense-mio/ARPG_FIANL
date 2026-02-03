@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00ad040537773242a6085ae277c7628, type: 3}
+  m_Name: Player Start
+  m_EditorClassIdentifier: 
+  dialoguePieces:
+  - ID: 01
+    image: {fileID: 0}
+    content: "\u4F60\u5DF2\u7ECF\u8BC1\u660E\u4E86\u4F60\u7684\u5B9E\u529B\uFF0C\u63A5\u4E0B\u6765\u662F\u6211\u4EEC\u7684\u8BF7\u6C42..."
+    task: {fileID: 0}
+    options:
+    - text: "\u4EC0\u4E48\u4E8B\uFF1F"
+      targetID: 02
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+    - text: "\u6211\u73B0\u5728\u5F88\u5FD9..."
+      targetID: 03
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+  - ID: 02
+    image: {fileID: 0}
+    content: "\u4E3A\u4E86\u91CD\u65B0\u5EFA\u8BBE\u738B\u56FD\uFF0C\u6211\u4EEC\u5FC5\u987B\u6E05\u626B\u4E00\u5207\u969C\u788D\uFF0C\u53EA\u6709\u5C06\u90A3\u80A1\u529B\u91CF\u9A71\u9010\u51FA\u53BB\uFF0C\u8FD9\u91CC\u624D\u4F1A\u6162\u6162\u8D8B\u4E8E\u5B89\u5B81\uFF0C\u6211\u9080\u8BF7\u4F60\u52A0\u5165\u6211\u4EEC\u4E00\u8D77\u8BA8\u4F10\u4ED6\uFF0C\u4F60\u51C6\u5907\u597D\u4E86\u5417"
+    task: {fileID: 11400000, guid: 3eb1a2aff08f4b54ca06bbef69613300, type: 2}
+    options:
+    - text: "\u73B0\u5728\u5C31\u51FA\u53D1"
+      targetID: 
+      takeQuest: 1
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 5273471645064197340, guid: 44f976400c5662f4291794301038c0d4, type: 3}
+            m_TargetAssemblyTypeName: DialogueActionHelper, Assembly-CSharp
+            m_MethodName: NPCGOFollowPlayer
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 1976832674594900570, guid: 8c3284989524fd048a7624d07f84fb42, type: 3}
+            m_TargetAssemblyTypeName: DialogueActionHelper, Assembly-CSharp
+            m_MethodName: NPCGOFollowPlayer
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+          - m_Target: {fileID: 5273471645064197340, guid: 44f976400c5662f4291794301038c0d4, type: 3}
+            m_TargetAssemblyTypeName: DialogueActionHelper, Assembly-CSharp
+            m_MethodName: SpawnBoss
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - text: "\u6211\u8FD8\u6CA1\u51C6\u5907\u597D..."
+      targetID: 03
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+  - ID: 03
+    image: {fileID: 0}
+    content: "\u597D\u5427\uFF0C\u6216\u8BB8\u6211\u53EF\u4EE5\u518D\u627E\u522B\u4EBA"
+    task: {fileID: 0}
+    options: []

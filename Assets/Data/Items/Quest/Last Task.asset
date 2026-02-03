@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 933612e98e913ed4b9a91f3676990872, type: 3}
+  m_Name: Last Task
+  m_EditorClassIdentifier: 
+  taskName: "\u91CD\u5EFA\u5BB6\u56ED"
+  description: "\u8BA9\u6211\u4EEC\u4E00\u8D77\u91CD\u5EFA\u8FD9\u4E2A\u5730\u65B9\u5427~"
+  isStarted: 0
+  isCompleted: 0
+  isTurnedIn: 0
+  requireList:
+  - name: "\u65E0"
+    requireAmount: 0
+    currentAmount: 0
+  rewardList:
+  - {fileID: 11400000, guid: 59a12a05302d57d41bf5d57b199dce0f, type: 2}

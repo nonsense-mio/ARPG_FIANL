@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 933612e98e913ed4b9a91f3676990872, type: 3}
+  m_Name: Second Task
+  m_EditorClassIdentifier: 
+  taskName: "\u7EC8\u5C40\u4E4B\u6218"
+  description: "\u4F60\u5DF2\u7ECF\u8BC1\u660E\u4E86\u4F60\u7684\u5B9E\u529B\uFF0C\u548C\u6211\u4EEC\u5E76\u80A9\u4F5C\u6218\uFF0C\u4E00\u8D77\u5C06\u8FD9\u90AA\u6076\u7684\u529B\u91CF\u9A71\u9010\u51FA\u53BB\uFF0C\u91CD\u632F\u738B\u56FD"
+  isStarted: 0
+  isCompleted: 0
+  isTurnedIn: 0
+  requireList:
+  - name: Evil God
+    requireAmount: 1
+    currentAmount: 0
+  rewardList:
+  - {fileID: 11400000, guid: 59f86a5c56ec4f14cb97399f8afd1d46, type: 2}
+  - {fileID: 11400000, guid: f88f5ca4797b8ef4bbf3e791450721f8, type: 2}

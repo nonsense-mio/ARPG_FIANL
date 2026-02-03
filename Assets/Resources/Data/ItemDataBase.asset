@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 363339d84d716c849bbc25c3ca25c8b5, type: 3}
+  m_Name: ItemDataBase
+  m_EditorClassIdentifier: 
+  weaponItems:
+  - {fileID: 11400000, guid: 8b3c4b16d553e4f4882f4a4108d58915, type: 2}
+  - {fileID: 11400000, guid: f88f5ca4797b8ef4bbf3e791450721f8, type: 2}
+  - {fileID: 11400000, guid: b37d517fdf0a1b34e9157282ef4acb6d, type: 2}
+  - {fileID: 11400000, guid: 84f33770ccd4aa9488f55f739976d9fe, type: 2}
+  - {fileID: 11400000, guid: d69aa9018889873419da0e3dc89409b9, type: 2}
+  - {fileID: 11400000, guid: 33b728841ca7a2f4baec5dd187a172f3, type: 2}
+  - {fileID: 11400000, guid: 390bab8593d718645af74cb9f4dc2701, type: 2}
+  - {fileID: 11400000, guid: 59f86a5c56ec4f14cb97399f8afd1d46, type: 2}
+  - {fileID: 11400000, guid: ba8829af68573a8449ce76a99fcf0de2, type: 2}
+  helmetItems:
+  - {fileID: 11400000, guid: 1b1f0c8e83b47e6489d97b681bdec541, type: 2}
+  - {fileID: 11400000, guid: 16c647d5d5de2db4a9d2ef951680b4ae, type: 2}
+  - {fileID: 11400000, guid: 3634fc8dbf3279647b48e1d8e419c257, type: 2}
+  bodyItems:
+  - {fileID: 11400000, guid: 56ab6fdee7eb6f84298fbc12ec96847c, type: 2}
+  - {fileID: 11400000, guid: 3cc49ee505151404b8e784573d26da9f, type: 2}
+  - {fileID: 11400000, guid: 8cd2bfc91beec5e4fa3e32df3f72d868, type: 2}
+  legItems:
+  - {fileID: 11400000, guid: fbee61d2900895f4cb7301c51fa4ab8b, type: 2}
+  - {fileID: 11400000, guid: 05999f7f9d6572c45bb12fd5837314f6, type: 2}
+  - {fileID: 11400000, guid: 76fe2435ff402d84fa6bb81c384a5a46, type: 2}
+  handItems:
+  - {fileID: 11400000, guid: 09f30819b8d37f14eb070c1829de60e9, type: 2}
+  - {fileID: 11400000, guid: 28baad53c1bcba9499681ebf57b5b50d, type: 2}
+  - {fileID: 11400000, guid: c780baa01e28e3140934d9189476a404, type: 2}
+  consumableItems:
+  - {fileID: 11400000, guid: ddaf11e51e614174b989c72d2c9b6e2b, type: 2}
+  - {fileID: 11400000, guid: 9f8b101a6ad551f43ae1d31999040f17, type: 2}
+  - {fileID: 11400000, guid: 855538d7e05b31d41b05d5befd47305e, type: 2}
+  - {fileID: 11400000, guid: f1547897346ee9246892a0a8fb5dcf2e, type: 2}
+  - {fileID: 11400000, guid: 0db4efea9b0a93845a418d4783bfe413, type: 2}
+  spellItems:
+  - {fileID: 11400000, guid: 434d27d0cac07af48b6c952e6614e4ee, type: 2}
+  - {fileID: 11400000, guid: 7430c33f9e599eb429e2d5b77feaf16d, type: 2}
+  - {fileID: 11400000, guid: ccc38692af4ef014eb4b1f973e4717ae, type: 2}

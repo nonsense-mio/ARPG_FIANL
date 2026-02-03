@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d89a89b58a60c543b3872114632cddb, type: 3}
+  m_Name: Unarmed Helmet Equipment
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 0}
+  itemName: 
+  itemID: 2000
+  physicalDefense: 0
+  magicDefense: 0
+  poisonResistance: 0
+  fireResistance: 0
+  helmetModelName: Chr_Head_Male_00

@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 1900311618
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0f17273ab1a56508d552d96d4f256718
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 0f17273ab1a56508d552d96d4f256718
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Editor/ArtRes/music/Home.wav
+- Assets/Editor/ArtRes/music/BeginScene.wav
+- Assets/Editor/ArtRes/music/Boss.wav
+- Assets/Editor/ArtRes/music/Win.wav
+- Assets/Editor/ArtRes/music/BGM1.mp3
+- Assets/Editor/ArtRes/music/GameScene1.wav
+Dependencies: []

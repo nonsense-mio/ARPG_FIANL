@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00ad040537773242a6085ae277c7628, type: 3}
+  m_Name: Player Start
+  m_EditorClassIdentifier: 
+  dialoguePieces:
+  - ID: 01
+    image: {fileID: 0}
+    content: "\u4F60\u597D\uFF0C\u5192\u9669\u8005\uFF01\u8BF7\u5BB9\u8BB8\u6211\u4ECB\u7ECD\u4E0B\u81EA\u5DF1\uFF0C\u6211\u662F\u5E0C\u745E\uFF0C\u90A3\u8FB9\u7684\u90A3\u4E2A\u5BB6\u4F19\u662F\u6770\u82E5\u7279\uFF0C\u81EA\u4ECE\u8FD9\u4E2A\u738B\u56FD\u9668\u843D\u540E\uFF0C\u6211\u4EEC\u5C31\u5949\u547D\u575A\u5B88\u5728\u8FD9\u91CC...\u4F60\u5E94\u8BE5\u4E5F\u662F\u88AB\u6D3E\u8FC7\u6765\u7684\u628A"
+    task: {fileID: 0}
+    options:
+    - text: "\u662F\u7684\uFF0C\u9700\u8981\u6211\u505A\u4EC0\u4E48\uFF1F"
+      targetID: 02
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+    - text: "\u4E0D\uFF0C\u6211\u53EA\u662F\u8DEF\u8FC7..."
+      targetID: 
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+  - ID: 02
+    image: {fileID: 0}
+    content: "\u9996\u5148\u4F60\u5F97\u5411\u6211\u4EEC\u8FD9\u8BC1\u660E\u4F60\u7684\u5B9E\u529B\uFF0C\u5148\u6311\u51E0\u4EF6\u8D81\u624B\u7684\u6B66\u5668\u5427"
+    task: {fileID: 0}
+    options:
+    - text: "\u628A\u4F60\u6709\u7684\u90FD\u62FF\u51FA\u6765"
+      targetID: 03
+      takeQuest: 1
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+    - text: "\u6211\u4E0D\u9700\u8981"
+      targetID: 06
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+  - ID: 03
+    image: {fileID: 0}
+    content: "\u4E1C\u897F\u90FD\u5728\u7BB1\u5B50\u91CC\uFF0C\u4F60\u60F3\u8981\u7684\u90FD\u80FD\u627E\u5230\uFF0C\u8FD8\u6709\u4E00\u4E9B\u71AC\u5236\u7684\u836F\u6C34\u548C\u5236\u4F5C\u7684\u70B8\u5F39\uFF0C\u8FD9\u6709\u52A9\u4E8E\u4F60\u5728\u6218\u6597\u4E2D\u66F4\u597D\u7684\u8868\u73B0"
+    task: {fileID: 0}
+    options:
+    - text: "\u6709\u5251\u6CB9\u5417"
+      targetID: 04
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+  - ID: 04
+    image: {fileID: 0}
+    content: "\u5251\u6CB9\u6682\u65F6\u6CA1\u6709\uFF0C\u4E0D\u8FC7\u4F60\u53EF\u4EE5\u53BB\u627E\u90A3\u8FB9\u7684\u6770\u82E5\u7279\uFF0C\u4ED6\u53EF\u4EE5\u5E2E\u4F60\u53D8\u5F97\u66F4\u5F3A"
+    task: {fileID: 0}
+    options: []
+  - ID: 05
+    image: {fileID: 0}
+    content: "\u7B49\u4F60\u51C6\u5907\u597D\u540E\u5C31\u5F97\u5411\u6211\u4EEC\u5C55\u793A\u5B9E\u529B\u4E86\uFF0C\u5916\u9762\u5C31\u6709\u51E0\u53EA\u602A\u7269\uFF0C\u4F60\u77E5\u9053\u8BE5\u505A\u4EC0\u4E48"
+    task: {fileID: 11400000, guid: 9c96ae5b3c62b85439b4f3f65f8972ed, type: 2}
+    options:
+    - text: "\u653E\u5FC3\uFF0C\u4EA4\u7ED9\u6211\u5427"
+      targetID: 
+      takeQuest: 1
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 5273471645064197340, guid: 44f976400c5662f4291794301038c0d4, type: 3}
+            m_TargetAssemblyTypeName: DialogueActionHelper, Assembly-CSharp
+            m_MethodName: Task1EnemySpawn
+            m_Mode: 1
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+    - text: "\u6211\u7B49\u4F1A\u513F\u518D\u6765"
+      targetID: 06
+      takeQuest: 0
+      onSelectAction:
+        m_PersistentCalls:
+          m_Calls: []
+  - ID: 06
+    image: {fileID: 0}
+    content: "\u597D\u5427\uFF0C\u6211\u4E00\u76F4\u5C31\u5728\u8FD9\uFF0C\u4F60\u6709\u95EE\u9898\u968F\u65F6\u8FC7\u6765\u627E\u6211"
+    task: {fileID: 0}
+    options: []

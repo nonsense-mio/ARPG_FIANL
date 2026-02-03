@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f714a14d729b3f4696ebf10bce12b82, type: 3}
+  m_Name: Focus Flask
+  m_EditorClassIdentifier: 
+  itemIcon: {fileID: 21300000, guid: f2d8bc066f216634ab84704aa2f3aac8, type: 3}
+  itemName: "\u84DD\u6C34"
+  itemID: 6002
+  maxItemAmount: 10
+  currentItemAmount: 10
+  itemModel: {fileID: 8271658604237798204, guid: 8e0b850d479c6bc45a11b06147cafe9a, type: 3}
+  itemModelName: Item/Potion_Blue
+  consumeAnimation: Drink
+  isInteracting: 0
+  estusFlask: 1
+  ashenFlask: 0
+  detoxFlask: 0
+  healthRecoverAmount: 0
+  focusRecoverAmount: 100

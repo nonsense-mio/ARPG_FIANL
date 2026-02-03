@@ -1,0 +1,39 @@
+ManifestFileVersion: 0
+CRC: 606157341
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2e4ae468923b5dbf2f0dca2869cd4667
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 2e4ae468923b5dbf2f0dca2869cd4667
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Editor/ArtRes/sound/slash1.wav
+- Assets/Editor/ArtRes/sound/hero_nail_art_charge_complete.wav
+- Assets/Editor/ArtRes/sound/damage2.wav
+- Assets/Editor/ArtRes/sound/hero_nail_art_great_slash.wav
+- Assets/Editor/ArtRes/sound/heal.wav
+- Assets/Editor/ArtRes/sound/slash3.wav
+- Assets/Editor/ArtRes/sound/attack1.mp3
+- Assets/Editor/ArtRes/sound/interact.wav
+- Assets/Editor/ArtRes/sound/fireball.wav
+- Assets/Editor/ArtRes/sound/damage1.wav
+- Assets/Editor/ArtRes/sound/hero_nail_art_charge_initiate.wav
+- Assets/Editor/ArtRes/sound/fireball_hit.wav
+- Assets/Editor/ArtRes/sound/saveGame.wav
+- Assets/Editor/ArtRes/sound/phase_shift.wav
+- Assets/Editor/ArtRes/sound/activeFire.wav
+- Assets/Editor/ArtRes/sound/bomb_explosion.wav
+- Assets/Editor/ArtRes/sound/stalactite_death.wav
+- Assets/Editor/ArtRes/sound/UI_Select.wav
+- Assets/Editor/ArtRes/sound/UI_Confirm.wav
+- Assets/Editor/ArtRes/sound/slash2.wav
+Dependencies: []
