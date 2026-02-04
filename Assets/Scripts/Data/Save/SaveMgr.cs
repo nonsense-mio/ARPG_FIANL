@@ -1,5 +1,7 @@
 using System.IO;
 using UnityEngine;
+using QFramework;
+using ARPG;
 
 /// <summary>
 /// 存档管理器：负责多槽位存档的读写
@@ -38,7 +40,11 @@ public class SaveMgr : BaseManager<SaveMgr>
         CurrentGameDataMgr.Instance.playerInventoryData = new PlayerInventoryData();
         CurrentGameDataMgr.Instance.taskData = new TaskData();
 
+        // 同步到 QFramework Model 层
+        SyncToModels();
         SaveCurrentGame();
+
+
     }
 
     /// <summary>
@@ -64,6 +70,9 @@ public class SaveMgr : BaseManager<SaveMgr>
         // 恢复游戏时长
         CurrentPlayTime = SlotInfo.GetSlot(slotIndex)?.playTimeSeconds ?? 0f;
 
+        // 同步到 QFramework Model 层
+        SyncToModels();
+
         JsonMgr.Instance.SaveData(SlotInfo, SLOT_INFO_FILE);
         return true;
     }
@@ -79,13 +88,16 @@ public class SaveMgr : BaseManager<SaveMgr>
             return;
         }
 
+        // 从 QFramework Model 层导出数据
+        SyncFromModels();
+
         // 先收集任务数据到 CurrentGameDataMgr
         TaskSaveHelper.SaveAllTaskData();
 
         // 更新槽位元数据（用于UI显示）
         SaveSlotData slot = SlotInfo.GetSlot(CurrentSlotIndex);
         PlayerData pd = CurrentGameDataMgr.Instance.playerData;
-        
+
         slot.isEmpty = false;
         slot.playerName = pd.playerName;
         slot.playerLevel = pd.playerLevel;
@@ -147,4 +159,32 @@ public class SaveMgr : BaseManager<SaveMgr>
         string path = $"{Application.persistentDataPath}/{fileName}.json";
         if (File.Exists(path)) File.Delete(path);
     }
+
+    #region QFramework Model 同步
+
+    /// <summary>
+    /// 将 CurrentGameDataMgr 数据同步到 QFramework Model 层
+    /// </summary>
+    private void SyncToModels()
+    {
+        var playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
+        playerModel.ImportFromPlayerData(CurrentGameDataMgr.Instance.playerData);
+
+        var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
+        inventoryModel.ImportFromInventoryData(CurrentGameDataMgr.Instance.playerInventoryData);
+    }
+
+    /// <summary>
+    /// 从 QFramework Model 层导出数据到 CurrentGameDataMgr
+    /// </summary>
+    private void SyncFromModels()
+    {
+        var playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
+        playerModel.ExportToPlayerData(CurrentGameDataMgr.Instance.playerData);
+
+        var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
+        inventoryModel.ExportToInventoryData(CurrentGameDataMgr.Instance.playerInventoryData);
+    }
+
+    #endregion
 }

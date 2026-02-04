@@ -11,7 +11,7 @@ namespace HT
 public class ABResMgr : BaseManager<ABResMgr>
 {
     //如果是true 会通过EditorResMgr加载 如果是false 通过ABMgr加载
-    private bool isDebug = false;
+    private bool isDebug = true;
     private ABResMgr() { }
 
     public void LoadResAsync<T>(string abName,string resName,UnityAction<T> callBack,bool isSync = false)where T : Object

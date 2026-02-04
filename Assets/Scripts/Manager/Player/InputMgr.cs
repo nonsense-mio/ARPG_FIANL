@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -72,8 +73,8 @@ namespace HT
         {
             //if (enable)
             //{
-                // 恢复输入前，清空所有缓存的输入状态
-                ClearAllInputs();
+            // 恢复输入前，清空所有缓存的输入状态
+            ClearAllInputs();
             //}
             canProcessInput = enable;
         }
@@ -189,7 +190,7 @@ namespace HT
             {
                 return;
             }
-                
+
             HandleMoveInput();
             HandleRollInput();
 

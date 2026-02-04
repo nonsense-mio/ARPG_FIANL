@@ -10,7 +10,7 @@ using UnityEngine.Events;
 //AB包相关API
 //委托
 //lambda表达式
-//单例模式基类——>观看Unity小框架视频 进行学习
+//单例模式基类
 public class ABMgr : SingletonAutoMono<ABMgr>
 {
     //主包

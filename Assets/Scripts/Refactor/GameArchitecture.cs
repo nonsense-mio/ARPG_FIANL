@@ -7,8 +7,12 @@ namespace ARPG
     {
         protected override void Init()
         {
-            // 注册 存储工具
+            // 注册 Utility
             RegisterUtility<IStorage>(new JsonStorage());
+
+            // 注册 Model
+            RegisterModel<IPlayerModel>(new PlayerModel());
+            RegisterModel<IInventoryModel>(new InventoryModel());
         }
     }
 }

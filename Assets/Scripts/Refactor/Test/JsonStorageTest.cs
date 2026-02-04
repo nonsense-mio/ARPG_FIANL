@@ -15,12 +15,13 @@ public class JsonStorageTest : MonoBehaviour, IController
     void Start()
     {
         // 测试保存
-        var testData = new TestData { name = "Test", value = 100 };
-        this.GetUtility<IStorage>().SaveData(testData, "test");
+        // var testData = new TestData { name = "Test", value = 100 };
+        // this.GetUtility<IStorage>().SaveData(testData, "test");
 
-        // 测试加载
-        var loaded = this.GetUtility<IStorage>().LoadData<TestData>("test");
-        Debug.Log($"Loaded: {loaded.name}, {loaded.value}");
+        // // 测试加载
+        // var loaded = this.GetUtility<IStorage>().LoadData<TestData>("test");
+        // Debug.Log($"Loaded: {loaded.name}, {loaded.value}");
+
     }
 
     // Update is called once per frame
