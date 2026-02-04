@@ -9,6 +9,7 @@ public class CurrentGameDataMgr : BaseManager<CurrentGameDataMgr>
     public PlayerData playerData;
     public PlayerInventoryData playerInventoryData;
     public TaskData taskData;
+    public SceneStateData sceneStateData;
     public MusicData musicData;
 
     private CurrentGameDataMgr()
@@ -16,6 +17,7 @@ public class CurrentGameDataMgr : BaseManager<CurrentGameDataMgr>
         playerData = new PlayerData();
         playerInventoryData = new PlayerInventoryData();
         taskData = new TaskData();
+        sceneStateData = new SceneStateData();
         musicData = JsonMgr.Instance.LoadData<MusicData>("MusicData");
     }
     

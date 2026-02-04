@@ -12,6 +12,7 @@ public class SaveMgr : BaseManager<SaveMgr>
     private const string PLAYER_DATA_FILE = "PlayerData";
     private const string INVENTORY_DATA_FILE = "PlayerInventoryData";
     private const string TASK_DATA_FILE = "TaskData";
+    private const string SCENE_STATE_FILE = "SceneStateData";
 
     public int CurrentSlotIndex { get; private set; } = -1;
     public SaveSlotInfo SlotInfo { get; private set; }
@@ -39,6 +40,7 @@ public class SaveMgr : BaseManager<SaveMgr>
         CurrentGameDataMgr.Instance.playerData = new PlayerData { playerName = playerName };
         CurrentGameDataMgr.Instance.playerInventoryData = new PlayerInventoryData();
         CurrentGameDataMgr.Instance.taskData = new TaskData();
+        CurrentGameDataMgr.Instance.sceneStateData = new SceneStateData();
 
         // 同步到 QFramework Model 层
         SyncToModels();
@@ -66,6 +68,7 @@ public class SaveMgr : BaseManager<SaveMgr>
         CurrentGameDataMgr.Instance.playerData = JsonMgr.Instance.LoadData<PlayerData>(PLAYER_DATA_FILE + suffix);
         CurrentGameDataMgr.Instance.playerInventoryData = JsonMgr.Instance.LoadData<PlayerInventoryData>(INVENTORY_DATA_FILE + suffix);
         CurrentGameDataMgr.Instance.taskData = JsonMgr.Instance.LoadData<TaskData>(TASK_DATA_FILE + suffix);
+        CurrentGameDataMgr.Instance.sceneStateData = JsonMgr.Instance.LoadData<SceneStateData>(SCENE_STATE_FILE + suffix);
 
         // 恢复游戏时长
         CurrentPlayTime = SlotInfo.GetSlot(slotIndex)?.playTimeSeconds ?? 0f;
@@ -89,7 +92,7 @@ public class SaveMgr : BaseManager<SaveMgr>
         }
 
         // 从 QFramework Model 层导出数据
-        SyncFromModels();
+        //SyncFromModels();
 
         // 先收集任务数据到 CurrentGameDataMgr
         TaskSaveHelper.SaveAllTaskData();
@@ -115,6 +118,7 @@ public class SaveMgr : BaseManager<SaveMgr>
         JsonMgr.Instance.SaveData(CurrentGameDataMgr.Instance.playerData, PLAYER_DATA_FILE + suffix);
         JsonMgr.Instance.SaveData(CurrentGameDataMgr.Instance.playerInventoryData, INVENTORY_DATA_FILE + suffix);
         JsonMgr.Instance.SaveData(CurrentGameDataMgr.Instance.taskData, TASK_DATA_FILE + suffix);
+        JsonMgr.Instance.SaveData(CurrentGameDataMgr.Instance.sceneStateData, SCENE_STATE_FILE + suffix);
         JsonMgr.Instance.SaveData(SlotInfo, SLOT_INFO_FILE);
     }
 
@@ -130,6 +134,7 @@ public class SaveMgr : BaseManager<SaveMgr>
         DeleteFile(PLAYER_DATA_FILE + suffix);
         DeleteFile(INVENTORY_DATA_FILE + suffix);
         DeleteFile(TASK_DATA_FILE + suffix);
+        DeleteFile(SCENE_STATE_FILE + suffix);
 
         if (SlotInfo.lastUsedSlot == slotIndex)
             SlotInfo.lastUsedSlot = -1;
@@ -172,6 +177,12 @@ public class SaveMgr : BaseManager<SaveMgr>
 
         var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
         inventoryModel.ImportFromInventoryData(CurrentGameDataMgr.Instance.playerInventoryData);
+
+        var taskModel = GameArchitecture.Interface.GetModel<ITaskModel>();
+        taskModel.ImportFromTaskData(CurrentGameDataMgr.Instance.taskData);
+
+        var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+        sceneStateModel.ImportFromSceneStateData(CurrentGameDataMgr.Instance.sceneStateData);
     }
 
     /// <summary>
@@ -184,6 +195,12 @@ public class SaveMgr : BaseManager<SaveMgr>
 
         var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
         inventoryModel.ExportToInventoryData(CurrentGameDataMgr.Instance.playerInventoryData);
+
+        var taskModel = GameArchitecture.Interface.GetModel<ITaskModel>();
+        taskModel.ExportToTaskData(CurrentGameDataMgr.Instance.taskData);
+
+        var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+        sceneStateModel.ExportToSceneStateData(CurrentGameDataMgr.Instance.sceneStateData);
     }
 
     #endregion

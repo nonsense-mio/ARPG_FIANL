@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using QFramework;
 
 namespace ARPG
@@ -36,38 +35,11 @@ namespace ARPG
         public BindableProperty<string> LastRestedBonfireID { get; } = new BindableProperty<string>("");
         #endregion
 
-        #region 世界状态 (内部字典)
-        private Dictionary<string, bool> chestStates = new Dictionary<string, bool>();
-        private Dictionary<string, bool> bonfireStates = new Dictionary<string, bool>();
-        #endregion
-
         protected override void OnInit()
         {
             // Model 初始化时不需要特别操作
             // 数据通过 ImportFromPlayerData 加载
         }
-
-        #region 世界状态操作
-        public void SetChestOpened(string chestID, bool opened)
-        {
-            chestStates[chestID] = opened;
-        }
-
-        public bool IsChestOpened(string chestID)
-        {
-            return chestStates.TryGetValue(chestID, out bool opened) && opened;
-        }
-
-        public void SetBonfireActivated(string bonfireID, bool activated)
-        {
-            bonfireStates[bonfireID] = activated;
-        }
-
-        public bool IsBonfireActivated(string bonfireID)
-        {
-            return bonfireStates.TryGetValue(bonfireID, out bool activated) && activated;
-        }
-        #endregion
 
         #region 数据导入导出
         public void ImportFromPlayerData(PlayerData data)
@@ -99,21 +71,6 @@ namespace ARPG
             RespawnY.Value = data.respawnY;
             RespawnZ.Value = data.respawnZ;
             LastRestedBonfireID.Value = data.lastRestedBonfireID ?? "";
-
-            // 世界状态
-            chestStates.Clear();
-            if (data.chestDic != null)
-            {
-                foreach (var kvp in data.chestDic)
-                    chestStates[kvp.Key] = kvp.Value;
-            }
-
-            bonfireStates.Clear();
-            if (data.bonfireDic != null)
-            {
-                foreach (var kvp in data.bonfireDic)
-                    bonfireStates[kvp.Key] = kvp.Value;
-            }
         }
 
         public void ExportToPlayerData(PlayerData data)
@@ -145,15 +102,6 @@ namespace ARPG
             data.respawnY = RespawnY.Value;
             data.respawnZ = RespawnZ.Value;
             data.lastRestedBonfireID = LastRestedBonfireID.Value;
-
-            // 世界状态
-            data.chestDic.Clear();
-            foreach (var kvp in chestStates)
-                data.chestDic[kvp.Key] = kvp.Value;
-
-            data.bonfireDic.Clear();
-            foreach (var kvp in bonfireStates)
-                data.bonfireDic[kvp.Key] = kvp.Value;
         }
         #endregion
     }

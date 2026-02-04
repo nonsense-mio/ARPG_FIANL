@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using QFramework;
+using ARPG;
 
 namespace HT
 {
@@ -22,15 +24,9 @@ namespace HT
 
         private void Start()
         {
-            // 初始化篝火状态字典
-            var data = CurrentGameDataMgr.Instance.playerData;
-            if (!data.bonfireDic.ContainsKey(bonfireID))
-            {
-                data.bonfireDic.Add(bonfireID, false);
-            }
-
-            // 从存档读取激活状态
-            hasBeenActived = data.bonfireDic[bonfireID];
+            // 从 SceneStateModel 读取篝火激活状态
+            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            hasBeenActived = sceneStateModel.IsBonfireActivated(bonfireID);
 
             // 根据激活状态设置表现
             UpdateBonfireVisual();
@@ -96,16 +92,9 @@ namespace HT
             // 更新视觉表现
             UpdateBonfireVisual();
 
-            // 更新存档数据
-            var data = CurrentGameDataMgr.Instance.playerData;
-            if (data.bonfireDic.ContainsKey(bonfireID))
-            {
-                data.bonfireDic[bonfireID] = true;
-            }
-            else
-            {
-                data.bonfireDic.Add(bonfireID, true);
-            }
+            // 更新 SceneStateModel 篝火状态
+            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            sceneStateModel.SetBonfireActivated(bonfireID, true);
         }
 
         private void SetAsRespawnPoint(PlayerData data)

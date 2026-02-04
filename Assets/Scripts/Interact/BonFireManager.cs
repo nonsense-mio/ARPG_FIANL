@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using QFramework;
+using ARPG;
 
 namespace HT
 {
@@ -69,14 +71,15 @@ namespace HT
         /// </summary>
         public List<string> GetActivatedBonfireIDs()
         {
-            var data = CurrentGameDataMgr.Instance.playerData;
             var activatedList = new List<string>();
 
-            foreach (var kvp in data.bonfireDic)
+            // 从 SceneStateModel 获取已激活的篝火
+            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            foreach (var id in bonfireRegistry.Keys)
             {
-                if (kvp.Value)
+                if (sceneStateModel.IsBonfireActivated(id))
                 {
-                    activatedList.Add(kvp.Key);
+                    activatedList.Add(id);
                 }
             }
 

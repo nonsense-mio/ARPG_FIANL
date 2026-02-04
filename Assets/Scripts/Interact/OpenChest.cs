@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using QFramework;
+using ARPG;
 
 namespace HT
 {
@@ -22,17 +24,14 @@ namespace HT
             base.Awake();
             interactionPrompt = "打开宝箱";
             animator = GetComponent<Animator>();
-
         }
 
         private void Start()
         {
-            //如果字典里没有该宝箱ID 则添加进去 并设置为未开启状态
-            if (!CurrentGameDataMgr.Instance.playerData.chestDic.ContainsKey(chestID))
-            {
-                CurrentGameDataMgr.Instance.playerData.chestDic.Add(chestID, false);
-            }
-            hasOpened = CurrentGameDataMgr.Instance.playerData.chestDic[chestID];
+            // 从 SceneStateModel 读取宝箱状态
+            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            hasOpened = sceneStateModel.IsChestOpened(chestID);
+
             if (hasOpened)
             {
                 animator.enabled = false;
@@ -56,13 +55,11 @@ namespace HT
             playerManager.OpenChestInteraction(playerStandingPostion);
             //开启协程 生成宝箱里的物品
             StartCoroutine(SpawnItemInChest());
-            if (CurrentGameDataMgr.Instance.playerData.chestDic.ContainsKey(chestID))
-            {
-                CurrentGameDataMgr.Instance.playerData.chestDic.Remove(chestID);
-            }
-            CurrentGameDataMgr.Instance.playerData.chestDic.Add(chestID, true);
-            hasOpened = true;
 
+            // 更新 SceneStateModel 宝箱状态
+            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            sceneStateModel.SetChestOpened(chestID, true);
+            hasOpened = true;
         }
 
         private IEnumerator SpawnItemInChest()

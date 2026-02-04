@@ -37,28 +37,6 @@ namespace ARPG
         BindableProperty<string> LastRestedBonfireID { get; }
         #endregion
 
-        #region 世界状态
-        /// <summary>
-        /// 设置宝箱开启状态
-        /// </summary>
-        void SetChestOpened(string chestID, bool opened);
-
-        /// <summary>
-        /// 获取宝箱是否已开启
-        /// </summary>
-        bool IsChestOpened(string chestID);
-
-        /// <summary>
-        /// 设置篝火激活状态
-        /// </summary>
-        void SetBonfireActivated(string bonfireID, bool activated);
-
-        /// <summary>
-        /// 获取篝火是否已激活
-        /// </summary>
-        bool IsBonfireActivated(string bonfireID);
-        #endregion
-
         #region 数据导入导出 (与存档系统集成)
         /// <summary>
         /// 从 PlayerData 导入数据 (存档加载时调用)

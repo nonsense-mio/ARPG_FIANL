@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XLua;
+using QFramework;
+using ARPG;
+
 namespace HT
 {
     [Hotfix]
     public class BossFightManager : MonoBehaviour
     {
+        [SerializeField] private string bossID;
         public EnemyManager boss;
         public List<FogWall> fogWalls = new List<FogWall>();
         public PassThroughFogWall passThroughFogWall;
@@ -14,6 +18,24 @@ namespace HT
         public bool bossFightIsActive;
         public bool bossHasBeenAwakened;
         public bool bossHasBeenDefeated;
+
+        void Start()
+        {
+            // 从 SceneStateModel 读取 Boss 击败状态
+            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            bossHasBeenDefeated = sceneStateModel.IsBossDefeated(bossID);
+
+            // 如果 Boss 已被击败，禁用 Boss 和相关组件
+            if (bossHasBeenDefeated)
+            {
+                if (boss != null) boss.gameObject.SetActive(false);
+                foreach (var fogWall in fogWalls)
+                {
+                    if (fogWall != null) fogWall.ActivateFogWall(false);
+                }
+            }
+        }
+
         void OnEnable()
         {
             EventCenter.Instance.AddEventListener<CharacterManager>(E_EventType.E_Character_Death, OnCharacterDeath);
@@ -63,7 +85,7 @@ namespace HT
 
             bossFightIsActive = false;
             bossHasBeenDefeated = true;
-            
+
             // 关雾墙
             foreach (var fogWall in fogWalls)
             {
@@ -72,6 +94,10 @@ namespace HT
 
             // 隐藏 HUD
             EventCenter.Instance.EventTrigger<BossHudData?>(E_EventType.E_BossHudChanged, null);
+
+            // 更新 SceneStateModel Boss 击败状态
+            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            sceneStateModel.SetBossDefeated(bossID, true);
         }
 
 

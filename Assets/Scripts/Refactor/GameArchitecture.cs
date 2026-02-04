@@ -13,6 +13,8 @@ namespace ARPG
             // 注册 Model
             RegisterModel<IPlayerModel>(new PlayerModel());
             RegisterModel<IInventoryModel>(new InventoryModel());
+            RegisterModel<ITaskModel>(new TaskModel());
+            RegisterModel<ISceneStateModel>(new SceneStateModel());
         }
     }
 }
