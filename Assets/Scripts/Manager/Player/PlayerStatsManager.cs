@@ -29,7 +29,6 @@ namespace HT
             currentFocus = maxFocus;
 
             SyncAllStatsToModel();
-            EventCenter.Instance.EventTrigger(E_EventType.E_Player_Init_UI);
         }
 
         void Start()
@@ -44,10 +43,8 @@ namespace HT
             currentFocus = maxFocus;
 
             SyncAllStatsToModel();
-            //发布玩家初始化UI事件
-            EventCenter.Instance.EventTrigger(E_EventType.E_Player_Init_UI);
         }
-
+        //同步状态数据 到playerModel
         private void SyncAllStatsToModel()
         {
             if (playerModel == null) return;
@@ -85,11 +82,6 @@ namespace HT
             if (player.isDead)
                 return;
 
-            // 状态事件：给 UI/数值联动用
-            EventCenter.Instance.EventTrigger<StatChanged>(
-                E_EventType.E_Player_StatChanged,
-                new StatChanged(E_PlayerStatType.Health, currentHealth, maxHealth)
-            );
             if (playerModel != null) { playerModel.CurrentHP.Value = currentHealth; }
 
             player.playerAnimatorManager.PlayTargetAnimation(damageAnimation, true);
@@ -107,11 +99,6 @@ namespace HT
         {
             base.TakeDamageNoAnimation(physicalDamage, fireDamage, enemyCharacterDamagingMe);
 
-            // 状态事件：给 UI/数值联动用
-            EventCenter.Instance.EventTrigger<StatChanged>(
-                E_EventType.E_Player_StatChanged,
-                new StatChanged(E_PlayerStatType.Health, currentHealth, maxHealth)
-            );
             if (playerModel != null) { playerModel.CurrentHP.Value = currentHealth; }
             if (currentHealth <= 0)
             {
@@ -125,11 +112,6 @@ namespace HT
             if (player.isDead)
                 return;
 
-            // 状态事件：给 UI/数值联动用
-            EventCenter.Instance.EventTrigger<StatChanged>(
-                E_EventType.E_Player_StatChanged,
-                new StatChanged(E_PlayerStatType.Health, currentHealth, maxHealth)
-            );
             if (playerModel != null) { playerModel.CurrentHP.Value = currentHealth; }
             if (currentHealth <= 0)
             {
@@ -148,12 +130,6 @@ namespace HT
             {
                 currentStamina = 0;
             }
-            //发布玩家体力消耗事件
-            // 状态事件
-            EventCenter.Instance.EventTrigger<StatChanged>(
-                E_EventType.E_Player_StatChanged,
-                new StatChanged(E_PlayerStatType.Stamina, (int)currentStamina, (int)maxStamina)
-            );
             if (playerModel != null) { playerModel.CurrentStamina.Value = (int)currentStamina; }
         }
         public void DeductSprintingStamina(float stamina)
@@ -165,12 +141,6 @@ namespace HT
                 {
                     currentStamina -= stamina;
                     sprintingTimer = 0;
-                    //发布玩家体力消耗事件
-                    // 状态事件
-                    EventCenter.Instance.EventTrigger<StatChanged>(
-                        E_EventType.E_Player_StatChanged,
-                        new StatChanged(E_PlayerStatType.Stamina, (int)currentStamina, (int)maxStamina)
-                    );
                     if (playerModel != null) { playerModel.CurrentStamina.Value = (int)currentStamina; }
                 }
             }
@@ -203,14 +173,7 @@ namespace HT
                     {
                         currentStamina += staminaRegenerationAmount * Time.deltaTime;
                     }
-                    // 状态事件
-                    EventCenter.Instance.EventTrigger<StatChanged>(
-                        E_EventType.E_Player_StatChanged,
-                        new StatChanged(E_PlayerStatType.Stamina, (int)currentStamina, (int)maxStamina)
-                    );
                     if (playerModel != null) { playerModel.CurrentStamina.Value = (int)currentStamina; }
-
-
                 }
             }
 
@@ -223,12 +186,6 @@ namespace HT
         public override void HealCharacter(int healAmount)
         {
             base.HealCharacter(healAmount);
-            //发布玩家更新生命值事件
-            // 状态事件：给 UI/数值联动用
-            EventCenter.Instance.EventTrigger<StatChanged>(
-                E_EventType.E_Player_StatChanged,
-                new StatChanged(E_PlayerStatType.Health, currentHealth, maxHealth)
-            );
             if (playerModel != null) { playerModel.CurrentHP.Value = currentHealth; }
         }
         /// <summary>
@@ -243,11 +200,6 @@ namespace HT
                 currentFocus = 0;
             }
             //发布玩家专注消耗事件
-            // 状态事件
-            EventCenter.Instance.EventTrigger<StatChanged>(
-                E_EventType.E_Player_StatChanged,
-                new StatChanged(E_PlayerStatType.Focus, (int)currentFocus, (int)maxFocus)
-            );
             if (playerModel != null) { playerModel.CurrentFocus.Value = (int)currentFocus; }
         }
         public void AddFocusPoints(int focusPoints)
@@ -257,11 +209,6 @@ namespace HT
             {
                 currentFocus = maxFocus;
             }
-            // 状态事件
-            EventCenter.Instance.EventTrigger<StatChanged>(
-                E_EventType.E_Player_StatChanged,
-                new StatChanged(E_PlayerStatType.Focus, (int)currentFocus, (int)maxFocus)
-            );
             if (playerModel != null) { playerModel.CurrentFocus.Value = (int)currentFocus; }
         }
 
@@ -271,7 +218,6 @@ namespace HT
             if (teamIDNumber == enemy.characterStatsManager.teamIDNumber)
                 return;
             currentSoulCount += enemy.characterStatsManager.soulsAwardedOnDeath;
-            EventCenter.Instance.EventTrigger(E_EventType.E_Player_Update_SoulCount_UI);
             if (playerModel != null) { playerModel.CurrentSoulCount.Value = currentSoulCount; }
         }
         public void SpendSouls(int amount)
@@ -279,7 +225,6 @@ namespace HT
             currentSoulCount -= amount;
             if (currentSoulCount < 0)
                 currentSoulCount = 0;
-            EventCenter.Instance.EventTrigger(E_EventType.E_Player_Update_SoulCount_UI);
             if (playerModel != null) { playerModel.CurrentSoulCount.Value = currentSoulCount; }
         }
 

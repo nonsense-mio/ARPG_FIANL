@@ -10,19 +10,6 @@ namespace HT
     public abstract class BasePanel : ARPGController
     {
         /// <summary>
-        /// UI 依赖的玩家门面（由外部在 ShowPanel/GetPanel 时注入）
-        /// </summary>
-        protected IPlayerUIFacade playerFacade;
-
-        /// <summary>
-        /// 外部注入门面：面板需要玩家数据/行为时调用
-        /// </summary>
-        public virtual void Bind(IPlayerUIFacade facade)
-        {
-            playerFacade = facade;
-        }
-
-        /// <summary>
         /// 用于存储所有要用到的UI控件、用里氏替换原则 父类装子类
         /// </summary>
         protected Dictionary<string, UIBehaviour> controlDic = new Dictionary<string, UIBehaviour>();

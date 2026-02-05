@@ -14,8 +14,6 @@ public enum E_EventType
     E_Character_Damage,
     //玩家喝药事件 —— 参数：
     E_Player_DrinkPotion,
-    //玩家治疗法术事件 —— 参数：
-    E_Player_HealSpell,
     //玩家施法前摇事件 —— 参数：
     E_Player_WarmUpSpell,
     //玩家施法事件 —— 参数：
@@ -23,11 +21,6 @@ public enum E_EventType
     //玩家花费灵魂事件 —— 参数：
     E_Player_SpendSouls,
 
-    // 玩家数值变化（状态事件）—— 参数：StatChanged
-    E_Player_StatChanged,
-
-    //初始化玩家UI事件 —— 参数：
-    E_Player_Init_UI,
     //更新玩家灵魂数量UI事件 —— 参数：
     E_Player_Update_SoulCount_UI,
     // //更新快捷栏UI事件 —— 参数：
@@ -42,10 +35,6 @@ public enum E_EventType
     E_FireBallHit,
     //炸弹命中事件 —— 参数：
     E_BombHit,
-    E_ChangeRightWeapon,
-    E_ChangeLeftWeapon,
-    E_ChangeConsumable,
-    E_ChangeSpell,
 
     E_Character_Death,
     E_BossHudChanged,

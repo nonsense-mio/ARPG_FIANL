@@ -502,7 +502,6 @@ namespace HT
                 d_Pad_Right = false;
                 player.playerInventoryManager.ChangeRightWeapon();
                 player.playerWeaponSlotManager.LoadBothWeaponsOnSlots();
-                EventCenter.Instance.EventTrigger(E_EventType.E_ChangeRightWeapon);
                 var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
                 inventoryModel.CurrentRightWeaponIndex.Value = player.playerInventoryManager.currentRightWeaponIndex;
             }
@@ -511,7 +510,6 @@ namespace HT
                 d_Pad_Left = false;
                 player.playerInventoryManager.ChangeLeftWeapon();
                 player.playerWeaponSlotManager.LoadBothWeaponsOnSlots();
-                EventCenter.Instance.EventTrigger(E_EventType.E_ChangeLeftWeapon);
                 var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
                 inventoryModel.CurrentLeftWeaponIndex.Value = player.playerInventoryManager.currentLeftWeaponIndex;
             }
@@ -519,7 +517,6 @@ namespace HT
             {
                 d_Pad_Up = false;
                 player.playerInventoryManager.ChangeConsumable();
-                EventCenter.Instance.EventTrigger(E_EventType.E_ChangeConsumable);
                 var inv = GameArchitecture.Interface.GetModel<IInventoryModel>();
                 inv.CurrentConsumableIndex.Value = player.playerInventoryManager.currentConsumableIndex;
             }
@@ -527,7 +524,6 @@ namespace HT
             {
                 d_Pad_Down = false;
                 player.playerInventoryManager.ChangeSpell();
-                EventCenter.Instance.EventTrigger(E_EventType.E_ChangeSpell);
                 var inv = GameArchitecture.Interface.GetModel<IInventoryModel>();
                 inv.CurrentSpellIndex.Value = player.playerInventoryManager.currentSpellIndex;
             }
