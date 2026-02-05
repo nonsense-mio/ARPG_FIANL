@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -246,6 +248,13 @@ namespace HT
             inv.ChangeRightWeapon();
             inv.ChangeConsumable();
             inv.ChangeSpell();
+
+            // Change* 方法会推进索引（因为保存时做了 -1 偏移），同步回 Model 层
+            var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
+            inventoryModel.CurrentRightWeaponIndex.Value = inv.currentRightWeaponIndex;
+            inventoryModel.CurrentLeftWeaponIndex.Value = inv.currentLeftWeaponIndex;
+            inventoryModel.CurrentConsumableIndex.Value = inv.currentConsumableIndex;
+            inventoryModel.CurrentSpellIndex.Value = inv.currentSpellIndex;
         }
 
         #endregion
