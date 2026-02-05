@@ -1,8 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 using UnityEngine.UI;
+
 namespace HT
 {
     public class EquipPanel : BasePanel
@@ -11,18 +13,16 @@ namespace HT
         private Image armorGroup;
         private Image scGroup;
         public List<BagItem> equipSlotList = new List<BagItem>();
+
+        private IInventoryModel inventoryModel;
+
         protected override void Awake()
         {
             base.Awake();
             weaponGroup = GetControl<Image>("weaponGroup");
             armorGroup = GetControl<Image>("armorGroup");
             scGroup = GetControl<Image>("scGroup");
-
-        }
-        private void EnsureFacade()
-        {
-            if (playerFacade == null)
-                Debug.LogError($"{nameof(EquipPanel)} 未绑定 playerFacade，请在 ShowPanel/GetPanel 回调里调用 panel.Bind(facade)");
+            inventoryModel = this.GetModel<IInventoryModel>();
         }
 
         /// <summary>
@@ -30,7 +30,6 @@ namespace HT
         /// </summary>
         public void Refresh()
         {
-            EnsureFacade();
             LoadItemImage();
         }
 
@@ -45,8 +44,6 @@ namespace HT
                 obj.transform.localRotation = Quaternion.identity;
                 BagItem bagItem = obj.GetComponent<BagItem>();
                 equipSlotList.Add(bagItem);
-
-
             }
             for (int i = 0; i < 4; i++)
             {
@@ -57,8 +54,6 @@ namespace HT
                 obj.transform.localRotation = Quaternion.identity;
                 BagItem bagItem = obj.GetComponent<BagItem>();
                 equipSlotList.Add(bagItem);
-
-
             }
             for (int i = 0; i < 8; i++)
             {
@@ -85,28 +80,27 @@ namespace HT
             equipSlotList.Clear();
         }
 
-
         //打开背包并选择
         private void OpenBagAndSelect(Action<BagPanel> initBag)
         {
             UIMgr.Instance.HidePanel<EquipPanel>();
             UIMgr.Instance.ShowPanel<BagPanel>(callBack: (bagPanel) =>
             {
-                bagPanel.Bind(playerFacade);
                 bagPanel.RequestInitAllInventory();
                 initBag?.Invoke(bagPanel);
             });
         }
+
         //显示图片 + 绑定点击事件
         private void LoadItemImage()
         {
-            EnsureFacade();
             // 先清掉旧监听并刷新图标
             for (int i = 0; i < equipSlotList.Count; i++)
             {
                 equipSlotList[i].btnSlot.onClick.RemoveAllListeners();
 
-                Item_SO item = playerFacade.GetEquipSlotItem(i);
+                int id = inventoryModel.GetEquipSlotID(i);
+                Item_SO item = inventoryModel.IsEmptySlot(id) ? null : ItemDataBase.Instance.GetItemByID(id);
                 if (item != null && item.itemIcon != null)
                 {
                     equipSlotList[i].iconImage.sprite = item.itemIcon;
@@ -135,7 +129,7 @@ namespace HT
                             bagPanel.SetSelectCallback((selectedItem) =>
                             {
                                 if (selectedItem is WeaponItem_SO)
-                                    playerFacade.ChangeEquipItem(index, selectedItem);
+                                    this.SendCommand(new ChangeEquipItemCommand(index, selectedItem));
                                 else
                                     Debug.LogWarning("选中的不是武器！");
                             });
@@ -158,7 +152,7 @@ namespace HT
                                 bagPanel.SetSelectCallback((selectedItem) =>
                                 {
                                     if (selectedItem is HelmetEquipment)
-                                        playerFacade.ChangeEquipItem(8, selectedItem);
+                                        this.SendCommand(new ChangeEquipItemCommand(8, selectedItem));
                                     else
                                         Debug.LogWarning("选中的不是头盔！");
                                 });
@@ -175,7 +169,7 @@ namespace HT
                                 bagPanel.SetSelectCallback((selectedItem) =>
                                 {
                                     if (selectedItem is BodyEquipment)
-                                        playerFacade.ChangeEquipItem(9, selectedItem);
+                                        this.SendCommand(new ChangeEquipItemCommand(9, selectedItem));
                                     else
                                         Debug.LogWarning("选中的不是盔甲！");
                                 });
@@ -192,7 +186,7 @@ namespace HT
                                 bagPanel.SetSelectCallback((selectedItem) =>
                                 {
                                     if (selectedItem is LegEquipment)
-                                        playerFacade.ChangeEquipItem(10, selectedItem);
+                                        this.SendCommand(new ChangeEquipItemCommand(10, selectedItem));
                                     else
                                         Debug.LogWarning("选中的不是腿甲！");
                                 });
@@ -209,7 +203,7 @@ namespace HT
                                 bagPanel.SetSelectCallback((selectedItem) =>
                                 {
                                     if (selectedItem is HandEquipment)
-                                        playerFacade.ChangeEquipItem(11, selectedItem);
+                                        this.SendCommand(new ChangeEquipItemCommand(11, selectedItem));
                                     else
                                         Debug.LogWarning("选中的不是手甲！");
                                 });
@@ -231,7 +225,7 @@ namespace HT
                             bagPanel.SetSelectCallback((selectedItem) =>
                             {
                                 if (selectedItem is ConsumableItem_SO)
-                                    playerFacade.ChangeEquipItem(index, selectedItem);
+                                    this.SendCommand(new ChangeEquipItemCommand(index, selectedItem));
                                 else
                                     Debug.LogWarning("选中的不是消耗品！");
                             });
@@ -252,7 +246,7 @@ namespace HT
                             bagPanel.SetSelectCallback((selectedItem) =>
                             {
                                 if (selectedItem is SpellItem)
-                                    playerFacade.ChangeEquipItem(index, selectedItem);
+                                    this.SendCommand(new ChangeEquipItemCommand(index, selectedItem));
                                 else
                                     Debug.LogWarning("选中的不是法术！");
                             });
@@ -262,10 +256,5 @@ namespace HT
                 #endregion
             }
         }
-
-
-
-
     }
 }
-

@@ -128,6 +128,19 @@ namespace ARPG
         }
         #endregion
 
+        public int GetEquipSlotID(int slotIndex)
+        {
+            if (slotIndex >= 0 && slotIndex < 4) return RightHandSlotIDs[slotIndex];
+            if (slotIndex >= 4 && slotIndex < 8) return LeftHandSlotIDs[slotIndex - 4];
+            if (slotIndex == 8) return CurrentHelmetID.Value;
+            if (slotIndex == 9) return CurrentBodyID.Value;
+            if (slotIndex == 10) return CurrentLegsID.Value;
+            if (slotIndex == 11) return CurrentHandsID.Value;
+            if (slotIndex >= 12 && slotIndex < 16) return ConsumableSlotIDs[slotIndex - 12];
+            if (slotIndex >= 16 && slotIndex < 20) return SpellSlotIDs[slotIndex - 16];
+            return 0;
+        }
+
         #region 存档集成
         public void ImportFromInventoryData(PlayerInventoryData data)
         {

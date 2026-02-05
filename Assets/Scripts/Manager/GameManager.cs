@@ -55,21 +55,9 @@ namespace HT
             // 初始化VFX管理器
             VFXMgr.Instance.Init();
 
-            //创建并绑定 PlayerUIFacade
-            PlayerManager pm = PlayerManager.localPlayer;
-            IPlayerUIFacade facade = null;
-            if (pm != null)
-                facade = new PlayerUIFacade(pm.playerStatsManager, pm.playerInventoryManager);
             //显示游戏面板
-            UIMgr.Instance.ShowPanel<GamePanel>(callBack: (panel) =>
-            {
-                panel.Bind(facade);
-            });
-
-            UIMgr.Instance.ShowPanel<InteractionPanel>(callBack: (panel) =>
-            {
-                panel.Bind(facade);
-            });
+            UIMgr.Instance.ShowPanel<GamePanel>();
+            UIMgr.Instance.ShowPanel<InteractionPanel>();
 
 
 

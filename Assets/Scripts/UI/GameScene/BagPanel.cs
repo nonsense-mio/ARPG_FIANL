@@ -1,5 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -18,8 +19,16 @@ namespace HT
         private bool pendingInitConsumableInventory;
         private bool pendingInitSpellInventory;
 
-        //用于存储外部传入的“选择物品后要做什么”的回调
+        //用于存储外部传入的"选择物品后要做什么"的回调
         private System.Action<Item_SO> onEquipCallback;
+
+        private IInventoryModel inventoryModel;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            inventoryModel = this.GetModel<IInventoryModel>();
+        }
 
         // 提供给外部设置回调的方法
         public void SetSelectCallback(System.Action<Item_SO> callback)
@@ -32,15 +41,9 @@ namespace HT
             //滚动列表的更新
             sv.CheckShowOrHide();
         }
-        private void EnsureFacade()
-        {
-            if (playerFacade == null)
-                Debug.LogError($"{nameof(BagPanel)} 未绑定 playerFacade，请在 ShowPanel/GetPanel 回调里调用 panel.Bind(facade)");
-        }
 
         public override void ShowMe()
         {
-
             sv = new CustomSV<Item_SO, BagItem>();
             //初始化预设体资源路径
             sv.InitItemResName("UI/btnBagItem");
@@ -65,51 +68,63 @@ namespace HT
             pendingInitAllInventory = false;
         }
 
-
         #region 初始化背包相关
+
+        private List<Item_SO> ConvertIDsToItems(BindableList<int> ids)
+        {
+            var items = new List<Item_SO>(ids.Count);
+            foreach (int id in ids)
+            {
+                if (!inventoryModel.IsEmptySlot(id))
+                {
+                    var item = ItemDataBase.Instance.GetItemByID(id);
+                    if (item != null)
+                        items.Add(item);
+                }
+            }
+            return items;
+        }
+
         private void InitWeaponInventory()
         {
-            EnsureFacade();
-            sv.InitInfos(new List<Item_SO>(playerFacade.GetWeaponInventory()));
+            sv.InitInfos(ConvertIDsToItems(inventoryModel.WeaponIDs));
         }
         private void InitHelmetInventory()
         {
-            EnsureFacade();
-            sv.InitInfos(new List<Item_SO>(playerFacade.GetHelmetInventory()));
+            sv.InitInfos(ConvertIDsToItems(inventoryModel.HelmetIDs));
         }
         private void InitBodyInventory()
         {
-            EnsureFacade();
-            sv.InitInfos(new List<Item_SO>(playerFacade.GetBodyInventory()));
+            sv.InitInfos(ConvertIDsToItems(inventoryModel.BodyIDs));
         }
         private void InitLegInventory()
         {
-            EnsureFacade();
-            sv.InitInfos(new List<Item_SO>(playerFacade.GetLegInventory()));
+            sv.InitInfos(ConvertIDsToItems(inventoryModel.LegIDs));
         }
         private void InitHandInventory()
         {
-            EnsureFacade();
-            sv.InitInfos(new List<Item_SO>(playerFacade.GetHandInventory()));
+            sv.InitInfos(ConvertIDsToItems(inventoryModel.HandIDs));
         }
         private void InitConsumableInventory()
         {
-            EnsureFacade();
-            sv.InitInfos(new List<Item_SO>(playerFacade.GetConsumableInventory()));
+            sv.InitInfos(ConvertIDsToItems(inventoryModel.ConsumableIDs));
         }
         private void InitSpellInventory()
         {
-            EnsureFacade();
-            sv.InitInfos(new List<Item_SO>(playerFacade.GetSpellInventory()));
+            sv.InitInfos(ConvertIDsToItems(inventoryModel.SpellIDs));
         }
         private void InitAllInventory()
         {
-            EnsureFacade();
-            sv.InitInfos(playerFacade.GetAllInventorySnapshot());
+            var all = new List<Item_SO>();
+            all.AddRange(ConvertIDsToItems(inventoryModel.WeaponIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.HelmetIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.BodyIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.LegIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.HandIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.ConsumableIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.SpellIDs));
+            sv.InitInfos(all);
         }
-        
-
-
 
         /// <summary>
         /// 外部调用：请求在面板完成 ShowMe 后初始化背包显示
@@ -146,7 +161,7 @@ namespace HT
         {
             pendingInitSpellInventory = true;
         }
-        // 每帧调用以处理请求
+        // 处理延迟初始化请求
         private void HandleRequestInits()
         {
             if (pendingInitAllInventory)
@@ -193,7 +208,6 @@ namespace HT
 
         #endregion
 
-        
         /// <summary>
         /// 点击背包格子时触发的逻辑
         /// </summary>
@@ -202,7 +216,7 @@ namespace HT
         {
             Debug.Log("点击了物品：" + item.itemName);
 
-            //如果有回调，说明是处于“选择模式”（比如从装备面板跳过来的）
+            //如果有回调，说明是处于"选择模式"（比如从装备面板跳过来的）
             if (onEquipCallback != null)
             {
                 onEquipCallback(item);
@@ -211,24 +225,19 @@ namespace HT
                 UIMgr.Instance.HidePanel<BagPanel>();
                 UIMgr.Instance.ShowPanel<EquipPanel>(callBack: (equipPanel) =>
                 {
-                    // 把 facade 继续传给 EquipPanel，避免 EquipPanel 再去找 player
-                    equipPanel.Bind(playerFacade);
-                    // EquipPanel.ShowMe 已经调用过了；这里主动刷新一次显示
                     equipPanel.Refresh();
                 });
                 //更新快捷栏UI显示
                 UIMgr.Instance.GetPanel<GamePanel>((panel) =>
                 {
-                    panel.Bind(playerFacade);
                     panel.UpdateAllQuickSlots();
                 });
             }
             else
             {
-                // 否则是“查看模式”，什么都不做，或者显示详情
+                // 否则是"查看模式"，什么都不做，或者显示详情
                 Debug.Log("当前是查看模式，不执行装备逻辑");
             }
         }
     }
 }
-

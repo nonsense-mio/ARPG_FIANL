@@ -87,11 +87,8 @@ namespace HT
                 //背包按钮
                 case "btnBag":
                     {
-                        
                         UIMgr.Instance.ShowPanel<BagPanel>(callBack: (bagPanel) =>
                         {
-                            bagPanel.Bind(playerFacade);
-                            // 不要在这里直接 InitAllInventory（此时 ShowMe 还没执行） 
                             bagPanel.RequestInitAllInventory();
                         });
                         SetActiveSelectWindow(false);
@@ -100,12 +97,8 @@ namespace HT
                 //装备按钮
                 case "btnEquip":
                     {
-                        
                         UIMgr.Instance.ShowPanel<EquipPanel>(callBack: (equipPanel) =>
                         {
-                            //绑定facade 诸如数据
-                            equipPanel.Bind(playerFacade);
-                            //更新装备面板显示
                             equipPanel.Refresh();
                         });
                         SetActiveSelectWindow(false);

@@ -80,6 +80,13 @@ namespace ARPG
         int GetItemType(int itemID);
         #endregion
 
+        /// <summary>
+        /// 获取指定装备槽位的物品ID
+        /// 槽位映射: 0-3 右手武器, 4-7 左手武器, 8 头盔, 9 身体, 10 腿部, 11 手部,
+        ///          12-15 消耗品, 16-19 法术
+        /// </summary>
+        int GetEquipSlotID(int slotIndex);
+
         #region 存档集成
         /// <summary>
         /// 从 PlayerInventoryData 导入数据 (存档加载时调用)
