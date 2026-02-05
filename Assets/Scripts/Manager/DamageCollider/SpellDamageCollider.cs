@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -70,7 +70,7 @@ namespace HT
             if (!hasCollided)
             {
                 hasCollided = true;
-                EventCenter.Instance.EventTrigger<Vector3>(E_EventType.E_FireBallHit, hitPoint);
+                GameArchitecture.Interface.SendEvent(new FireBallHitEvent { HitPoint = hitPoint });
                 PoolMgr.Instance.PushObj(this.gameObject);
             }
         }

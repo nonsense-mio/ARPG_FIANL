@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using HT;
 using UnityEngine;
 using UnityEngine.Events;
@@ -74,14 +74,14 @@ public class OptionUI : MonoBehaviour, IPoolObject
                 if (TaskManager.Instance.GetTask(currentPiece.task).IsCompleted)
                 {
                     //触发任务提交事件，通知任务系统和UI更新 发布奖励
-                    EventCenter.Instance.EventTrigger<TaskData_SO>(E_EventType.E_Task_TurnedIn, currentPiece.task);
+                    GameArchitecture.Interface.SendEvent(new TaskTurnedInEvent(currentPiece.task));
                 }
                 
             }
             //如果没有任务，添加任务
             else
             {
-                EventCenter.Instance.EventTrigger<TaskData_SO>(E_EventType.E_Task_Started, currentPiece.task);
+                GameArchitecture.Interface.SendEvent(new TaskStartedEvent(currentPiece.task));
             }
         }
         //根据选项的目标片段ID跳转到对应的对话片段

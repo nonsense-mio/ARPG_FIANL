@@ -1,6 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 using System.Linq;
 using HT;
@@ -32,17 +33,12 @@ public class TaskManager : SingletonAutoMono<TaskManager>
 
     void OnEnable()
     {
-        EventCenter.Instance.AddEventListener<TaskData_SO>(E_EventType.E_Task_Started, AddTask);
-        EventCenter.Instance.AddEventListener<TaskData_SO>(E_EventType.E_Task_TurnedIn, TurnedInTask);
-        EventCenter.Instance.AddEventListener<CharacterManager>(E_EventType.E_Character_Death, EnemyDeathHandler);
-
-    }
-
-    void OnDisable()
-    {
-        EventCenter.Instance.RemoveEventListener<TaskData_SO>(E_EventType.E_Task_Started, AddTask);
-        EventCenter.Instance.RemoveEventListener<TaskData_SO>(E_EventType.E_Task_TurnedIn, TurnedInTask);
-        EventCenter.Instance.RemoveEventListener<CharacterManager>(E_EventType.E_Character_Death, EnemyDeathHandler);
+        GameArchitecture.Interface.RegisterEvent<TaskStartedEvent>(e => AddTask(e.Task))
+            .UnRegisterWhenGameObjectDestroyed(gameObject);
+        GameArchitecture.Interface.RegisterEvent<TaskTurnedInEvent>(e => TurnedInTask(e.Task))
+            .UnRegisterWhenGameObjectDestroyed(gameObject);
+        GameArchitecture.Interface.RegisterEvent<CharacterDeathEvent>(e => EnemyDeathHandler(e.Character))
+            .UnRegisterWhenGameObjectDestroyed(gameObject);
     }
 
 

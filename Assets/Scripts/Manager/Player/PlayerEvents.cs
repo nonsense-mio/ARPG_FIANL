@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -14,22 +14,14 @@ namespace HT
         }
         void OnEnable()
         {
-            EventCenter.Instance.AddEventListener<CharacterManager>(E_EventType.E_Character_Death, ClearPlayerLockOn);
-            EventCenter.Instance.AddEventListener<bool>(E_EventType.E_EnableInput, player.inputMgr.EnableOrDisableInput);
-            EventCenter.Instance.AddEventListener<int>(E_EventType.E_Player_SpendSouls, player.playerStatsManager.SpendSouls);
-            EventCenter.Instance.AddEventListener<TaskData_SO>(E_EventType.E_Task_TurnedIn, player.playerInventoryManager.RewardTask);
-            EventCenter.Instance.AddEventListener<CharacterManager>(E_EventType.E_Character_Death, player.playerStatsManager.AddSouls);
-
-        }
-
-        void OnDisable()
-        {
-            EventCenter.Instance.RemoveEventListener<CharacterManager>(E_EventType.E_Character_Death, ClearPlayerLockOn);
-            EventCenter.Instance.RemoveEventListener<bool>(E_EventType.E_EnableInput, player.inputMgr.EnableOrDisableInput);
-            EventCenter.Instance.RemoveEventListener<int>(E_EventType.E_Player_SpendSouls, player.playerStatsManager.SpendSouls);
-            EventCenter.Instance.RemoveEventListener<TaskData_SO>(E_EventType.E_Task_TurnedIn, player.playerInventoryManager.RewardTask);
-            EventCenter.Instance.RemoveEventListener<CharacterManager>(E_EventType.E_Character_Death, player.playerStatsManager.AddSouls);
-
+            GameArchitecture.Interface.RegisterEvent<CharacterDeathEvent>(e => ClearPlayerLockOn(e.Character))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<EnableInputEvent>(e => player.inputMgr.EnableOrDisableInput(e.Enabled))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<TaskTurnedInEvent>(e => player.playerInventoryManager.RewardTask(e.Task))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<CharacterDeathEvent>(e => player.playerStatsManager.AddSouls(e.Character))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
         }
         //当玩家死亡时清空锁定目标 或 玩家锁定目标死亡时清空
         private void ClearPlayerLockOn(CharacterManager character)

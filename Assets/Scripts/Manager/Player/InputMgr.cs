@@ -380,7 +380,7 @@ namespace HT
                 {
                     player.isAiming = false;
                     //player.uiManager.crossHair.SetActive(false);
-                    EventCenter.Instance.EventTrigger<bool>(E_EventType.E_AimAction, false);
+                    GameArchitecture.Interface.SendEvent(new AimActionEvent { IsAiming = false });
                     //重置摄像机的旋转
                     player.cameraMgr.ResetAimCameraRotation();
                 }
@@ -535,12 +535,12 @@ namespace HT
                 inventoryFlag = !inventoryFlag;
                 if (inventoryFlag)
                 {
-                    EventCenter.Instance.EventTrigger<bool>(E_EventType.E_OpenOrCloseSelectWindow, true);
+                    GameArchitecture.Interface.SendEvent(new SelectWindowEvent { IsOpen = true });
                     UIMgr.Instance.HidePanel<GamePanel>();
                 }
                 else
                 {
-                    EventCenter.Instance.EventTrigger<bool>(E_EventType.E_OpenOrCloseSelectWindow, false);
+                    GameArchitecture.Interface.SendEvent(new SelectWindowEvent { IsOpen = false });
                     UIMgr.Instance.HidePanel<EquipPanel>();
                     UIMgr.Instance.HidePanel<BagPanel>();
                     UIMgr.Instance.HidePanel<LevelUpPanel>();

@@ -38,12 +38,8 @@ namespace HT
 
         void OnEnable()
         {
-            EventCenter.Instance.AddEventListener<CharacterManager>(E_EventType.E_Character_Death, OnCharacterDeath);
-        }
-
-        void OnDisable()
-        {
-            EventCenter.Instance.RemoveEventListener<CharacterManager>(E_EventType.E_Character_Death, OnCharacterDeath);
+            GameArchitecture.Interface.RegisterEvent<CharacterDeathEvent>(e => OnCharacterDeath(e.Character))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
         //Boss死亡处理
@@ -93,7 +89,7 @@ namespace HT
             }
 
             // 隐藏 HUD
-            EventCenter.Instance.EventTrigger<BossHudData?>(E_EventType.E_BossHudChanged, null);
+            GameArchitecture.Interface.SendEvent(new BossHudChangedEvent { Data = null });
 
             // 更新 SceneStateModel Boss 击败状态
             var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
@@ -112,7 +108,7 @@ namespace HT
                 boss.enemyStatsManager.maxHealth
             );
 
-            EventCenter.Instance.EventTrigger<BossHudData?>(E_EventType.E_BossHudChanged, data);
+            GameArchitecture.Interface.SendEvent(new BossHudChangedEvent { Data = data });
         }
     }
 }

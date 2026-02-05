@@ -129,15 +129,14 @@ namespace HT
             }));
             #endregion
 
-            // 保留: 纯 UI 行为事件
-            EventCenter.Instance.AddEventListener<bool>(E_EventType.E_AimAction, AimActionUI);
+            // UI 行为事件
+            unRegisters.Add(this.RegisterEvent<AimActionEvent>(e => AimActionUI(e.IsAiming)));
         }
 
         void OnDisable()
         {
             foreach (var ur in unRegisters) ur.UnRegister();
             unRegisters.Clear();
-            EventCenter.Instance.RemoveEventListener<bool>(E_EventType.E_AimAction, AimActionUI);
         }
 
         #region 快速槽位图标
@@ -189,12 +188,12 @@ namespace HT
 
         public override void HideMe()
         {
-            EventCenter.Instance.EventTrigger(E_EventType.E_EnableInput, false);
+            GameArchitecture.Interface.SendEvent(new EnableInputEvent { Enabled = false });
         }
 
         public override void ShowMe()
         {
-            EventCenter.Instance.EventTrigger(E_EventType.E_EnableInput, true);
+            GameArchitecture.Interface.SendEvent(new EnableInputEvent { Enabled = true });
         }
     }
 }

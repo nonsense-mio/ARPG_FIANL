@@ -1,3 +1,5 @@
+using HT;
+
 namespace ARPG
 {
     /// <summary>
@@ -5,10 +7,18 @@ namespace ARPG
     /// </summary>
     public struct TaskStartedEvent
     {
+        public TaskData_SO Task;
         public string TaskName;
+
+        public TaskStartedEvent(TaskData_SO task)
+        {
+            Task = task;
+            TaskName = task != null ? task.taskName : "";
+        }
 
         public TaskStartedEvent(string taskName)
         {
+            Task = null;
             TaskName = taskName;
         }
     }
@@ -31,10 +41,18 @@ namespace ARPG
     /// </summary>
     public struct TaskTurnedInEvent
     {
+        public TaskData_SO Task;
         public string TaskName;
+
+        public TaskTurnedInEvent(TaskData_SO task)
+        {
+            Task = task;
+            TaskName = task != null ? task.taskName : "";
+        }
 
         public TaskTurnedInEvent(string taskName)
         {
+            Task = null;
             TaskName = taskName;
         }
     }

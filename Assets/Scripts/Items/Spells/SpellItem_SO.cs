@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -31,7 +31,7 @@ namespace HT
         public virtual void AttemptToCastSpell(CharacterManager character)
         {
             character.characterAnimatorManager.PlayTargetAnimation(spellAnimation, true,false,character.isUsingLeftHand);
-            EventCenter.Instance.EventTrigger<(CharacterManager, SpellItem)>(E_EventType.E_Player_WarmUpSpell, (character, this));
+            GameArchitecture.Interface.SendEvent(new PlayerWarmUpSpellEvent { Character = character, Spell = this });
         }
         /// <summary>
         /// 施法成功
@@ -40,7 +40,7 @@ namespace HT
         /// <param name="playerStats"></param>
         public virtual void SuccessfullyCastSpell(CharacterManager character)
         {
-            EventCenter.Instance.EventTrigger<(CharacterManager, SpellItem)>(E_EventType.E_Player_CastSpell, (character, this));
+            GameArchitecture.Interface.SendEvent(new PlayerCastSpellEvent { Character = character, Spell = this });
             PlayerManager player = character as PlayerManager;
             if (player == null)
                 return;

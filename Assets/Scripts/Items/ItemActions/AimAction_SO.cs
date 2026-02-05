@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -14,7 +14,7 @@ namespace HT
                 return;
             if (player != null)
             {
-                EventCenter.Instance.EventTrigger<bool>(E_EventType.E_AimAction, true);
+                GameArchitecture.Interface.SendEvent(new AimActionEvent { IsAiming = true });
             }
 
             character.isAiming = true;

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -93,11 +95,8 @@ namespace HT
         }
         void OnEnable()
         {
-            EventCenter.Instance.AddEventListener<bool>(E_EventType.E_NPC_FollowPlayer, IsNPCChanged);
-        }
-        void OnDisable()
-        {
-            EventCenter.Instance.RemoveEventListener<bool>(E_EventType.E_NPC_FollowPlayer, IsNPCChanged);
+            GameArchitecture.Interface.RegisterEvent<NPCFollowPlayerEvent>(e => IsNPCChanged(e.IsFollowing))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
         }
         private void Start()
         {

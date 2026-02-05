@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using HT;
 using UnityEngine;
 using XLua;
@@ -39,11 +39,11 @@ public class DialogueActionHelper : MonoBehaviour
 
     public void NPCGOFollowPlayer()
     {
-        EventCenter.Instance.EventTrigger(E_EventType.E_NPC_FollowPlayer,true);
+        GameArchitecture.Interface.SendEvent(new NPCFollowPlayerEvent { IsFollowing = true });
     }
     public void NPCGoHome()
     {
-        EventCenter.Instance.EventTrigger(E_EventType.E_NPC_FollowPlayer,false);
+        GameArchitecture.Interface.SendEvent(new NPCFollowPlayerEvent { IsFollowing = false });
     }
 
     public void RebuildHome()

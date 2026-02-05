@@ -1,5 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,8 @@ namespace HT
         private Text txtTips;
         public Image imgTips;
 
+        private readonly List<IUnRegister> unRegisters = new List<IUnRegister>();
+
         protected override void Awake()
         {
             base.Awake();
@@ -24,15 +27,14 @@ namespace HT
         }
         private void OnEnable()
         {
-            EventCenter.Instance.AddEventListener<bool>(E_EventType.E_OpenOrCloseSelectWindow, SetActiveSelectWindow);
-            EventCenter.Instance.AddEventListener<Interactable>(E_EventType.E_Interact, PopUpTips);
-            EventCenter.Instance.AddEventListener<BossHudData?>(E_EventType.E_BossHudChanged, OnBossHudChanged);
+            unRegisters.Add(this.RegisterEvent<SelectWindowEvent>(e => SetActiveSelectWindow(e.IsOpen)));
+            unRegisters.Add(this.RegisterEvent<InteractPromptEvent>(e => PopUpTips(e.Target)));
+            unRegisters.Add(this.RegisterEvent<BossHudChangedEvent>(e => OnBossHudChanged(e.Data)));
         }
         private void OnDisable()
         {
-            EventCenter.Instance.RemoveEventListener<bool>(E_EventType.E_OpenOrCloseSelectWindow, SetActiveSelectWindow);
-            EventCenter.Instance.RemoveEventListener<Interactable>(E_EventType.E_Interact, PopUpTips);
-            EventCenter.Instance.RemoveEventListener<BossHudData?>(E_EventType.E_BossHudChanged, OnBossHudChanged);
+            foreach (var ur in unRegisters) ur.UnRegister();
+            unRegisters.Clear();
         }
 
         #region boss相关

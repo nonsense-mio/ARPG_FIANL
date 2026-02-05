@@ -1,5 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -42,7 +43,7 @@ namespace HT
                 return false;
 
             hasPublishedPhaseShift = true;
-            EventCenter.Instance.EventTrigger<EnemyManager>(E_EventType.E_BossPhaseShift, enemy);
+            GameArchitecture.Interface.SendEvent(new BossPhaseShiftEvent { Boss = enemy });
             return true;
         }
 
@@ -136,7 +137,7 @@ namespace HT
 
             string bossName = (enemy != null && enemy.enemyBossManager != null) ? enemy.enemyBossManager.bossName : "Boss";
             var data = new BossHudData(bossName, currentHealth, maxHealth);
-            EventCenter.Instance.EventTrigger<BossHudData?>(E_EventType.E_BossHudChanged, data);
+            GameArchitecture.Interface.SendEvent(new BossHudChangedEvent { Data = data });
         }
 
         protected override void HandleDeath()

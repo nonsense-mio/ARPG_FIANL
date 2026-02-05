@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace HT
 {   //人物基类
@@ -211,7 +210,7 @@ namespace HT
                 character.characterAnimatorManager.PlayTargetAnimation("Dead_01", true);
             print("人物死亡");
             character.isDead = true;
-            EventCenter.Instance.EventTrigger<CharacterManager>(E_EventType.E_Character_Death, character);
+            GameArchitecture.Interface.SendEvent(new CharacterDeathEvent { Character = character });
         }
 
     }

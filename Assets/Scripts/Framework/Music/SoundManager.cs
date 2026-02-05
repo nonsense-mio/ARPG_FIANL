@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace HT
 {
@@ -18,28 +19,22 @@ namespace HT
 
         private void OnEnable()
         {
-            EventCenter.Instance.AddEventListener<Transform>(E_EventType.E_BombHit, BombHitSound);
-            EventCenter.Instance.AddEventListener<CharacterManager>(E_EventType.E_Slash, SlashSound);
-            EventCenter.Instance.AddEventListener<Vector3>(E_EventType.E_FireBallHit, FireBallHitSound);
-            EventCenter.Instance.AddEventListener<Vector3>(E_EventType.E_Character_Damage, OnPlayerDamage);
-            EventCenter.Instance.AddEventListener<EnemyManager>(E_EventType.E_BossPhaseShift, OnBossPhaseShift);
-            EventCenter.Instance.AddEventListener<PlayerManager>(E_EventType.E_Player_DrinkPotion, OnPlayerHeal);
-            EventCenter.Instance.AddEventListener<Interactable>(E_EventType.E_Perform_Interaction, InteractSound);
-            EventCenter.Instance.AddEventListener<(CharacterManager, SpellItem)>(E_EventType.E_Player_CastSpell, SpellCastSound);
-
-        }
-
-        private void OnDestroy()
-        {
-            EventCenter.Instance.RemoveEventListener<Transform>(E_EventType.E_BombHit, BombHitSound);
-            EventCenter.Instance.RemoveEventListener<CharacterManager>(E_EventType.E_Slash, SlashSound);
-            EventCenter.Instance.RemoveEventListener<Vector3>(E_EventType.E_FireBallHit, FireBallHitSound);
-            EventCenter.Instance.RemoveEventListener<Vector3>(E_EventType.E_Character_Damage, OnPlayerDamage);
-            EventCenter.Instance.RemoveEventListener<EnemyManager>(E_EventType.E_BossPhaseShift, OnBossPhaseShift);
-            EventCenter.Instance.RemoveEventListener<PlayerManager>(E_EventType.E_Player_DrinkPotion, OnPlayerHeal);
-            EventCenter.Instance.RemoveEventListener<Interactable>(E_EventType.E_Perform_Interaction, InteractSound);
-            EventCenter.Instance.RemoveEventListener<(CharacterManager, SpellItem)>(E_EventType.E_Player_CastSpell, SpellCastSound);
-
+            GameArchitecture.Interface.RegisterEvent<BombHitEvent>(e => BombHitSound(e.BombTransform))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<SlashEvent>(e => SlashSound(e.Character))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<FireBallHitEvent>(e => FireBallHitSound(e.HitPoint))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<CharacterDamageEvent>(e => OnPlayerDamage(e.HitPoint))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<BossPhaseShiftEvent>(e => OnBossPhaseShift(e.Boss))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<PlayerDrinkPotionEvent>(e => OnPlayerHeal(e.Player))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<PerformInteractionEvent>(e => InteractSound(e.Target))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<PlayerCastSpellEvent>(e => SpellCastSound((e.Character, e.Spell)))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
         }
         public void Init()
         {

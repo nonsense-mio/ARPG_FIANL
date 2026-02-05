@@ -1,5 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -97,7 +98,7 @@ namespace HT
                     ChooseWhichDirectionDamageCameFrom(directionHitFrom);
                     //播放受击特效
                     //enemyManager.characterEffectsManager.PlayBloodSplatterFX(contactPoint);
-                    EventCenter.Instance.EventTrigger<Vector3>(E_EventType.E_Character_Damage, contactPoint);
+                    GameArchitecture.Interface.SendEvent(new CharacterDamageEvent { HitPoint = contactPoint });
                     enemyManager.characterEffectsManager.InterrupEffect();
 
                     //根据攻击类型造成伤害

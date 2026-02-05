@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -173,7 +173,7 @@ namespace HT
                 leftHandDamageCollider.EnableDamageCollider();
             }
             //触发挥砍事件
-            EventCenter.Instance.EventTrigger<CharacterManager>(E_EventType.E_Slash,character);
+            GameArchitecture.Interface.SendEvent(new SlashEvent { Character = character });
         }
  
         /// <summary>

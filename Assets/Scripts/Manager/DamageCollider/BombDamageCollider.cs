@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 namespace HT
 {
@@ -58,7 +58,7 @@ namespace HT
                 }
             }
             //从对象池中取出爆炸特效 发布事件
-            EventCenter.Instance.EventTrigger<Transform>(E_EventType.E_BombHit, this.transform);
+            GameArchitecture.Interface.SendEvent(new BombHitEvent { BombTransform = this.transform });
         }
         //重置炸弹信息
         public void ResetInfo()

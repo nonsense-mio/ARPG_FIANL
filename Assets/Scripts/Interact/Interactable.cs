@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -22,7 +22,7 @@ namespace HT
         /// <param name="playerManager"></param>
         public virtual void Interact(PlayerManager playerManager)
         {
-            EventCenter.Instance.EventTrigger<Interactable>(E_EventType.E_Perform_Interaction, this);
+            GameArchitecture.Interface.SendEvent(new PerformInteractionEvent { Target = this });
             //交互后保存游戏数据
             playerManager.playerSaveManager.SaveDataToGameDataMgr();
         }

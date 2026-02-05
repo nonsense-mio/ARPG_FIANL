@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 
@@ -23,12 +23,8 @@ namespace HT
 
         private void OnEnable()
         {
-            EventCenter.Instance.AddEventListener<EnemyManager>(E_EventType.E_BossPhaseShift, OnBossPhaseShift);
-        }
-
-        private void OnDisable()
-        {
-            EventCenter.Instance.RemoveEventListener<EnemyManager>(E_EventType.E_BossPhaseShift, OnBossPhaseShift);
+            GameArchitecture.Interface.RegisterEvent<BossPhaseShiftEvent>(e => OnBossPhaseShift(e.Boss))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
         private void OnBossPhaseShift(EnemyManager boss)

@@ -1,6 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 using HT;
 
@@ -53,16 +54,10 @@ public class TaskGiver : MonoBehaviour
 
     void OnEnable()
     {
-        // 监听任务提交事件
-        EventCenter.Instance.AddEventListener<TaskData_SO>(E_EventType.E_Task_TurnedIn, OnTaskTurnedIn);
-        // 监听存档加载完成事件
-        EventCenter.Instance.AddEventListener(E_EventType.E_Game_DataLoaded, OnGameDataLoaded);
-    }
-
-    void OnDisable()
-    {
-        EventCenter.Instance.RemoveEventListener<TaskData_SO>(E_EventType.E_Task_TurnedIn, OnTaskTurnedIn);
-        EventCenter.Instance.RemoveEventListener(E_EventType.E_Game_DataLoaded, OnGameDataLoaded);
+        GameArchitecture.Interface.RegisterEvent<TaskTurnedInEvent>(e => OnTaskTurnedIn(e.Task))
+            .UnRegisterWhenGameObjectDestroyed(gameObject);
+        GameArchitecture.Interface.RegisterEvent<GameDataLoadedEvent>(e => OnGameDataLoaded())
+            .UnRegisterWhenGameObjectDestroyed(gameObject);
     }
 
     /// <summary>

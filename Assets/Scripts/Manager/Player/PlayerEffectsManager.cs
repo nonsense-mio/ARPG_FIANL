@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -27,7 +27,7 @@ namespace HT
             player.playerStatsManager.HealCharacter(amountToBeHealed);
             player.playerStatsManager.AddFocusPoints(focusTobeAdded);
             // 触发治疗事件，VFXMgr和SoundManager都会响应（一对多广播）
-            EventCenter.Instance.EventTrigger<PlayerManager>(E_EventType.E_Player_DrinkPotion,player);
+            GameArchitecture.Interface.SendEvent(new PlayerDrinkPotionEvent { Player = player });
         }
 
 

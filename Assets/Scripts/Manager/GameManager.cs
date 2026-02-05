@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -43,7 +43,7 @@ namespace HT
                 TaskSaveHelper.LoadAllTaskData();
 
                 // 通知所有监听者数据加载完成
-                EventCenter.Instance.EventTrigger(E_EventType.E_Game_DataLoaded);
+                GameArchitecture.Interface.SendEvent(new GameDataLoadedEvent());
             }, true);
 
             //设置摄像机脚本参数

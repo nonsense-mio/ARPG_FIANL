@@ -1,10 +1,12 @@
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
 {
     /// <summary>
     /// VFX特效管理器
-    /// 作为独立系统，订阅EventCenter已有事件来播放对应特效
+    /// 订阅 TypeEventSystem 事件来播放对应特效
     /// </summary>
     public class VFXMgr : SingletonAutoMono<VFXMgr>
     {
@@ -16,27 +18,22 @@ namespace HT
 
         private void OnEnable()
         {
-            EventCenter.Instance.AddEventListener<Transform>(E_EventType.E_BombHit, BombHitFX);
-            EventCenter.Instance.AddEventListener<CharacterManager>(E_EventType.E_Slash, OnSlash);
-            EventCenter.Instance.AddEventListener<Vector3>(E_EventType.E_FireBallHit, FireBallHitFX);
-            EventCenter.Instance.AddEventListener<Vector3>(E_EventType.E_Character_Damage, OnCharacterDamage);
-            EventCenter.Instance.AddEventListener<EnemyManager>(E_EventType.E_BossPhaseShift, OnBossPhaseShift);
-            EventCenter.Instance.AddEventListener<PlayerManager>(E_EventType.E_Player_DrinkPotion, OnPlayerHeal);
-            EventCenter.Instance.AddEventListener<(CharacterManager, SpellItem)>(E_EventType.E_Player_CastSpell, CastSpellFX);
-            EventCenter.Instance.AddEventListener<(CharacterManager, SpellItem)>(E_EventType.E_Player_WarmUpSpell, WarmUpSpellFX);
-        }
-
-        private void OnDisable()
-        {
-            EventCenter.Instance.RemoveEventListener<Transform>(E_EventType.E_BombHit, BombHitFX);
-            EventCenter.Instance.RemoveEventListener<CharacterManager>(E_EventType.E_Slash, OnSlash);
-            EventCenter.Instance.RemoveEventListener<Vector3>(E_EventType.E_FireBallHit, FireBallHitFX);
-            EventCenter.Instance.RemoveEventListener<Vector3>(E_EventType.E_Character_Damage, OnCharacterDamage);
-            EventCenter.Instance.RemoveEventListener<EnemyManager>(E_EventType.E_BossPhaseShift, OnBossPhaseShift);
-            EventCenter.Instance.RemoveEventListener<PlayerManager>(E_EventType.E_Player_DrinkPotion, OnPlayerHeal);
-            EventCenter.Instance.RemoveEventListener<(CharacterManager, SpellItem)>(E_EventType.E_Player_CastSpell, CastSpellFX);
-            EventCenter.Instance.RemoveEventListener<(CharacterManager, SpellItem)>(E_EventType.E_Player_WarmUpSpell, WarmUpSpellFX);
-
+            GameArchitecture.Interface.RegisterEvent<BombHitEvent>(e => BombHitFX(e.BombTransform))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<SlashEvent>(e => OnSlash(e.Character))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<FireBallHitEvent>(e => FireBallHitFX(e.HitPoint))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<CharacterDamageEvent>(e => OnCharacterDamage(e.HitPoint))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<BossPhaseShiftEvent>(e => OnBossPhaseShift(e.Boss))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<PlayerDrinkPotionEvent>(e => OnPlayerHeal(e.Player))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<PlayerCastSpellEvent>(e => CastSpellFX((e.Character, e.Spell)))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<PlayerWarmUpSpellEvent>(e => WarmUpSpellFX((e.Character, e.Spell)))
+                .UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
         public void Init()
