@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using QFramework;
+using Framework;
 
 namespace ARPG
 {

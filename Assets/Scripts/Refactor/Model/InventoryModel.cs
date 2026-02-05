@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using QFramework;
+using Framework;
 
 namespace ARPG
 {
@@ -11,13 +11,13 @@ namespace ARPG
         private const int SLOT_SIZE = 4;
 
         #region 库存ID列表
-        public BindableProperty<List<int>> WeaponIDs { get; } = new BindableProperty<List<int>>(new List<int>());
-        public BindableProperty<List<int>> HelmetIDs { get; } = new BindableProperty<List<int>>(new List<int>());
-        public BindableProperty<List<int>> BodyIDs { get; } = new BindableProperty<List<int>>(new List<int>());
-        public BindableProperty<List<int>> LegIDs { get; } = new BindableProperty<List<int>>(new List<int>());
-        public BindableProperty<List<int>> HandIDs { get; } = new BindableProperty<List<int>>(new List<int>());
-        public BindableProperty<List<int>> ConsumableIDs { get; } = new BindableProperty<List<int>>(new List<int>());
-        public BindableProperty<List<int>> SpellIDs { get; } = new BindableProperty<List<int>>(new List<int>());
+        public BindableList<int> WeaponIDs { get; } = new BindableList<int>();
+        public BindableList<int> HelmetIDs { get; } = new BindableList<int>();
+        public BindableList<int> BodyIDs { get; } = new BindableList<int>();
+        public BindableList<int> LegIDs { get; } = new BindableList<int>();
+        public BindableList<int> HandIDs { get; } = new BindableList<int>();
+        public BindableList<int> ConsumableIDs { get; } = new BindableList<int>();
+        public BindableList<int> SpellIDs { get; } = new BindableList<int>();
         #endregion
 
         #region 快速插槽ID
@@ -66,13 +66,13 @@ namespace ARPG
             int type = GetItemType(itemID);
             switch (type)
             {
-                case 1: WeaponIDs.Value.Add(itemID); break;
-                case 2: HelmetIDs.Value.Add(itemID); break;
-                case 3: BodyIDs.Value.Add(itemID); break;
-                case 4: LegIDs.Value.Add(itemID); break;
-                case 5: HandIDs.Value.Add(itemID); break;
-                case 6: ConsumableIDs.Value.Add(itemID); break;
-                case 7: SpellIDs.Value.Add(itemID); break;
+                case 1: WeaponIDs.Add(itemID); break;
+                case 2: HelmetIDs.Add(itemID); break;
+                case 3: BodyIDs.Add(itemID); break;
+                case 4: LegIDs.Add(itemID); break;
+                case 5: HandIDs.Add(itemID); break;
+                case 6: ConsumableIDs.Add(itemID); break;
+                case 7: SpellIDs.Add(itemID); break;
             }
         }
 
@@ -81,13 +81,13 @@ namespace ARPG
             int type = GetItemType(itemID);
             switch (type)
             {
-                case 1: WeaponIDs.Value.Remove(itemID); break;
-                case 2: HelmetIDs.Value.Remove(itemID); break;
-                case 3: BodyIDs.Value.Remove(itemID); break;
-                case 4: LegIDs.Value.Remove(itemID); break;
-                case 5: HandIDs.Value.Remove(itemID); break;
-                case 6: ConsumableIDs.Value.Remove(itemID); break;
-                case 7: SpellIDs.Value.Remove(itemID); break;
+                case 1: WeaponIDs.Remove(itemID); break;
+                case 2: HelmetIDs.Remove(itemID); break;
+                case 3: BodyIDs.Remove(itemID); break;
+                case 4: LegIDs.Remove(itemID); break;
+                case 5: HandIDs.Remove(itemID); break;
+                case 6: ConsumableIDs.Remove(itemID); break;
+                case 7: SpellIDs.Remove(itemID); break;
             }
         }
 
@@ -134,13 +134,13 @@ namespace ARPG
             if (data == null) return;
 
             // 库存列表
-            WeaponIDs.Value = new List<int>(data.weaponInventoryIDs ?? new List<int>());
-            HelmetIDs.Value = new List<int>(data.headEquipmentInventoryIDs ?? new List<int>());
-            BodyIDs.Value = new List<int>(data.bodyEquipmentInventoryIDs ?? new List<int>());
-            LegIDs.Value = new List<int>(data.legEquipmentInventoryIDs ?? new List<int>());
-            HandIDs.Value = new List<int>(data.handEquipmentInventoryIDs ?? new List<int>());
-            ConsumableIDs.Value = new List<int>(data.consumableInventoryIDs ?? new List<int>());
-            SpellIDs.Value = new List<int>(data.spellInventoryIDs ?? new List<int>());
+            WeaponIDs.Reset(data.weaponInventoryIDs);
+            HelmetIDs.Reset(data.headEquipmentInventoryIDs);
+            BodyIDs.Reset(data.bodyEquipmentInventoryIDs);
+            LegIDs.Reset(data.legEquipmentInventoryIDs);
+            HandIDs.Reset(data.handEquipmentInventoryIDs);
+            ConsumableIDs.Reset(data.consumableInventoryIDs);
+            SpellIDs.Reset(data.spellInventoryIDs);
 
             // 快速插槽
             RightHandSlotIDs = new List<int>(data.rightHandSlotIDs ?? CreateEmptySlots(IInventoryModel.EMPTY_WEAPON_ID));
@@ -166,13 +166,13 @@ namespace ARPG
             if (data == null) return;
 
             // 库存列表
-            data.weaponInventoryIDs = new List<int>(WeaponIDs.Value);
-            data.headEquipmentInventoryIDs = new List<int>(HelmetIDs.Value);
-            data.bodyEquipmentInventoryIDs = new List<int>(BodyIDs.Value);
-            data.legEquipmentInventoryIDs = new List<int>(LegIDs.Value);
-            data.handEquipmentInventoryIDs = new List<int>(HandIDs.Value);
-            data.consumableInventoryIDs = new List<int>(ConsumableIDs.Value);
-            data.spellInventoryIDs = new List<int>(SpellIDs.Value);
+            data.weaponInventoryIDs = new List<int>(WeaponIDs);
+            data.headEquipmentInventoryIDs = new List<int>(HelmetIDs);
+            data.bodyEquipmentInventoryIDs = new List<int>(BodyIDs);
+            data.legEquipmentInventoryIDs = new List<int>(LegIDs);
+            data.handEquipmentInventoryIDs = new List<int>(HandIDs);
+            data.consumableInventoryIDs = new List<int>(ConsumableIDs);
+            data.spellInventoryIDs = new List<int>(SpellIDs);
 
             // 快速插槽
             data.rightHandSlotIDs = new List<int>(RightHandSlotIDs);

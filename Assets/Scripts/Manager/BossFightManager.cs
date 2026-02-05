@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XLua;
-using QFramework;
+using Framework;
 using ARPG;
 
 namespace HT

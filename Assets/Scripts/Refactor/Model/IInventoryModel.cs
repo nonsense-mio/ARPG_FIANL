@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using QFramework;
+using Framework;
 
 namespace ARPG
 {
@@ -20,13 +20,13 @@ namespace ARPG
         #endregion
 
         #region 库存ID列表
-        BindableProperty<List<int>> WeaponIDs { get; }
-        BindableProperty<List<int>> HelmetIDs { get; }
-        BindableProperty<List<int>> BodyIDs { get; }
-        BindableProperty<List<int>> LegIDs { get; }
-        BindableProperty<List<int>> HandIDs { get; }
-        BindableProperty<List<int>> ConsumableIDs { get; }
-        BindableProperty<List<int>> SpellIDs { get; }
+        BindableList<int> WeaponIDs { get; }
+        BindableList<int> HelmetIDs { get; }
+        BindableList<int> BodyIDs { get; }
+        BindableList<int> LegIDs { get; }
+        BindableList<int> HandIDs { get; }
+        BindableList<int> ConsumableIDs { get; }
+        BindableList<int> SpellIDs { get; }
         #endregion
 
         #region 快速插槽ID (固定4格)

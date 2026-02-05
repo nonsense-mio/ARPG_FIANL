@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using QFramework;
+using Framework;
 
 namespace ARPG
 {
@@ -13,7 +13,7 @@ namespace ARPG
         /// <summary>
         /// 活跃任务存档数据列表
         /// </summary>
-        BindableProperty<List<TaskSaveData>> ActiveTasks { get; }
+        BindableList<TaskSaveData> ActiveTasks { get; }
 
         /// <summary>
         /// NPC 任务链进度 (key: GiverId, value: 当前任务索引)

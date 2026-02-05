@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace QFramework
+namespace Framework
 {
     #region Architecture
 
@@ -57,7 +57,7 @@ namespace QFramework
         void UnRegisterEvent<T>(Action<T> onEvent);
 
     }
-    
+
     public abstract class Architecture<T> : IArchitecture where T : Architecture<T>, new()
     {
         /// <summary>
@@ -190,7 +190,7 @@ namespace QFramework
     #endregion
 
     #region Controller
-    public interface IController : IBelongToArchitecture, ICanSendCommand, ICanGetSystem, ICanGetModel, ICanRegisterEvent, ICanSendQuery,ICanGetUtility
+    public interface IController : IBelongToArchitecture, ICanSendCommand, ICanGetSystem, ICanGetModel, ICanRegisterEvent, ICanSendQuery, ICanGetUtility
     {
 
     }
@@ -459,7 +459,7 @@ namespace QFramework
     }
 
 
-    public class UnRegisterOnDestroyTrigger : MonoBehaviour
+    public class UnRegisterTrigger : MonoBehaviour
     {
         //存储待注销事件的哈希表
         private HashSet<IUnRegister> unRegisters = new HashSet<IUnRegister>();
@@ -468,7 +468,7 @@ namespace QFramework
         {
             unRegisters.Add(unRegister);
         }
-        void OnDestroy()
+        public void UnRegister()
         {
             //注销事件
             foreach (var unRegister in unRegisters)
@@ -476,6 +476,21 @@ namespace QFramework
                 unRegister.UnRegister();
             }
             unRegisters.Clear();
+        }
+    }
+    public class UnRegisterOnDestroyTrigger : UnRegisterTrigger
+    {
+        private void OnDestroy()
+        {
+            UnRegister();
+        }
+    }
+
+    public class UnRegisterOnDisableTrigger : UnRegisterTrigger
+    {
+        private void OnDisable()
+        {
+            UnRegister();
         }
     }
 
@@ -488,6 +503,17 @@ namespace QFramework
             if (trigger == null)
             {
                 trigger = gameObject.AddComponent<UnRegisterOnDestroyTrigger>();
+            }
+            //添加待注销事件
+            trigger.AddUnRegister(unRegister);
+        }
+
+        public static void UnRegisterWhenGameObjectDisabled(this IUnRegister unRegister, GameObject gameObject)
+        {
+            var trigger = gameObject.GetComponent<UnRegisterOnDisableTrigger>();
+            if (trigger == null)
+            {
+                trigger = gameObject.AddComponent<UnRegisterOnDisableTrigger>();
             }
             //添加待注销事件
             trigger.AddUnRegister(unRegister);

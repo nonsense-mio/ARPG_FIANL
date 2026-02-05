@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using QFramework;
+using Framework;
 
 namespace ARPG
 {
@@ -9,7 +9,7 @@ namespace ARPG
     public class TaskModel : AbstractModel, ITaskModel
     {
         #region 任务数据
-        public BindableProperty<List<TaskSaveData>> ActiveTasks { get; } = new BindableProperty<List<TaskSaveData>>(new List<TaskSaveData>());
+        public BindableList<TaskSaveData> ActiveTasks { get; } = new BindableList<TaskSaveData>();
         public BindableProperty<Dictionary<string, int>> TaskGiverProgress { get; } = new BindableProperty<Dictionary<string, int>>(new Dictionary<string, int>());
         #endregion
 
@@ -39,7 +39,7 @@ namespace ARPG
                 taskData.requireProgress.Add(0);
             }
 
-            ActiveTasks.Value.Add(taskData);
+            ActiveTasks.Add(taskData);
 
             // 发送任务开始事件
             this.SendEvent(new TaskStartedEvent(taskName));
@@ -81,12 +81,14 @@ namespace ARPG
 
         public TaskSaveData GetTask(string taskName)
         {
-            return ActiveTasks.Value.Find(t => t.taskName == taskName);
+            foreach (var task in ActiveTasks)
+                if (task.taskName == taskName) return task;
+            return null;
         }
 
         public bool HasTask(string taskName)
         {
-            return ActiveTasks.Value.Exists(t => t.taskName == taskName);
+            return GetTask(taskName) != null;
         }
         #endregion
 
@@ -107,28 +109,28 @@ namespace ARPG
         {
             if (data == null)
             {
-                ActiveTasks.Value = new List<TaskSaveData>();
+                ActiveTasks.Clear();
                 TaskGiverProgress.Value = new Dictionary<string, int>();
                 return;
             }
 
-            // 深拷贝任务列表
-            ActiveTasks.Value = new List<TaskSaveData>();
+            // 深拷贝任务列表，使用 Reset 批量替换
+            var copies = new List<TaskSaveData>();
             if (data.taskList != null)
             {
                 foreach (var task in data.taskList)
                 {
-                    var copy = new TaskSaveData
+                    copies.Add(new TaskSaveData
                     {
                         taskName = task.taskName,
                         isStarted = task.isStarted,
                         isCompleted = task.isCompleted,
                         isTurnedIn = task.isTurnedIn,
                         requireProgress = new List<int>(task.requireProgress ?? new List<int>())
-                    };
-                    ActiveTasks.Value.Add(copy);
+                    });
                 }
             }
+            ActiveTasks.Reset(copies);
 
             // 深拷贝 NPC 进度
             TaskGiverProgress.Value = new Dictionary<string, int>();
@@ -147,17 +149,16 @@ namespace ARPG
 
             // 导出任务列表
             data.taskList = new List<TaskSaveData>();
-            foreach (var task in ActiveTasks.Value)
+            foreach (var task in ActiveTasks)
             {
-                var copy = new TaskSaveData
+                data.taskList.Add(new TaskSaveData
                 {
                     taskName = task.taskName,
                     isStarted = task.isStarted,
                     isCompleted = task.isCompleted,
                     isTurnedIn = task.isTurnedIn,
                     requireProgress = new List<int>(task.requireProgress ?? new List<int>())
-                };
-                data.taskList.Add(copy);
+                });
             }
 
             // 导出 NPC 进度
