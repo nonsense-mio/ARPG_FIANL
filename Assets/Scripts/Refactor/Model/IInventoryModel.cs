@@ -30,10 +30,10 @@ namespace ARPG
         #endregion
 
         #region 快速插槽ID (固定4格)
-        List<int> RightHandSlotIDs { get; }
-        List<int> LeftHandSlotIDs { get; }
-        List<int> ConsumableSlotIDs { get; }
-        List<int> SpellSlotIDs { get; }
+        BindableList<int> RightHandSlotIDs { get; }
+        BindableList<int> LeftHandSlotIDs { get; }
+        BindableList<int> ConsumableSlotIDs { get; }
+        BindableList<int> SpellSlotIDs { get; }
         #endregion
 
         #region 当前装备ID

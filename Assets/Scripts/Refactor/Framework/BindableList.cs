@@ -8,7 +8,6 @@ namespace Framework
     /// 可绑定列表：支持 Add/Remove/Clear 事件通知
     /// 基于 Collection&lt;T&gt; + EasyEvent 实现
     /// </summary>
-    [Serializable]
     public class BindableList<T> : Collection<T>
     {
         #region 事件
@@ -59,7 +58,7 @@ namespace Framework
             onCleared.Trigger();
             if (beforeCount > 0)
             {
-                onCountChanged.Trigger(beforeCount);
+                onCountChanged.Trigger(Count);
             }
             
         }

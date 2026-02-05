@@ -99,7 +99,7 @@ namespace Framework
 
         public void UnRegister()
         {
-            mOnUnRegister.Invoke();
+            mOnUnRegister?.Invoke();
             mOnUnRegister = null;
         }
 

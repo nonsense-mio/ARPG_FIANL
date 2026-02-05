@@ -21,10 +21,10 @@ namespace ARPG
         #endregion
 
         #region 快速插槽ID
-        public List<int> RightHandSlotIDs { get; private set; }
-        public List<int> LeftHandSlotIDs { get; private set; }
-        public List<int> ConsumableSlotIDs { get; private set; }
-        public List<int> SpellSlotIDs { get; private set; }
+        public BindableList<int> RightHandSlotIDs { get; } = new BindableList<int>();
+        public BindableList<int> LeftHandSlotIDs { get; } = new BindableList<int>();
+        public BindableList<int> ConsumableSlotIDs { get; } = new BindableList<int>();
+        public BindableList<int> SpellSlotIDs { get; } = new BindableList<int>();
         #endregion
 
         #region 当前装备ID
@@ -44,10 +44,10 @@ namespace ARPG
         protected override void OnInit()
         {
             // 初始化快速插槽为空
-            RightHandSlotIDs = CreateEmptySlots(IInventoryModel.EMPTY_WEAPON_ID);
-            LeftHandSlotIDs = CreateEmptySlots(IInventoryModel.EMPTY_WEAPON_ID);
-            ConsumableSlotIDs = CreateEmptySlots(IInventoryModel.EMPTY_CONSUMABLE_ID);
-            SpellSlotIDs = CreateEmptySlots(IInventoryModel.EMPTY_SPELL_ID);
+            RightHandSlotIDs.Reset(CreateEmptySlots(IInventoryModel.EMPTY_WEAPON_ID));
+            LeftHandSlotIDs.Reset(CreateEmptySlots(IInventoryModel.EMPTY_WEAPON_ID));
+            ConsumableSlotIDs.Reset(CreateEmptySlots(IInventoryModel.EMPTY_CONSUMABLE_ID));
+            SpellSlotIDs.Reset(CreateEmptySlots(IInventoryModel.EMPTY_SPELL_ID));
         }
 
         private List<int> CreateEmptySlots(int emptyID)
@@ -90,7 +90,7 @@ namespace ARPG
                 case 7: SpellIDs.Remove(itemID); break;
             }
         }
-
+        //设置快速槽位物品
         public void SetSlotItem(int slotType, int slotIndex, int itemID)
         {
             if (slotIndex < 0 || slotIndex >= SLOT_SIZE) return;
@@ -143,10 +143,10 @@ namespace ARPG
             SpellIDs.Reset(data.spellInventoryIDs);
 
             // 快速插槽
-            RightHandSlotIDs = new List<int>(data.rightHandSlotIDs ?? CreateEmptySlots(IInventoryModel.EMPTY_WEAPON_ID));
-            LeftHandSlotIDs = new List<int>(data.leftHandSlotIDs ?? CreateEmptySlots(IInventoryModel.EMPTY_WEAPON_ID));
-            ConsumableSlotIDs = new List<int>(data.consumableSlotIDs ?? CreateEmptySlots(IInventoryModel.EMPTY_CONSUMABLE_ID));
-            SpellSlotIDs = new List<int>(data.spellSlotIDs ?? CreateEmptySlots(IInventoryModel.EMPTY_SPELL_ID));
+            RightHandSlotIDs.Reset(data.rightHandSlotIDs ?? CreateEmptySlots(IInventoryModel.EMPTY_WEAPON_ID));
+            LeftHandSlotIDs.Reset(data.leftHandSlotIDs ?? CreateEmptySlots(IInventoryModel.EMPTY_WEAPON_ID));
+            ConsumableSlotIDs.Reset(data.consumableSlotIDs ?? CreateEmptySlots(IInventoryModel.EMPTY_CONSUMABLE_ID));
+            SpellSlotIDs.Reset(data.spellSlotIDs ?? CreateEmptySlots(IInventoryModel.EMPTY_SPELL_ID));
 
             // 当前装备
             CurrentHelmetID.Value = data.currentHelmetID;
