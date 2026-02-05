@@ -91,8 +91,11 @@ public class SaveMgr : BaseManager<SaveMgr>
             return;
         }
 
-        // 从 QFramework Model 层导出数据
-        //SyncFromModels();
+        // 仅对已迁移到 Model 层写入的模块执行导出
+        // PlayerModel / InventoryModel 暂未迁移写入，不导出
+        // TaskModel 由 TaskSaveHelper 单独处理
+        var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+        sceneStateModel.ExportToSceneStateData(CurrentGameDataMgr.Instance.sceneStateData);
 
         // 先收集任务数据到 CurrentGameDataMgr
         TaskSaveHelper.SaveAllTaskData();
