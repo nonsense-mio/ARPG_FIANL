@@ -212,8 +212,8 @@ namespace HT
             UIMgr.Instance.GetPanel<GamePanel>((gamePanel) =>
             {
                 gamePanel.Bind(playerFacade);
-                gamePanel.SetSoulCountText(playerFacade.CurrentSoulCount);
-                gamePanel.InitializePlayerUI();
+                //gamePanel.SetSoulCountText(playerFacade.CurrentSoulCount);
+                //gamePanel.InitializePlayerUI();
             });
 
 

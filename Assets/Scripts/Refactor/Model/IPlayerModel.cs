@@ -25,6 +25,17 @@ namespace ARPG
         BindableProperty<int> FaithLevel { get; }
         #endregion
 
+        #region 运行时属性 (不参与存档，由 PlayerStatsManager 写入)
+        BindableProperty<int> CurrentHP { get; }
+        BindableProperty<int> MaxHP { get; }
+        BindableProperty<int> CurrentStamina { get; }
+        BindableProperty<int> MaxStamina { get; }
+        BindableProperty<int> CurrentFocus { get; }
+        BindableProperty<int> MaxFocus { get; }
+        BindableProperty<int> PoisonBuildUp { get; }
+        BindableProperty<int> PoisonAmount { get; }
+        #endregion
+
         #region 位置数据
         BindableProperty<float> PosX { get; }
         BindableProperty<float> PosY { get; }

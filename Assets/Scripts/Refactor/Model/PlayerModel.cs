@@ -24,6 +24,17 @@ namespace ARPG
         public BindableProperty<int> FaithLevel { get; } = new BindableProperty<int>(10);
         #endregion
 
+        #region 运行时属性
+        public BindableProperty<int> CurrentHP { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> MaxHP { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> CurrentStamina { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> MaxStamina { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> CurrentFocus { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> MaxFocus { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> PoisonBuildUp { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> PoisonAmount { get; } = new BindableProperty<int>(100);
+        #endregion
+
         #region 位置数据
         public BindableProperty<float> PosX { get; } = new BindableProperty<float>(0f);
         public BindableProperty<float> PosY { get; } = new BindableProperty<float>(0f);

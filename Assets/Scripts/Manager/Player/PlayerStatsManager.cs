@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ARPG;
+using Framework;
 
 namespace HT
 {
@@ -8,6 +10,7 @@ namespace HT
     public class PlayerStatsManager : CharacterStatsManager
     {
         PlayerManager player;
+        private IPlayerModel playerModel;
         public float staminaRegenerationAmount = 1;
         public float staminaRegenerationAmountWhileBlocking = 0.1f;
         private float staminaRegenTimer = 0;
@@ -16,6 +19,8 @@ namespace HT
         {
             base.Init(characterMgr);
             player = characterMgr as PlayerManager;
+            playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
+
             maxHealth = SetMaxHealthFromHealthLevel();
             currentHealth = maxHealth;
             maxStamina = SetMaxStaminaFromStaminaLevel();
@@ -23,7 +28,7 @@ namespace HT
             maxFocus = SetMaxFocusPointsFromFocusLevel();
             currentFocus = maxFocus;
 
-
+            SyncAllStatsToModel();
             EventCenter.Instance.EventTrigger(E_EventType.E_Player_Init_UI);
         }
 
@@ -38,8 +43,20 @@ namespace HT
             currentStamina = maxStamina;
             currentFocus = maxFocus;
 
+            SyncAllStatsToModel();
             //发布玩家初始化UI事件
             EventCenter.Instance.EventTrigger(E_EventType.E_Player_Init_UI);
+        }
+
+        private void SyncAllStatsToModel()
+        {
+            if (playerModel == null) return;
+            playerModel.MaxHP.Value = maxHealth;
+            playerModel.CurrentHP.Value = currentHealth;
+            playerModel.MaxStamina.Value = (int)maxStamina;
+            playerModel.CurrentStamina.Value = (int)currentStamina;
+            playerModel.MaxFocus.Value = (int)maxFocus;
+            playerModel.CurrentFocus.Value = (int)currentFocus;
         }
 
 
@@ -73,7 +90,7 @@ namespace HT
                 E_EventType.E_Player_StatChanged,
                 new StatChanged(E_PlayerStatType.Health, currentHealth, maxHealth)
             );
-
+            if (playerModel != null) { playerModel.CurrentHP.Value = currentHealth; }
 
             player.playerAnimatorManager.PlayTargetAnimation(damageAnimation, true);
             if (currentHealth <= 0)
@@ -95,6 +112,7 @@ namespace HT
                 E_EventType.E_Player_StatChanged,
                 new StatChanged(E_PlayerStatType.Health, currentHealth, maxHealth)
             );
+            if (playerModel != null) { playerModel.CurrentHP.Value = currentHealth; }
             if (currentHealth <= 0)
             {
                 HandleDeath();
@@ -112,6 +130,7 @@ namespace HT
                 E_EventType.E_Player_StatChanged,
                 new StatChanged(E_PlayerStatType.Health, currentHealth, maxHealth)
             );
+            if (playerModel != null) { playerModel.CurrentHP.Value = currentHealth; }
             if (currentHealth <= 0)
             {
                 HandleDeath();
@@ -135,6 +154,7 @@ namespace HT
                 E_EventType.E_Player_StatChanged,
                 new StatChanged(E_PlayerStatType.Stamina, (int)currentStamina, (int)maxStamina)
             );
+            if (playerModel != null) { playerModel.CurrentStamina.Value = (int)currentStamina; }
         }
         public void DeductSprintingStamina(float stamina)
         {
@@ -151,6 +171,7 @@ namespace HT
                         E_EventType.E_Player_StatChanged,
                         new StatChanged(E_PlayerStatType.Stamina, (int)currentStamina, (int)maxStamina)
                     );
+                    if (playerModel != null) { playerModel.CurrentStamina.Value = (int)currentStamina; }
                 }
             }
             else
@@ -177,23 +198,17 @@ namespace HT
                     if (player.isBlocking)
                     {
                         currentStamina += staminaRegenerationAmountWhileBlocking * Time.deltaTime;
-                        //回复体力时也更新UI显示
-                        // 状态事件
-                        EventCenter.Instance.EventTrigger<StatChanged>(
-                            E_EventType.E_Player_StatChanged,
-                            new StatChanged(E_PlayerStatType.Stamina, (int)currentStamina, (int)maxStamina)
-                        );
                     }
                     else
                     {
                         currentStamina += staminaRegenerationAmount * Time.deltaTime;
-                        //回复体力时也更新UI显示
-                        // 状态事件
-                        EventCenter.Instance.EventTrigger<StatChanged>(
-                            E_EventType.E_Player_StatChanged,
-                            new StatChanged(E_PlayerStatType.Stamina, (int)currentStamina, (int)maxStamina)
-                        );
                     }
+                    // 状态事件
+                    EventCenter.Instance.EventTrigger<StatChanged>(
+                        E_EventType.E_Player_StatChanged,
+                        new StatChanged(E_PlayerStatType.Stamina, (int)currentStamina, (int)maxStamina)
+                    );
+                    if (playerModel != null) { playerModel.CurrentStamina.Value = (int)currentStamina; }
 
 
                 }
@@ -214,6 +229,7 @@ namespace HT
                 E_EventType.E_Player_StatChanged,
                 new StatChanged(E_PlayerStatType.Health, currentHealth, maxHealth)
             );
+            if (playerModel != null) { playerModel.CurrentHP.Value = currentHealth; }
         }
         /// <summary>
         /// 减少focuspoints
@@ -232,7 +248,7 @@ namespace HT
                 E_EventType.E_Player_StatChanged,
                 new StatChanged(E_PlayerStatType.Focus, (int)currentFocus, (int)maxFocus)
             );
-
+            if (playerModel != null) { playerModel.CurrentFocus.Value = (int)currentFocus; }
         }
         public void AddFocusPoints(int focusPoints)
         {
@@ -246,7 +262,7 @@ namespace HT
                 E_EventType.E_Player_StatChanged,
                 new StatChanged(E_PlayerStatType.Focus, (int)currentFocus, (int)maxFocus)
             );
-
+            if (playerModel != null) { playerModel.CurrentFocus.Value = (int)currentFocus; }
         }
 
         //加魂
@@ -256,6 +272,7 @@ namespace HT
                 return;
             currentSoulCount += enemy.characterStatsManager.soulsAwardedOnDeath;
             EventCenter.Instance.EventTrigger(E_EventType.E_Player_Update_SoulCount_UI);
+            if (playerModel != null) { playerModel.CurrentSoulCount.Value = currentSoulCount; }
         }
         public void SpendSouls(int amount)
         {
@@ -263,6 +280,7 @@ namespace HT
             if (currentSoulCount < 0)
                 currentSoulCount = 0;
             EventCenter.Instance.EventTrigger(E_EventType.E_Player_Update_SoulCount_UI);
+            if (playerModel != null) { playerModel.CurrentSoulCount.Value = currentSoulCount; }
         }
 
         protected override void HandleDeath()

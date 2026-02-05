@@ -89,5 +89,20 @@ public class ItemDataBase : ScriptableObject
         return spellItems.FirstOrDefault(item => item != null && item.itemID == id);
     }
 
+    /// <summary>
+    /// 根据 ID 范围自动查找对应类型的 Item_SO
+    /// </summary>
+    public Item_SO GetItemByID(int id)
+    {
+        if (id >= 1000 && id < 2000) return GetWeaponByID(id);
+        if (id >= 2000 && id < 3000) return GetHelmetByID(id);
+        if (id >= 3000 && id < 4000) return GetBodyByID(id);
+        if (id >= 4000 && id < 5000) return GetLegByID(id);
+        if (id >= 5000 && id < 6000) return GetHandByID(id);
+        if (id >= 6000 && id < 7000) return GetConsumableByID(id);
+        if (id >= 7000 && id < 8000) return GetSpellByID(id);
+        return null;
+    }
+
     #endregion
 }

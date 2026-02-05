@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ARPG;
+using Framework;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -502,6 +503,8 @@ namespace HT
                 player.playerInventoryManager.ChangeRightWeapon();
                 player.playerWeaponSlotManager.LoadBothWeaponsOnSlots();
                 EventCenter.Instance.EventTrigger(E_EventType.E_ChangeRightWeapon);
+                var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
+                inventoryModel.CurrentRightWeaponIndex.Value = player.playerInventoryManager.currentRightWeaponIndex;
             }
             else if (d_Pad_Left)
             {
@@ -509,22 +512,25 @@ namespace HT
                 player.playerInventoryManager.ChangeLeftWeapon();
                 player.playerWeaponSlotManager.LoadBothWeaponsOnSlots();
                 EventCenter.Instance.EventTrigger(E_EventType.E_ChangeLeftWeapon);
+                var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
+                inventoryModel.CurrentLeftWeaponIndex.Value = player.playerInventoryManager.currentLeftWeaponIndex;
             }
             else if (d_Pad_Up)
             {
                 d_Pad_Up = false;
                 player.playerInventoryManager.ChangeConsumable();
                 EventCenter.Instance.EventTrigger(E_EventType.E_ChangeConsumable);
-
+                var inv = GameArchitecture.Interface.GetModel<IInventoryModel>();
+                inv.CurrentConsumableIndex.Value = player.playerInventoryManager.currentConsumableIndex;
             }
             else if (d_Pad_Down)
             {
                 d_Pad_Down = false;
                 player.playerInventoryManager.ChangeSpell();
-                print("切换法术");
                 EventCenter.Instance.EventTrigger(E_EventType.E_ChangeSpell);
+                var inv = GameArchitecture.Interface.GetModel<IInventoryModel>();
+                inv.CurrentSpellIndex.Value = player.playerInventoryManager.currentSpellIndex;
             }
-
         }
         private void HandleInventoryInput()
         {

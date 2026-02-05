@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 namespace HT
 {
-    public abstract class BasePanel : MonoBehaviour
+    public abstract class BasePanel : ARPGController
     {
         /// <summary>
         /// UI 依赖的玩家门面（由外部在 ShowPanel/GetPanel 时注入）
