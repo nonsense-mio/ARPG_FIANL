@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-
+using ARPG;
+using Framework;
 using UnityEngine;
 using UnityEngine.UI;
+
 namespace HT
 {
     public class LevelUpPanel : BasePanel
@@ -55,6 +55,9 @@ namespace HT
         private Slider sliderFaith;
         private Text txtCurrentFaithLevel;
         private Text txtProjectedFaithLevel;
+
+        private IPlayerModel playerModel;
+
         protected override void Awake()
         {
             base.Awake();
@@ -87,13 +90,10 @@ namespace HT
             txtCurrentFaithLevel = GetControl<Text>("txtCurrentFaithLevel");
             txtProjectedFaithLevel = GetControl<Text>("txtProjectedFaithLevel");
             sliderFaith = GetControl<Slider>("sliderFaith");
+
+            playerModel = this.GetModel<IPlayerModel>();
         }
 
-        private void EnsureFacade()
-        {
-            if (playerFacade == null)
-                Debug.LogError($"{nameof(LevelUpPanel)} 未绑定 playerFacade，请在 ShowPanel/GetPanel 回调里调用 panel.Bind(facade)");
-        }
         public override void HideMe()
         {
             btnLevUp.onClick.RemoveListener(ConfirmPlayerLevelUpStats);
@@ -109,7 +109,6 @@ namespace HT
 
         public override void ShowMe()
         {
-            EnsureFacade();
             Init();
             UpdateProjectedPlayerLevel();
             btnLevUp.onClick.AddListener(ConfirmPlayerLevelUpStats);
@@ -124,104 +123,139 @@ namespace HT
             sliderIntelligence.onValueChanged.AddListener(UpdateIntelligenceLevelSlider);
             sliderFaith.onValueChanged.AddListener(UpdateFaithLevelSlider);
         }
+
         private void Init()
         {
-            if (playerFacade == null) return;
-
-            currentPlayerLevel = playerFacade.PlayerLevel;
+            currentPlayerLevel = playerModel.PlayerLevel;
             txtCurrentPlayerLevel.text = currentPlayerLevel.ToString();
-            projectedPlayerLevel = playerFacade.PlayerLevel;
+            projectedPlayerLevel = playerModel.PlayerLevel;
             txtProjectedPlayerLevel.text = projectedPlayerLevel.ToString();
 
-            sliderHealth.value = playerFacade.HealthLevel;
-            sliderHealth.minValue = playerFacade.HealthLevel;
+            sliderHealth.value = playerModel.HealthLevel;
+            sliderHealth.minValue = playerModel.HealthLevel;
             sliderHealth.maxValue = 99;
             sliderHealth.wholeNumbers = true;
-            txtCurrentHealthLevel.text = playerFacade.HealthLevel.ToString();
-            txtProjectedHealthLevel.text = playerFacade.HealthLevel.ToString();
+            txtCurrentHealthLevel.text = playerModel.HealthLevel.ToString();
+            txtProjectedHealthLevel.text = playerModel.HealthLevel.ToString();
 
-            sliderStamina.value = playerFacade.StaminaLevel;
-            sliderStamina.minValue = playerFacade.StaminaLevel;
+            sliderStamina.value = playerModel.StaminaLevel;
+            sliderStamina.minValue = playerModel.StaminaLevel;
             sliderStamina.maxValue = 99;
             sliderStamina.wholeNumbers = true;
-            txtCurrentStaminaLevel.text = playerFacade.StaminaLevel.ToString();
-            txtProjectedStaminaLevel.text = playerFacade.StaminaLevel.ToString();
+            txtCurrentStaminaLevel.text = playerModel.StaminaLevel.ToString();
+            txtProjectedStaminaLevel.text = playerModel.StaminaLevel.ToString();
 
-            sliderFocus.value = playerFacade.FocusLevel;
-            sliderFocus.minValue = playerFacade.FocusLevel;
+            sliderFocus.value = playerModel.FocusLevel;
+            sliderFocus.minValue = playerModel.FocusLevel;
             sliderFocus.maxValue = 99;
             sliderFocus.wholeNumbers = true;
-            txtCurrentFocusLevel.text = playerFacade.FocusLevel.ToString();
-            txtProjectedFocusLevel.text = playerFacade.FocusLevel.ToString();
+            txtCurrentFocusLevel.text = playerModel.FocusLevel.ToString();
+            txtProjectedFocusLevel.text = playerModel.FocusLevel.ToString();
 
-            sliderPoise.value = playerFacade.PoiseLevel;
-            sliderPoise.minValue = playerFacade.PoiseLevel;
+            sliderPoise.value = playerModel.PoiseLevel;
+            sliderPoise.minValue = playerModel.PoiseLevel;
             sliderPoise.maxValue = 99;
             sliderPoise.wholeNumbers = true;
-            txtCurrentPoiseLevel.text = playerFacade.PoiseLevel.ToString();
-            txtProjectedPoiseLevel.text = playerFacade.PoiseLevel.ToString();
+            txtCurrentPoiseLevel.text = playerModel.PoiseLevel.ToString();
+            txtProjectedPoiseLevel.text = playerModel.PoiseLevel.ToString();
 
-            sliderStrength.value = playerFacade.StrengthLevel;
-            sliderStrength.minValue = playerFacade.StrengthLevel;
+            sliderStrength.value = playerModel.StrengthLevel;
+            sliderStrength.minValue = playerModel.StrengthLevel;
             sliderStrength.maxValue = 99;
             sliderStrength.wholeNumbers = true;
-            txtCurrentStrengthLevel.text = playerFacade.StrengthLevel.ToString();
-            txtProjectedStrengthLevel.text = playerFacade.StrengthLevel.ToString();
+            txtCurrentStrengthLevel.text = playerModel.StrengthLevel.ToString();
+            txtProjectedStrengthLevel.text = playerModel.StrengthLevel.ToString();
 
-            sliderDexterity.value = playerFacade.DexterityLevel;
-            sliderDexterity.minValue = playerFacade.DexterityLevel;
+            sliderDexterity.value = playerModel.DexterityLevel;
+            sliderDexterity.minValue = playerModel.DexterityLevel;
             sliderDexterity.maxValue = 99;
             sliderDexterity.wholeNumbers = true;
-            txtCurrentDexterityLevel.text = playerFacade.DexterityLevel.ToString();
-            txtProjectedDexterityLevel.text = playerFacade.DexterityLevel.ToString();
+            txtCurrentDexterityLevel.text = playerModel.DexterityLevel.ToString();
+            txtProjectedDexterityLevel.text = playerModel.DexterityLevel.ToString();
 
-            sliderIntelligence.value = playerFacade.IntelligenceLevel;
-            sliderIntelligence.minValue = playerFacade.IntelligenceLevel;
+            sliderIntelligence.value = playerModel.IntelligenceLevel;
+            sliderIntelligence.minValue = playerModel.IntelligenceLevel;
             sliderIntelligence.maxValue = 99;
             sliderIntelligence.wholeNumbers = true;
-            txtCurrentIntelligenceLevel.text = playerFacade.IntelligenceLevel.ToString();
-            txtProjectedIntelligenceLevel.text = playerFacade.IntelligenceLevel.ToString();
+            txtCurrentIntelligenceLevel.text = playerModel.IntelligenceLevel.ToString();
+            txtProjectedIntelligenceLevel.text = playerModel.IntelligenceLevel.ToString();
 
-            sliderFaith.value = playerFacade.FaithLevel;
-            sliderFaith.minValue = playerFacade.FaithLevel;
+            sliderFaith.value = playerModel.FaithLevel;
+            sliderFaith.minValue = playerModel.FaithLevel;
             sliderFaith.maxValue = 99;
             sliderFaith.wholeNumbers = true;
-            txtCurrentSouls.text = playerFacade.CurrentSoulCount.ToString();
+            txtCurrentSouls.text = playerModel.CurrentSoulCount.ToString();
         }
+
         //确认升级
         public void ConfirmPlayerLevelUpStats()
         {
-            if (playerFacade == null) return;
-            playerFacade.PlayerLevel = projectedPlayerLevel;
-            playerFacade.HealthLevel = Mathf.RoundToInt(sliderHealth.value);
-            playerFacade.StaminaLevel = Mathf.RoundToInt(sliderStamina.value);
-            playerFacade.FocusLevel = Mathf.RoundToInt(sliderFocus.value);
-            playerFacade.PoiseLevel = Mathf.RoundToInt(sliderPoise.value);
-            playerFacade.StrengthLevel = Mathf.RoundToInt(sliderStrength.value);
-            playerFacade.DexterityLevel = Mathf.RoundToInt(sliderDexterity.value);
-            playerFacade.IntelligenceLevel = Mathf.RoundToInt(sliderIntelligence.value);
-            playerFacade.FaithLevel = Mathf.RoundToInt(sliderFaith.value);
+            int newHealthLevel = Mathf.RoundToInt(sliderHealth.value);
+            int newStaminaLevel = Mathf.RoundToInt(sliderStamina.value);
+            int newFocusLevel = Mathf.RoundToInt(sliderFocus.value);
+            int newPoiseLevel = Mathf.RoundToInt(sliderPoise.value);
+            int newStrengthLevel = Mathf.RoundToInt(sliderStrength.value);
+            int newDexterityLevel = Mathf.RoundToInt(sliderDexterity.value);
+            int newIntelligenceLevel = Mathf.RoundToInt(sliderIntelligence.value);
+            int newFaithLevel = Mathf.RoundToInt(sliderFaith.value);
+            int newSoulCount = playerModel.CurrentSoulCount - soulsRequiredToLevelUp;
 
-            playerFacade.SetMaxHealthFromHealthLevel();
-            playerFacade.SetMaxStaminaFromStaminaLevel();
-            playerFacade.SetMaxFocusPointsFromFocusLevel();
+            // 1) 写入 PlayerModel (驱动 GamePanel 响应式更新)
+            playerModel.PlayerLevel.Value = projectedPlayerLevel;
+            playerModel.HealthLevel.Value = newHealthLevel;
+            playerModel.StaminaLevel.Value = newStaminaLevel;
+            playerModel.FocusLevel.Value = newFocusLevel;
+            playerModel.PoiseLevel.Value = newPoiseLevel;
+            playerModel.StrengthLevel.Value = newStrengthLevel;
+            playerModel.DexterityLevel.Value = newDexterityLevel;
+            playerModel.IntelligenceLevel.Value = newIntelligenceLevel;
+            playerModel.FaithLevel.Value = newFaithLevel;
+            playerModel.CurrentSoulCount.Value = newSoulCount;
 
-            playerFacade.CurrentSoulCount -= soulsRequiredToLevelUp;
-            // EventCenter.Instance.EventTrigger(E_EventType.E_Player_Init_UI);
-            // EventCenter.Instance.EventTrigger(E_EventType.E_Player_SpendSouls, soulsRequiredToLevelUp);
-            UIMgr.Instance.GetPanel<GamePanel>((gamePanel) =>
+            // 2) 写入 PlayerStatsManager (运行时逻辑)
+            var pm = PlayerManager.localPlayer;
+            if (pm != null)
             {
-                gamePanel.Bind(playerFacade);
-                //gamePanel.SetSoulCountText(playerFacade.CurrentSoulCount);
-                //gamePanel.InitializePlayerUI();
-            });
+                var stats = pm.playerStatsManager;
+                stats.playerLevel = projectedPlayerLevel;
+                stats.healthLevel = newHealthLevel;
+                stats.staminaLevel = newStaminaLevel;
+                stats.focusLevel = newFocusLevel;
+                stats.poiseLevel = newPoiseLevel;
+                stats.strengthLevel = newStrengthLevel;
+                stats.dexterityLevel = newDexterityLevel;
+                stats.intelligenceLevel = newIntelligenceLevel;
+                stats.faithLevel = newFaithLevel;
+                stats.currentSoulCount = newSoulCount;
 
+                // 重新计算 max 值
+                stats.SetMaxHealthFromHealthLevel();
+                stats.SetMaxStaminaFromStaminaLevel();
+                stats.SetMaxFocusPointsFromFocusLevel();
+
+                // 同步 max 值到 Model (GamePanel 自动更新)
+                playerModel.MaxHP.Value = stats.maxHealth;
+                playerModel.MaxStamina.Value = (int)stats.maxStamina;
+                playerModel.MaxFocus.Value = (int)stats.maxFocus;
+            }
+
+            // 3) 同步 CurrentGameDataMgr (存档持久化)
+            var pd = CurrentGameDataMgr.Instance.playerData;
+            pd.playerLevel = projectedPlayerLevel;
+            pd.healthLevel = newHealthLevel;
+            pd.staminaLevel = newStaminaLevel;
+            pd.focusLevel = newFocusLevel;
+            pd.poiseLevel = newPoiseLevel;
+            pd.strengthLevel = newStrengthLevel;
+            pd.dexterityLevel = newDexterityLevel;
+            pd.intelligenceLevel = newIntelligenceLevel;
+            pd.faithLevel = newFaithLevel;
+            pd.currentSoulCount = newSoulCount;
 
             UIMgr.Instance.HidePanel<LevelUpPanel>();
             UIMgr.Instance.ShowPanel<DialoguePanel>();
-
-
         }
+
         //计算升级所需魂数
         private void CalculateSoulCostToLevelUp()
         {
@@ -230,28 +264,27 @@ namespace HT
                 soulsRequiredToLevelUp += Mathf.RoundToInt((projectedPlayerLevel - currentPlayerLevel) * baseLevelUpSoulCost * 1.1f);
             }
         }
+
         //更新目标等级
         private void UpdateProjectedPlayerLevel()
         {
-            if (playerFacade == null) return;
             soulsRequiredToLevelUp = 0;
 
             projectedPlayerLevel = currentPlayerLevel;
-            projectedPlayerLevel = currentPlayerLevel;
-            projectedPlayerLevel += Mathf.RoundToInt(sliderHealth.value - playerFacade.HealthLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderStamina.value - playerFacade.StaminaLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderFocus.value - playerFacade.FocusLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderPoise.value - playerFacade.PoiseLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderStrength.value - playerFacade.StrengthLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderDexterity.value - playerFacade.DexterityLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderIntelligence.value - playerFacade.IntelligenceLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderFaith.value - playerFacade.FaithLevel);
+            projectedPlayerLevel += Mathf.RoundToInt(sliderHealth.value - playerModel.HealthLevel);
+            projectedPlayerLevel += Mathf.RoundToInt(sliderStamina.value - playerModel.StaminaLevel);
+            projectedPlayerLevel += Mathf.RoundToInt(sliderFocus.value - playerModel.FocusLevel);
+            projectedPlayerLevel += Mathf.RoundToInt(sliderPoise.value - playerModel.PoiseLevel);
+            projectedPlayerLevel += Mathf.RoundToInt(sliderStrength.value - playerModel.StrengthLevel);
+            projectedPlayerLevel += Mathf.RoundToInt(sliderDexterity.value - playerModel.DexterityLevel);
+            projectedPlayerLevel += Mathf.RoundToInt(sliderIntelligence.value - playerModel.IntelligenceLevel);
+            projectedPlayerLevel += Mathf.RoundToInt(sliderFaith.value - playerModel.FaithLevel);
 
             txtProjectedPlayerLevel.text = projectedPlayerLevel.ToString();
             CalculateSoulCostToLevelUp();
             txtSoulsRequired.text = soulsRequiredToLevelUp.ToString();
             //检查是否有足够的魂进行升级
-            btnLevUp.interactable = playerFacade.CurrentSoulCount >= soulsRequiredToLevelUp;
+            btnLevUp.interactable = playerModel.CurrentSoulCount >= soulsRequiredToLevelUp;
         }
 
 
@@ -297,9 +330,6 @@ namespace HT
         {
             txtProjectedFaithLevel.text = sliderFaith.value.ToString();
             UpdateProjectedPlayerLevel();
-
         }
-
     }
 }
-

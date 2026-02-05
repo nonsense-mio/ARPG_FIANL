@@ -19,16 +19,7 @@ public class DialogueActionHelper : MonoBehaviour
     public void OpenLevelUpPanel()
     {
         UIMgr.Instance.HidePanel<DialoguePanel>();
-        UIMgr.Instance.ShowPanel<LevelUpPanel>(callBack: (levelUpPanel) =>
-        {
-            //绑定facade 诸如数据
-            PlayerManager pm = PlayerManager.localPlayer;
-            if (pm != null)
-            {
-                IPlayerUIFacade facade = new PlayerUIFacade(pm.playerStatsManager, pm.playerInventoryManager);
-                levelUpPanel.Bind(facade);
-            }
-        });
+        UIMgr.Instance.ShowPanel<LevelUpPanel>();
     }
 
     public void Task1EnemySpawn()

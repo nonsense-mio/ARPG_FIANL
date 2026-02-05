@@ -24,7 +24,8 @@ namespace HT
         private Text txtFocus;
 
         private readonly List<IUnRegister> unRegisters = new List<IUnRegister>();
-
+        private IPlayerModel playerModel;
+        private IInventoryModel inventoryModel;
 
         protected override void Awake()
         {
@@ -43,12 +44,13 @@ namespace HT
             txtHealth = GetControl<Text>("txtHealth");
             txtStamina = GetControl<Text>("txtStamina");
             txtFocus = GetControl<Text>("txtFocus");
+
+            playerModel = this.GetModel<IPlayerModel>();
+            inventoryModel = this.GetModel<IInventoryModel>();
         }
 
         void OnEnable()
         {
-            var playerModel = this.GetModel<IPlayerModel>();
-            var inventoryModel = this.GetModel<IInventoryModel>();
 
             #region 属性绑定
             // Health
