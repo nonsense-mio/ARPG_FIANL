@@ -18,7 +18,7 @@ namespace ARPG
         /// <summary>
         /// NPC 任务链进度 (key: GiverId, value: 当前任务索引)
         /// </summary>
-        BindableProperty<Dictionary<string, int>> TaskGiverProgress { get; }
+        Dictionary<string, int> TaskGiverProgress { get; }
         #endregion
 
         #region 任务操作

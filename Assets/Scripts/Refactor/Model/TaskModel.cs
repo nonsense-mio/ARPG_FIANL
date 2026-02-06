@@ -10,7 +10,7 @@ namespace ARPG
     {
         #region 任务数据
         public BindableList<TaskSaveData> ActiveTasks { get; } = new BindableList<TaskSaveData>();
-        public BindableProperty<Dictionary<string, int>> TaskGiverProgress { get; } = new BindableProperty<Dictionary<string, int>>(new Dictionary<string, int>());
+        public Dictionary<string, int> TaskGiverProgress { get; } = new Dictionary<string, int>();
         #endregion
 
         protected override void OnInit()
@@ -83,12 +83,12 @@ namespace ARPG
         #region NPC 任务链进度
         public void SetGiverProgress(string giverId, int index)
         {
-            TaskGiverProgress.Value[giverId] = index;
+            TaskGiverProgress[giverId] = index;
         }
 
         public int GetGiverProgress(string giverId)
         {
-            return TaskGiverProgress.Value.TryGetValue(giverId, out int index) ? index : 0;
+            return TaskGiverProgress.TryGetValue(giverId, out int index) ? index : 0;
         }
         #endregion
 
@@ -98,7 +98,7 @@ namespace ARPG
             if (data == null)
             {
                 ActiveTasks.Clear();
-                TaskGiverProgress.Value = new Dictionary<string, int>();
+                TaskGiverProgress.Clear();
                 return;
             }
 
@@ -121,12 +121,12 @@ namespace ARPG
             ActiveTasks.Reset(copies);
 
             // 深拷贝 NPC 进度
-            TaskGiverProgress.Value = new Dictionary<string, int>();
+            TaskGiverProgress.Clear();
             if (data.taskGiverProgress != null)
             {
                 foreach (var kvp in data.taskGiverProgress)
                 {
-                    TaskGiverProgress.Value[kvp.Key] = kvp.Value;
+                    TaskGiverProgress[kvp.Key] = kvp.Value;
                 }
             }
         }
@@ -151,7 +151,7 @@ namespace ARPG
 
             // 导出 NPC 进度
             data.taskGiverProgress = new Dictionary<string, int>();
-            foreach (var kvp in TaskGiverProgress.Value)
+            foreach (var kvp in TaskGiverProgress)
             {
                 data.taskGiverProgress[kvp.Key] = kvp.Value;
             }
