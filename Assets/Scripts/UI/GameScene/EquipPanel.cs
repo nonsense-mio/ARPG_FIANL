@@ -15,6 +15,7 @@ namespace HT
         public List<BagItem> equipSlotList = new List<BagItem>();
 
         private IInventoryModel inventoryModel;
+        private PoolSystem poolSystem;
 
         protected override void Awake()
         {
@@ -23,6 +24,7 @@ namespace HT
             armorGroup = GetControl<Image>("armorGroup");
             scGroup = GetControl<Image>("scGroup");
             inventoryModel = this.GetModel<IInventoryModel>();
+            poolSystem = this.GetSystem<PoolSystem>();
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace HT
         {
             for (int i = 0; i < 8; i++)
             {
-                GameObject obj = PoolMgr.Instance.GetObj("UI/btnBagItem");
+                GameObject obj = poolSystem.Spawn("UI/btnBagItem");
                 obj.transform.SetParent(weaponGroup.transform, false);
                 obj.transform.localScale = Vector3.one;
                 obj.transform.localPosition = Vector3.zero;
@@ -47,7 +49,7 @@ namespace HT
             }
             for (int i = 0; i < 4; i++)
             {
-                GameObject obj = PoolMgr.Instance.GetObj("UI/btnBagItem");
+                GameObject obj = poolSystem.Spawn("UI/btnBagItem");
                 obj.transform.SetParent(armorGroup.transform, false);
                 obj.transform.localScale = Vector3.one;
                 obj.transform.localPosition = Vector3.zero;
@@ -57,7 +59,7 @@ namespace HT
             }
             for (int i = 0; i < 8; i++)
             {
-                GameObject obj = PoolMgr.Instance.GetObj("UI/btnBagItem");
+                GameObject obj = poolSystem.Spawn("UI/btnBagItem");
                 obj.transform.SetParent(scGroup.transform, false);
                 obj.transform.localScale = Vector3.one;
                 obj.transform.localPosition = Vector3.zero;
@@ -75,7 +77,7 @@ namespace HT
             {
                 equipSlotList[i].iconImage.sprite = null;
                 equipSlotList[i].btnSlot.onClick.RemoveAllListeners();
-                PoolMgr.Instance.PushObj(equipSlotList[i].gameObject);
+                poolSystem.Recycle(equipSlotList[i].gameObject);
             }
             equipSlotList.Clear();
         }

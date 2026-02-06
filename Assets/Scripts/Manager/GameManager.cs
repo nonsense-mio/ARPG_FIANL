@@ -153,7 +153,8 @@ namespace HT
             SaveMgr.Instance.StopPlayTimer();
 
             MusicMgr.Instance.ClearSound();
-            PoolMgr.Instance.ClearPool();
+            GameArchitecture.Interface.GetSystem<PoolSystem>().ClearAllPools();
+            PoolMgr.Instance.ClearPool(); // 仅清理泛型池(TimerItem等)
             GameArchitecture.Interface.GetSystem<ITaskSystem>().ClearTasks();
         }
     }

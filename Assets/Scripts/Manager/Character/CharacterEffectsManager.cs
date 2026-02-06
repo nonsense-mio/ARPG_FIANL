@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using UnityEngine;
 
 namespace HT
@@ -53,12 +54,12 @@ namespace HT
                 if (buildUpTransform != null)
                 {
                     //生成毒特效
-                    currentPoisonParticleFX = PoolMgr.Instance.GetObj(posionFX);
+                    currentPoisonParticleFX = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(posionFX);
                     currentPoisonParticleFX.transform.position = buildUpTransform.position;
                 }
                 else
                 {
-                    currentPoisonParticleFX = PoolMgr.Instance.GetObj(posionFX);
+                    currentPoisonParticleFX = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(posionFX);
                     currentPoisonParticleFX.transform.position = character.transform.position;
                 }
                 currentPoisonParticleFX.transform.localScale = Vector3.one * 0.5f;
@@ -87,7 +88,7 @@ namespace HT
                 //移除毒特效
                 if (currentPoisonParticleFX != null)
                 {
-                    PoolMgr.Instance.PushObj(currentPoisonParticleFX);
+                    GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(currentPoisonParticleFX);
                     currentPoisonParticleFX = null;
                 }
             }
@@ -99,7 +100,7 @@ namespace HT
             //将生成物放回对象池
             if (instantiateFX != null)
             {
-                PoolMgr.Instance.PushObj(instantiateFX);
+                GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(instantiateFX);
             }
             if (character.isHoldingArrow)
             {

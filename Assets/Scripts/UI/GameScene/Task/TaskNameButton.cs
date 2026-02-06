@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TaskNameButton : MonoBehaviour, IPoolObject
+public class TaskNameButton : MonoBehaviour, IPoolable
 {
     public Button btnTask;
     public Text txtTaskName;
@@ -22,8 +23,9 @@ public class TaskNameButton : MonoBehaviour, IPoolObject
         txtTaskContent = data.description;
     }
 
-    // 重置任务按钮信息
-    public void ResetInfo()
+    public void OnSpawn() { }
+
+    public void OnRecycle()
     {
         btnTask.onClick.RemoveAllListeners();
         currentData = null;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using UnityEngine;
 using UnityEngine.Events;
 using HT;
@@ -22,8 +23,11 @@ public class MusicMgr : BaseManager<MusicMgr>
     // 添加标志位，防止在清理时Update执行
     private bool isClearing = false;
 
+    private PoolSystem poolSystem;
+
     private MusicMgr()
     {
+        poolSystem = GameArchitecture.Interface.GetSystem<PoolSystem>();
         MonoMgr.Instance.AddFixedUpdateListener(Update);
         MusicData data = CurrentGameDataMgr.Instance.musicData;
         soundValue = data.soundValue;
@@ -52,7 +56,7 @@ public class MusicMgr : BaseManager<MusicMgr>
                 if (!source.isPlaying)
                 {
                     source.clip = null;
-                    PoolMgr.Instance.PushObj(source.gameObject);
+                    poolSystem.Recycle(source.gameObject);
                     soundList.RemoveAt(i);
                 }
             }
@@ -133,7 +137,7 @@ public class MusicMgr : BaseManager<MusicMgr>
         ABResMgr.Instance.LoadResAsync<AudioClip>("sound", name, (clip) =>
         {
             //从缓存池中取出音效对象 得到音效组件
-            AudioSource source = PoolMgr.Instance.GetObj("Sound/soundObj").GetComponent<AudioSource>();
+            AudioSource source = poolSystem.Spawn("Sound/soundObj").GetComponent<AudioSource>();
             //如果取出来的音效组件 是之前正在使用的 我们先停止它
             source.Stop();
             source.clip = clip;
@@ -165,7 +169,7 @@ public class MusicMgr : BaseManager<MusicMgr>
             soundList.Remove(source);
             //将音效组件依附的对象放回缓存池中
             source.clip = null;
-            PoolMgr.Instance.PushObj(source.gameObject);
+            poolSystem.Recycle(source.gameObject);
         }
     }
 
@@ -215,7 +219,7 @@ public class MusicMgr : BaseManager<MusicMgr>
         {
             soundList[i].Stop();
             soundList[i].clip = null;
-            PoolMgr.Instance.PushObj(soundList[i].gameObject);
+            poolSystem.Recycle(soundList[i].gameObject);
         }
         //清空音效列表
 

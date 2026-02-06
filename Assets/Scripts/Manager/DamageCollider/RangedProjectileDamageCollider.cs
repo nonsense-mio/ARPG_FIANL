@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace HT
 {
-    public class RangedProjectileDamageCollider : DamageCollider, IPoolObject
+    public class RangedProjectileDamageCollider : DamageCollider, IPoolable
     {
         public RangedAmmoItem_SO ammoItem;
         protected bool hasAlreadyPenetratedASurface;
@@ -30,20 +30,19 @@ namespace HT
                 transform.rotation = Quaternion.LookRotation(arrowRigidbody.velocity);
             }
         }
-        public void ResetInfo()
+        public void OnSpawn() { }
+
+        public void OnRecycle()
         {
             hasAlreadyPenetratedASurface = false;
             penetratedProjectile = null;
             arrowCapsuleCollider.enabled = true;
-            // 1. 暂停物理，清空速度
-            //arrowRigidbody.isKinematic = true;
             arrowRigidbody.velocity = Vector3.zero;
             arrowRigidbody.angularVelocity = Vector3.zero;
             arrowRigidbody.isKinematic = true;
 
             if (charactersDamaged.Count > 0)
             {
-                //重置已受伤害列表
                 charactersDamaged.Clear();
             }
         }

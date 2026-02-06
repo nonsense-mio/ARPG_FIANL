@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using ARPG;
 using HT;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BagItem : MonoBehaviour, IItemBase<Item_SO>, IPoolObject
+public class BagItem : MonoBehaviour, IItemBase<Item_SO>, IPoolable
 {
     public Button btnSlot;
     public Image bkImage;
@@ -16,7 +17,9 @@ public class BagItem : MonoBehaviour, IItemBase<Item_SO>, IPoolObject
         iconImage.sprite = item.itemIcon;
     }
 
-    public void ResetInfo()
+    public void OnSpawn() { }
+
+    public void OnRecycle()
     {
         iconImage.sprite = null;
         iconImage.enabled = true;

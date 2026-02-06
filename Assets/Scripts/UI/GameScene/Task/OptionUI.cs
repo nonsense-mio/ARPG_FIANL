@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class OptionUI : MonoBehaviour, IPoolObject
+public class OptionUI : MonoBehaviour, IPoolable
 {
     public Text optionText;
 
@@ -34,10 +34,9 @@ public class OptionUI : MonoBehaviour, IPoolObject
         onSelectAction = option.onSelectAction;
     }
 
-    /// <summary>
-    /// 池对象重置方法
-    /// </summary>
-    public void ResetInfo()
+    public void OnSpawn() { }
+
+    public void OnRecycle()
     {
         currentPiece = null;
         nextPieceID = null;

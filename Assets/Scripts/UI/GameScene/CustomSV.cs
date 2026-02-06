@@ -1,5 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using UnityEngine;
 using UnityEngine.Events; // 引入 UnityAction
 using UnityEngine.UI;     // 引入 Button
@@ -121,7 +121,7 @@ namespace HT
                     if (nowShowItem.ContainsKey(i))
                     {
                         if (nowShowItem[i] != null)
-                            PoolMgr.Instance.PushObj(nowShowItem[i]);
+                            GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(nowShowItem[i]);
                         nowShowItem.Remove(i);
                     }
                 }
@@ -130,7 +130,7 @@ namespace HT
                     if (nowShowItem.ContainsKey(i))
                     {
                         if (nowShowItem[i] != null)
-                            PoolMgr.Instance.PushObj(nowShowItem[i]);
+                            GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(nowShowItem[i]);
                         nowShowItem.Remove(i);
                     }
                 }
@@ -150,7 +150,7 @@ namespace HT
                     int index = i;
                     nowShowItem.Add(index, null);
                     //取出对象
-                    GameObject obj = PoolMgr.Instance.GetObj(itemResName);
+                    GameObject obj = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(itemResName);
                     //设置它的父对象
                     obj.transform.SetParent(content, false);
                     //重置相对缩放大小
@@ -183,7 +183,7 @@ namespace HT
                     if (nowShowItem.ContainsKey(index))
                         nowShowItem[index] = obj;
                     else
-                        PoolMgr.Instance.PushObj(obj);
+                        GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(obj);
                 }
 
             }
@@ -194,7 +194,7 @@ namespace HT
             foreach (var item in nowShowItem)
             {
                 if (item.Value != null)
-                    PoolMgr.Instance.PushObj(item.Value);
+                    GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(item.Value);
             }
             nowShowItem.Clear();
             oldMinIndex = -1;

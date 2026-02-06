@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using UnityEngine;
 
 namespace HT
@@ -22,7 +23,7 @@ namespace HT
             base.AttemptToConsumeItem(player);
             //GameObject flask = Instantiate(itemModel, player.playerWeaponSlotManager.rightHandSlot.transform);
             //生成瓶子模型
-            GameObject flask = PoolMgr.Instance.GetObj(itemModelName);
+            GameObject flask = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(itemModelName);
             flask.transform.parent = player.playerWeaponSlotManager.rightHandSlot.transform;
             flask.transform.localPosition = Vector3.zero;
             flask.transform.localRotation = Quaternion.identity;
@@ -34,7 +35,7 @@ namespace HT
                 player.playerEffectsManager.isPoisoned = false;
                 if(player.playerEffectsManager.currentPoisonParticleFX != null)
                 {   //回收中毒特效
-                    PoolMgr.Instance.PushObj(player.playerEffectsManager.currentPoisonParticleFX);
+                    GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(player.playerEffectsManager.currentPoisonParticleFX);
                     player.playerEffectsManager.currentPoisonParticleFX = null;
                 }
             }

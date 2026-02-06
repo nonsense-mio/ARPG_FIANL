@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using Unity.VisualScripting;
 using UnityEngine;
 namespace HT
@@ -18,7 +19,7 @@ namespace HT
         }
         private void PushInPool()
         {
-            PoolMgr.Instance.PushObj(this.gameObject);
+            GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(this.gameObject);
         }
     }
 }

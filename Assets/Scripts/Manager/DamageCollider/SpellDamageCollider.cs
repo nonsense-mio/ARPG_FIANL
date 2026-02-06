@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HT
 {
-    public class SpellDamageCollider : DamageCollider, IPoolObject
+    public class SpellDamageCollider : DamageCollider, IPoolable
     {
         public GameObject impactParticles;
         public string fireballFXName;
@@ -71,16 +71,17 @@ namespace HT
             {
                 hasCollided = true;
                 GameArchitecture.Interface.SendEvent(new FireBallHitEvent { HitPoint = hitPoint });
-                PoolMgr.Instance.PushObj(this.gameObject);
+                GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(this.gameObject);
             }
         }
 
-        // 必须实现 IPoolObject 的 ResetInfo 或者利用 OnDisable 来清理
-        public void ResetInfo()
+        public void OnSpawn() { }
+
+        public void OnRecycle()
         {
             hasCollided = false;
 
-            // 1. 重置刚体物理状态
+            // 重置刚体物理状态
             if (rb != null)
             {
                 rb.velocity = Vector3.zero;

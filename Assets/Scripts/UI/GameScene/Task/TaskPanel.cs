@@ -12,12 +12,14 @@ namespace HT
         public RectTransform rewardListTransform;
         private Text txtTaskTitle;
         private Text txtTaskContent;
+        private PoolSystem poolSystem;
 
         protected override void Awake()
         {
             base.Awake();
             txtTaskTitle = GetControl<Text>("txtTaskTitle");
             txtTaskContent = GetControl<Text>("txtTaskContent");
+            poolSystem = this.GetSystem<PoolSystem>();
         }
 
         //设置任务需求列表
@@ -26,12 +28,12 @@ namespace HT
             // 倒序遍历
             for (int i = requireListTransform.childCount - 1; i >= 0; i--)
             {
-                PoolMgr.Instance.PushObj(requireListTransform.GetChild(i).gameObject);
+                poolSystem.Recycle(requireListTransform.GetChild(i).gameObject);
             }
             //生成需求列表
             for (int i = 0; i < taskData.requireList.Count; i++)
             {
-                GameObject go = PoolMgr.Instance.GetObj("UI/TaskRequirement");
+                GameObject go = poolSystem.Spawn("UI/TaskRequirement");
                 go.transform.SetParent(requireListTransform, false);
                 TaskRequirement taskRequirement = go.GetComponent<TaskRequirement>();
                 taskRequirement.InitRequirement(taskData.requireList[i].name, taskData.requireList[i].requireAmount, taskData.requireList[i].currentAmount);
@@ -44,12 +46,12 @@ namespace HT
             // 倒序遍历，避免索引错乱
             for (int i = rewardListTransform.childCount - 1; i >= 0; i--)
             {
-                PoolMgr.Instance.PushObj(rewardListTransform.GetChild(i).gameObject);
+                poolSystem.Recycle(rewardListTransform.GetChild(i).gameObject);
             }
             //生成奖励列表
             for (int i = 0; i < taskData.rewardList.Count; i++)
             {
-                GameObject obj = PoolMgr.Instance.GetObj("UI/btnBagItem");
+                GameObject obj = poolSystem.Spawn("UI/btnBagItem");
                 obj.transform.SetParent(rewardListTransform, false);
                 BagItem bagItem = obj.GetComponent<BagItem>();
                 bagItem.InitInfo(taskData.rewardList[i]);
@@ -60,7 +62,7 @@ namespace HT
             // 防御性清理：确保不会累积旧按钮
             for (int i = taskListTransform.childCount - 1; i >= 0; i--)
             {
-                PoolMgr.Instance.PushObj(taskListTransform.GetChild(i).gameObject);
+                poolSystem.Recycle(taskListTransform.GetChild(i).gameObject);
             }
 
             //生成任务列表
@@ -68,7 +70,7 @@ namespace HT
             var allTasks = taskSystem.GetAllTaskData();
             for (int i = 0; i < allTasks.Count; i++)
             {
-                GameObject btnTaskName = PoolMgr.Instance.GetObj("UI/btnTaskName");
+                GameObject btnTaskName = poolSystem.Spawn("UI/btnTaskName");
                 btnTaskName.transform.SetParent(taskListTransform, false);
                 btnTaskName.transform.localScale = Vector3.one;
                 TaskNameButton taskNameButton = btnTaskName.GetComponent<TaskNameButton>();
@@ -91,15 +93,15 @@ namespace HT
             // 倒序遍历清理
             for (int i = taskListTransform.childCount - 1; i >= 0; i--)
             {
-                PoolMgr.Instance.PushObj(taskListTransform.GetChild(i).gameObject);
+                poolSystem.Recycle(taskListTransform.GetChild(i).gameObject);
             }
             for (int i = requireListTransform.childCount - 1; i >= 0; i--)
             {
-                PoolMgr.Instance.PushObj(requireListTransform.GetChild(i).gameObject);
+                poolSystem.Recycle(requireListTransform.GetChild(i).gameObject);
             }
             for (int i = rewardListTransform.childCount - 1; i >= 0; i--)
             {
-                PoolMgr.Instance.PushObj(rewardListTransform.GetChild(i).gameObject);
+                poolSystem.Recycle(rewardListTransform.GetChild(i).gameObject);
             }
         }
 

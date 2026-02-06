@@ -3,7 +3,7 @@ using Framework;
 using UnityEngine;
 namespace HT
 {
-    public class BombDamageCollider : DamageCollider, IPoolObject
+    public class BombDamageCollider : DamageCollider, IPoolable
     {
         [Header("爆炸范围和伤害")]
         public int explosiveRadius = 1;
@@ -35,7 +35,7 @@ namespace HT
                 hasCollided = true;
                 Explode();
                 //将炸弹放回对象池
-                PoolMgr.Instance.PushObj(transform.gameObject);
+                GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(gameObject);
                 EnemyManager enemyManager = hitCharacter as EnemyManager;
 
                 if (enemyManager != null)
@@ -60,16 +60,16 @@ namespace HT
             //从对象池中取出爆炸特效 发布事件
             GameArchitecture.Interface.SendEvent(new BombHitEvent { BombTransform = this.transform });
         }
-        //重置炸弹信息
-        public void ResetInfo()
-        {
+        public void OnSpawn() { }
 
+        //重置炸弹信息
+        public void OnRecycle()
+        {
             bombRigidbody.velocity = Vector3.zero;
             bombRigidbody.angularVelocity = Vector3.zero;
             hasCollided = false;
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
-
         }
         void OnDisable()
         {

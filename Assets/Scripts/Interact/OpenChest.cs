@@ -68,7 +68,7 @@ namespace HT
 
             for (int i = 0; i < itemsInChest.Count; i++)
             {
-                GameObject obj = PoolMgr.Instance.GetObj(itemSpawnerName);
+                GameObject obj = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(itemSpawnerName);
                 obj.transform.position = transform.position;
                 ItemPickUp itemPickUp = obj.GetComponent<ItemPickUp>();
                 if (itemPickUp != null)

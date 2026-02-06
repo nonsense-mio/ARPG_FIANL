@@ -36,7 +36,7 @@ namespace HT
             //把拾取到的物品添加到玩家库存中 (三路写入: Runtime + Model + 持久化)
             GameArchitecture.Interface.SendCommand(new AddItemToInventoryCommand(item));
 
-            PoolMgr.Instance.PushObj(gameObject);
+            GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(gameObject);
         }
     }
 }

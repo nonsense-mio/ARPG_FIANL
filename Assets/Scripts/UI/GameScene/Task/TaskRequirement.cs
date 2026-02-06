@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TaskRequirement : MonoBehaviour, IPoolObject
+public class TaskRequirement : MonoBehaviour, IPoolable
 {
     private Text requireName;
     private Text requireAmount;
@@ -30,7 +31,9 @@ public class TaskRequirement : MonoBehaviour, IPoolObject
         }
     }
 
-    public void ResetInfo()
+    public void OnSpawn() { }
+
+    public void OnRecycle()
     {
         requireName.text = "";
         requireAmount.text = "0/0";

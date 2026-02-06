@@ -16,8 +16,11 @@ namespace HT
         [SerializeField] string slashFXPath = "FX/Slash";
         [SerializeField] string phaseShiftFXPath = "FX/PhaseShift";
 
+        private PoolSystem poolSystem;
+
         private void OnEnable()
         {
+            poolSystem = GameArchitecture.Interface.GetSystem<PoolSystem>();
             GameArchitecture.Interface.RegisterEvent<BombHitEvent>(e => BombHitFX(e.BombTransform))
                 .UnRegisterWhenGameObjectDestroyed(gameObject);
             GameArchitecture.Interface.RegisterEvent<SlashEvent>(e => OnSlash(e.Character))
@@ -47,7 +50,7 @@ namespace HT
         /// </summary>
         private void OnPlayerHeal(PlayerManager player)
         {
-            GameObject fx = PoolMgr.Instance.GetObj(healFXPath);
+            GameObject fx = poolSystem.Spawn(healFXPath);
             fx.transform.SetParent(player.transform);
             fx.transform.localPosition = Vector3.zero;
         }
@@ -58,7 +61,7 @@ namespace HT
         private void OnCharacterDamage(Vector3 hitPoint)
         {
 
-            GameObject blood = PoolMgr.Instance.GetObj(bloodFXPath);
+            GameObject blood = poolSystem.Spawn(bloodFXPath);
             blood.transform.position = hitPoint;
             blood.transform.rotation = Quaternion.identity;
             blood.transform.localScale = Vector3.one * 0.5f;
@@ -82,7 +85,7 @@ namespace HT
             {
                 currentSlashPath = "FX/Slash";
             }
-            GameObject slash = PoolMgr.Instance.GetObj(currentSlashPath);
+            GameObject slash = poolSystem.Spawn(currentSlashPath);
             slash.transform.position = character.transform.position + character.transform.up * 1.0f;
             slash.transform.rotation = character.transform.rotation;
             slash.transform.localScale = Vector3.one * 0.5f;
@@ -91,7 +94,7 @@ namespace HT
         //Boss 进入二阶段特效
         private void OnBossPhaseShift(EnemyManager boss)
         {
-            GameObject phaseShiftFX = PoolMgr.Instance.GetObj(phaseShiftFXPath);
+            GameObject phaseShiftFX = poolSystem.Spawn(phaseShiftFXPath);
             phaseShiftFX.transform.SetParent(boss.transform);
             phaseShiftFX.transform.localPosition = Vector3.zero + Vector3.up * 0.2f;
             phaseShiftFX.transform.localRotation = Quaternion.identity;
@@ -104,13 +107,13 @@ namespace HT
             //根据法术类型播放不同特效
             if (args.Item2 is HealingSpell)
             {
-                GameObject fx = PoolMgr.Instance.GetObj(args.Item2.spellWarmUpFXName);
+                GameObject fx = poolSystem.Spawn(args.Item2.spellWarmUpFXName);
                 fx.transform.SetParent(args.Item1.transform);
                 fx.transform.localPosition = Vector3.zero + Vector3.up * 2f;
             }
             else if (args.Item2 is ProjectileSpell)
             {
-                GameObject fx = PoolMgr.Instance.GetObj(args.Item2.spellWarmUpFXName);
+                GameObject fx = poolSystem.Spawn(args.Item2.spellWarmUpFXName);
                 if (args.Item1.isUsingRightHand)
                     fx.transform.SetParent(args.Item1.characterWeaponSlotManager.rightHandSlot.transform);
                 else
@@ -126,7 +129,7 @@ namespace HT
             //治疗法术
             if (args.Item2 is HealingSpell)
             {
-                GameObject fx = PoolMgr.Instance.GetObj(args.Item2.spellCastFXName);
+                GameObject fx = poolSystem.Spawn(args.Item2.spellCastFXName);
                 fx.transform.SetParent(args.Item1.transform);
                 fx.transform.localPosition = Vector3.zero;
                 fx.transform.localScale = Vector3.one * 0.5f;
@@ -135,7 +138,7 @@ namespace HT
             else if (args.Item2 is ProjectileSpell)
             {
                 ProjectileSpell ps = args.Item2 as ProjectileSpell;
-                GameObject fx = PoolMgr.Instance.GetObj(args.Item2.spellCastFXName);
+                GameObject fx = poolSystem.Spawn(args.Item2.spellCastFXName);
                 PlayerManager player = args.Item1 as PlayerManager;
                 if (args.Item1.isUsingRightHand)
                     fx.transform.position = args.Item1.characterWeaponSlotManager.rightHandSlot.transform.position;
@@ -166,14 +169,14 @@ namespace HT
 
         private void FireBallHitFX(Vector3 hitPoint)
         {
-            GameObject fx = PoolMgr.Instance.GetObj("FX/FireBallImpact");
+            GameObject fx = poolSystem.Spawn("FX/FireBallImpact");
             fx.transform.position = hitPoint;
             fx.transform.rotation = Quaternion.LookRotation(-Vector3.up);
         }
 
         private void BombHitFX(Transform bombTransform)
         {
-            GameObject fx = PoolMgr.Instance.GetObj("FX/BombFX");
+            GameObject fx = poolSystem.Spawn("FX/BombFX");
             fx.transform.position = bombTransform.position;
             fx.transform.rotation = Quaternion.identity;
         }

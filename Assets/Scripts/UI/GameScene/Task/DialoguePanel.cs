@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Framework;
 
 namespace HT
 {
@@ -15,10 +15,12 @@ namespace HT
         //当前对话片段
         public DialoguePiece currentDialoguePiece;
         int currentIndex = 0;
+        private PoolSystem poolSystem;
         protected override void Awake()
         {
             base.Awake();
             txtContent = GetControl<Text>("txtContent");
+            poolSystem = this.GetSystem<PoolSystem>();
         }
         public void InitDialogueData(DialogueData_SO dialogueData)
         {
@@ -37,7 +39,7 @@ namespace HT
             {
                 var child = optionGroup.transform.GetChild(i).gameObject;
                 child.transform.SetParent(null); // 先解除父子关系，确保立即生效
-                PoolMgr.Instance.PushObj(child);
+                poolSystem.Recycle(child);
             }
         }
 
@@ -96,7 +98,7 @@ namespace HT
             //创建新的选项
             for (int i = 0; i < currentDialoguePiece.options.Count; i++)
             {
-                GameObject optionObj = PoolMgr.Instance.GetObj("UI/Option");
+                GameObject optionObj = poolSystem.Spawn("UI/Option");
                 optionObj.transform.SetParent(optionGroup.transform, false);
                 OptionUI optionUI = optionObj.GetComponent<OptionUI>();
                 optionUI.InitOption(currentDialoguePiece, currentDialoguePiece.options[i]);
