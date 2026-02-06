@@ -40,9 +40,6 @@ namespace ARPG
             }
 
             ActiveTasks.Add(taskData);
-
-            // 发送任务开始事件
-            this.SendEvent(new TaskStartedEvent(taskName));
         }
 
         public void UpdateTaskProgress(string taskName, int requireIndex, int amount)
@@ -52,9 +49,6 @@ namespace ARPG
             if (requireIndex < 0 || requireIndex >= task.requireProgress.Count) return;
 
             task.requireProgress[requireIndex] += amount;
-
-            // 发送进度更新事件
-            this.SendEvent(new TaskProgressUpdatedEvent(taskName, requireIndex, task.requireProgress[requireIndex]));
         }
 
         public void CompleteTask(string taskName)
@@ -63,9 +57,6 @@ namespace ARPG
             if (task == null || task.isCompleted) return;
 
             task.isCompleted = true;
-
-            // 发送任务完成事件
-            this.SendEvent(new TaskCompletedEvent(taskName));
         }
 
         public void TurnInTask(string taskName)
@@ -74,9 +65,6 @@ namespace ARPG
             if (task == null || task.isTurnedIn) return;
 
             task.isTurnedIn = true;
-
-            // 发送任务上交事件
-            this.SendEvent(new TaskTurnedInEvent(taskName));
         }
 
         public TaskSaveData GetTask(string taskName)

@@ -68,7 +68,7 @@ namespace Framework
         private List<ISystem> systems = new List<ISystem>();
         //IOC容器
         private IOCContainer container = new IOCContainer();
-        public static Action<T> OnRegissterPatch;
+        public static Action<T> OnRegisterPatch;
         private static T architecture;
         public static IArchitecture Interface
         {
@@ -89,7 +89,7 @@ namespace Framework
                 architecture = new T();
                 architecture.Init();
                 //回调函数 把对象传出去
-                OnRegissterPatch?.Invoke(architecture);
+                OnRegisterPatch?.Invoke(architecture);
 
                 //IModel注册完后 初始化 这里的Init是IModel中的Init() 用来代替构造函数的初始化的
                 foreach (var architectureModel in architecture.models)

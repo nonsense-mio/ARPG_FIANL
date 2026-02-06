@@ -93,12 +93,20 @@ public class SaveMgr : BaseManager<SaveMgr>
 
         // 仅对已迁移到 Model 层写入的模块执行导出
         // PlayerModel / InventoryModel 暂未迁移写入，不导出
-        // TaskModel 由 TaskSaveHelper 单独处理
         var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
         sceneStateModel.ExportToSceneStateData(CurrentGameDataMgr.Instance.sceneStateData);
 
-        // 先收集任务数据到 CurrentGameDataMgr
-        TaskSaveHelper.SaveAllTaskData();
+        // 同步 TaskSystem 运行时状态到 TaskModel
+        var taskSystem = GameArchitecture.Interface.GetSystem<ITaskSystem>();
+        taskSystem.SyncToModel();
+
+        // 收集 TaskGiver 进度到 TaskModel
+        var taskModel = GameArchitecture.Interface.GetModel<ITaskModel>();
+        foreach (var giver in Object.FindObjectsOfType<TaskGiver>())
+            taskModel.SetGiverProgress(giver.GetGiverId(), giver.CurrentTaskIndex);
+
+        // 导出 TaskModel 到 CurrentGameDataMgr
+        taskModel.ExportToTaskData(CurrentGameDataMgr.Instance.taskData);
 
         // 更新槽位元数据（用于UI显示）
         SaveSlotData slot = SlotInfo.GetSlot(CurrentSlotIndex);

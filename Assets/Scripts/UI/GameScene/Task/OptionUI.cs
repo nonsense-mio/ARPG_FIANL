@@ -65,18 +65,18 @@ public class OptionUI : MonoBehaviour, IPoolObject
         //当前对话片段有任务
         if (currentPiece.task != null && takeQuest)
         {
+            var taskSystem = GameArchitecture.Interface.GetSystem<ITaskSystem>();
 
-            //添加到任务列表里
-            //判断是否有任务
-            if (TaskManager.Instance.HaveTask(currentPiece.task))
+            //判断是否已接取任务
+            if (taskSystem.HaveTask(currentPiece.task.taskName))
             {
                 //判断是否完成任务
-                if (TaskManager.Instance.GetTask(currentPiece.task).IsCompleted)
+                var taskData = taskSystem.GetTaskData(currentPiece.task.taskName);
+                if (taskData != null && taskData.isCompleted)
                 {
                     //触发任务提交事件，通知任务系统和UI更新 发布奖励
                     GameArchitecture.Interface.SendEvent(new TaskTurnedInEvent(currentPiece.task));
                 }
-                
             }
             //如果没有任务，添加任务
             else

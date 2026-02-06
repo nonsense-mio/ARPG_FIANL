@@ -15,6 +15,9 @@ namespace ARPG
             RegisterModel<IInventoryModel>(new InventoryModel());
             RegisterModel<ITaskModel>(new TaskModel());
             RegisterModel<ISceneStateModel>(new SceneStateModel());
+
+            // 注册 System
+            RegisterSystem<ITaskSystem>(new TaskSystem());
         }
     }
 }

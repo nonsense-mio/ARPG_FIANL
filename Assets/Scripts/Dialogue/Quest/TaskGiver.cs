@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using ARPG;
 using Framework;
@@ -24,32 +23,60 @@ public class TaskGiver : MonoBehaviour
     [SerializeField] private int currentTaskIndex = 0;
     [SerializeField] private string currentTaskName = "无";
 
+    /// <summary>
+    /// 供 SaveMgr 在保存时读取当前任务索引
+    /// </summary>
+    public int CurrentTaskIndex => currentTaskIndex;
+
     // 当前任务链节点
     private TaskChainNode CurrentNode => currentTaskIndex < taskChain.Count ? taskChain[currentTaskIndex] : null;
 
     // 当前任务数据
     private TaskData_SO CurrentTask => CurrentNode?.GetTask();
 
-    #region 任务状态属性
-    private bool IsStarted => GetTaskState(t => t.IsStarted);
-    private bool IsCompleted => GetTaskState(t => t.IsCompleted);
-    private bool IsTurnedIn => GetTaskState(t => t.IsTurnedIn);
+    private ITaskSystem taskSystem;
+    private ITaskModel taskModel;
 
-    private bool GetTaskState(Func<TaskManager.TaskInfo, bool> getter)
+    #region 任务状态属性
+    private bool IsStarted
     {
-        var task = CurrentTask;
-        if (task != null)
+        get
         {
-            var taskInfo = TaskManager.Instance.GetTask(task);
-            if (taskInfo != null) return getter(taskInfo);
+            var t = CurrentTask;
+            if (t == null) return false;
+            var data = taskSystem.GetTaskData(t.taskName);
+            return data != null && data.isStarted;
         }
-        return false;
+    }
+
+    private bool IsCompleted
+    {
+        get
+        {
+            var t = CurrentTask;
+            if (t == null) return false;
+            var data = taskSystem.GetTaskData(t.taskName);
+            return data != null && data.isCompleted;
+        }
+    }
+
+    private bool IsTurnedIn
+    {
+        get
+        {
+            var t = CurrentTask;
+            if (t == null) return false;
+            var data = taskSystem.GetTaskData(t.taskName);
+            return data != null && data.isTurnedIn;
+        }
     }
     #endregion
 
     void Awake()
     {
         dialogueController = GetComponent<DialogueController>();
+        taskSystem = GameArchitecture.Interface.GetSystem<ITaskSystem>();
+        taskModel = GameArchitecture.Interface.GetModel<ITaskModel>();
     }
 
     void OnEnable()
@@ -67,7 +94,7 @@ public class TaskGiver : MonoBehaviour
     {
         LoadProgress();
 
-        
+
         if (IsStarted && !IsCompleted)
         {
             CurrentNode?.LoadDialogueAction(CurrentNode.startDialogue);
@@ -151,60 +178,32 @@ public class TaskGiver : MonoBehaviour
     }
 
     /// <summary>
-    /// 保存当前任务进度索引到 CurrentGameDataMgr
-    /// </summary>
-    public void SaveProgress()
-    {
-        var taskData = CurrentGameDataMgr.Instance.taskData;
-        string id = GetGiverId();
-
-        if (taskData.taskGiverProgress.ContainsKey(id))
-        {
-            taskData.taskGiverProgress[id] = currentTaskIndex;
-        }
-        else
-        {
-            taskData.taskGiverProgress.Add(id, currentTaskIndex);
-        }
-    }
-
-    /// <summary>
-    /// 从 CurrentGameDataMgr 恢复任务进度索引
+    /// 从 ITaskModel 恢复任务进度索引
     /// </summary>
     public void LoadProgress()
     {
-        var taskData = CurrentGameDataMgr.Instance.taskData;
         string id = GetGiverId();
+        currentTaskIndex = taskModel.GetGiverProgress(id);
 
-        if (taskData.taskGiverProgress.TryGetValue(id, out int savedIndex))
-        {
-            currentTaskIndex = savedIndex;
-        }
-        else
-        {
-            currentTaskIndex = 0;
-        }
-
-        // 校正：如果当前任务在 TaskManager 中已被标记为已提交，则跳过
-        SyncIndexWithTaskManager();
+        // 校正：如果当前任务在 TaskSystem 中已被标记为已提交，则跳过
+        SyncIndexWithTaskSystem();
 
         UpdateDialogue();
     }
 
     /// <summary>
-    /// 根据 TaskManager 中的任务提交状态校正 currentTaskIndex
-    /// 解决保存时 TaskManager 和 TaskGiver 状态不同步的问题
+    /// 根据 TaskSystem 中的任务提交状态校正 currentTaskIndex
     /// </summary>
-    private void SyncIndexWithTaskManager()
+    private void SyncIndexWithTaskSystem()
     {
         while (currentTaskIndex < taskChain.Count)
         {
             var task = taskChain[currentTaskIndex].GetTask();
             if (task == null) break;
 
-            var taskInfo = TaskManager.Instance.GetTask(task);
+            var taskData = taskSystem.GetTaskData(task.taskName);
             // 如果任务已提交，跳到下一个
-            if (taskInfo != null && taskInfo.IsTurnedIn)
+            if (taskData != null && taskData.isTurnedIn)
             {
                 currentTaskIndex++;
             }
@@ -217,4 +216,3 @@ public class TaskGiver : MonoBehaviour
     #endregion
 
 }
-

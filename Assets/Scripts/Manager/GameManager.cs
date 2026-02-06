@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ARPG;
 using Framework;
 using UnityEngine;
@@ -40,7 +41,9 @@ namespace HT
                 player.playerSaveManager.LoadDataFromGameDataMgr();
 
                 // 恢复任务数据（需要在场景加载完成后调用，确保 TaskGiver 已存在）
-                TaskSaveHelper.LoadAllTaskData();
+                var allTasks = CollectAllTasksFromScene();
+                var taskSystem = GameArchitecture.Interface.GetSystem<ITaskSystem>();
+                taskSystem.RebuildFromModel(allTasks);
 
                 // 通知所有监听者数据加载完成
                 GameArchitecture.Interface.SendEvent(new GameDataLoadedEvent());
@@ -120,6 +123,29 @@ namespace HT
             UIMgr.Instance.ShowPanel<BeginPanel>();
         }
 
+        /// <summary>
+        /// 从场景中所有 TaskGiver 收集所有任务 SO
+        /// </summary>
+        private static List<TaskData_SO> CollectAllTasksFromScene()
+        {
+            List<TaskData_SO> allTasks = new List<TaskData_SO>();
+            var allTaskGivers = Object.FindObjectsOfType<TaskGiver>();
+
+            foreach (var giver in allTaskGivers)
+            {
+                foreach (var node in giver.taskChain)
+                {
+                    var task = node.GetTask();
+                    if (task != null && !allTasks.Exists(t => t.taskName == task.taskName))
+                    {
+                        allTasks.Add(task);
+                    }
+                }
+            }
+
+            return allTasks;
+        }
+
         //切换场景时清理信息
         public void ClearInfo()
         {
@@ -128,7 +154,7 @@ namespace HT
 
             MusicMgr.Instance.ClearSound();
             PoolMgr.Instance.ClearPool();
-            TaskManager.Instance.ClearTasks();
+            GameArchitecture.Interface.GetSystem<ITaskSystem>().ClearTasks();
         }
     }
 }

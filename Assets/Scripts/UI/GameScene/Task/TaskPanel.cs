@@ -1,3 +1,5 @@
+using ARPG;
+using Framework;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -62,13 +64,15 @@ namespace HT
             }
 
             //生成任务列表
-            for (int i = 0; i < TaskManager.Instance.taskList.Count; i++)
+            var taskSystem = GameArchitecture.Interface.GetSystem<ITaskSystem>();
+            var allTasks = taskSystem.GetAllTaskData();
+            for (int i = 0; i < allTasks.Count; i++)
             {
                 GameObject btnTaskName = PoolMgr.Instance.GetObj("UI/btnTaskName");
                 btnTaskName.transform.SetParent(taskListTransform, false);
                 btnTaskName.transform.localScale = Vector3.one;
                 TaskNameButton taskNameButton = btnTaskName.GetComponent<TaskNameButton>();
-                taskNameButton.Init(TaskManager.Instance.taskList[i].taskData);
+                taskNameButton.Init(allTasks[i]);
                 //添加按钮监听事件 显示任务内容、需求和奖励
                 taskNameButton.btnTask.onClick.AddListener(() =>
                 {
