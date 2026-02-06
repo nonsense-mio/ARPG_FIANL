@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+using ARPG;
+
 
 namespace HT
 {
@@ -35,8 +33,8 @@ namespace HT
 
             //播放拾取物品的动画
             player.playerAnimatorManager.PlayTargetAnimation(animationName, true);
-            //把拾取到的武器添加到玩家武器库存中
-            player.playerInventoryManager.AddItemToInventory(item);
+            //把拾取到的物品添加到玩家库存中 (三路写入: Runtime + Model + 持久化)
+            GameArchitecture.Interface.SendCommand(new AddItemToInventoryCommand(item));
 
             PoolMgr.Instance.PushObj(gameObject);
         }

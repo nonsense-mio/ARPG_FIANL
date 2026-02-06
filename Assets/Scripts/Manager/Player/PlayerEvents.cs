@@ -18,8 +18,11 @@ namespace HT
                 .UnRegisterWhenGameObjectDestroyed(gameObject);
             GameArchitecture.Interface.RegisterEvent<EnableInputEvent>(e => player.inputMgr.EnableOrDisableInput(e.Enabled))
                 .UnRegisterWhenGameObjectDestroyed(gameObject);
-            GameArchitecture.Interface.RegisterEvent<TaskTurnedInEvent>(e => player.playerInventoryManager.RewardTask(e.Task))
-                .UnRegisterWhenGameObjectDestroyed(gameObject);
+            GameArchitecture.Interface.RegisterEvent<TaskTurnedInEvent>(e =>
+            {
+                foreach (var reward in e.Task.rewardList)
+                    GameArchitecture.Interface.SendCommand(new AddItemToInventoryCommand(reward));
+            }).UnRegisterWhenGameObjectDestroyed(gameObject);
             GameArchitecture.Interface.RegisterEvent<CharacterDeathEvent>(e => player.playerStatsManager.AddSouls(e.Character))
                 .UnRegisterWhenGameObjectDestroyed(gameObject);
         }

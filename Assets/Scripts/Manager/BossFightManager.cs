@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using XLua;
@@ -39,7 +38,7 @@ namespace HT
         void OnEnable()
         {
             GameArchitecture.Interface.RegisterEvent<CharacterDeathEvent>(e => OnCharacterDeath(e.Character))
-                .UnRegisterWhenGameObjectDestroyed(gameObject);
+                .UnRegisterWhenGameObjectDisabled(gameObject);
         }
 
         //Boss死亡处理

@@ -96,7 +96,7 @@ namespace HT
         void OnEnable()
         {
             GameArchitecture.Interface.RegisterEvent<NPCFollowPlayerEvent>(e => IsNPCChanged(e.IsFollowing))
-                .UnRegisterWhenGameObjectDestroyed(gameObject);
+                .UnRegisterWhenGameObjectDisabled(gameObject);
         }
         private void Start()
         {

@@ -24,7 +24,7 @@ namespace HT
         private void OnEnable()
         {
             GameArchitecture.Interface.RegisterEvent<BossPhaseShiftEvent>(e => OnBossPhaseShift(e.Boss))
-                .UnRegisterWhenGameObjectDestroyed(gameObject);
+                .UnRegisterWhenGameObjectDisabled(gameObject);
         }
 
         private void OnBossPhaseShift(EnemyManager boss)
