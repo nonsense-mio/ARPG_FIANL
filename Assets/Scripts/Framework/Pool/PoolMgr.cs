@@ -77,7 +77,7 @@ public class PoolData
                 rootObj = new GameObject(drawerName);
                 rootObj.transform.SetParent(poolRoot.transform);
             }
-            obj.transform.SetParent(rootObj.transform);
+            obj.transform.SetParent(rootObj.transform, false);
         }
         dataStack.Push(obj);
         usedList.Remove(obj);

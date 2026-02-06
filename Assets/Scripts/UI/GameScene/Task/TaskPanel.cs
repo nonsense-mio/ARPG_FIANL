@@ -55,6 +55,12 @@ namespace HT
         }
         public override void ShowMe()
         {
+            // 防御性清理：确保不会累积旧按钮
+            for (int i = taskListTransform.childCount - 1; i >= 0; i--)
+            {
+                PoolMgr.Instance.PushObj(taskListTransform.GetChild(i).gameObject);
+            }
+
             //生成任务列表
             for (int i = 0; i < TaskManager.Instance.taskList.Count; i++)
             {
