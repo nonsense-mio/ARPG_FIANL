@@ -12,14 +12,14 @@ namespace HT
         public RectTransform rewardListTransform;
         private Text txtTaskTitle;
         private Text txtTaskContent;
-        private PoolSystem poolSystem;
+        private IPoolSystem poolSystem;
 
         protected override void Awake()
         {
             base.Awake();
             txtTaskTitle = GetControl<Text>("txtTaskTitle");
             txtTaskContent = GetControl<Text>("txtTaskContent");
-            poolSystem = this.GetSystem<PoolSystem>();
+            poolSystem = this.GetSystem<IPoolSystem>();
         }
 
         //设置任务需求列表

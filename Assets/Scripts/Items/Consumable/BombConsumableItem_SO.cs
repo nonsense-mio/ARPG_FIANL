@@ -24,7 +24,7 @@ namespace HT
             {
                 player.playerWeaponSlotManager.rightHandSlot.UnloadWeapon();
                 player.playerAnimatorManager.PlayTargetAnimation(consumeAnimation, true);
-                GameObject bombModel = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(itemModelName);
+                GameObject bombModel = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(itemModelName);
                 bombModel.transform.position = player.playerWeaponSlotManager.rightHandSlot.transform.position;
                 bombModel.transform.rotation = Quaternion.identity;
                 bombModel.transform.SetParent(player.playerWeaponSlotManager.rightHandSlot.transform);

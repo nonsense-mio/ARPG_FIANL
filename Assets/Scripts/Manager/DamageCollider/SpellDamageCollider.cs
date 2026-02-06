@@ -71,7 +71,7 @@ namespace HT
             {
                 hasCollided = true;
                 GameArchitecture.Interface.SendEvent(new FireBallHitEvent { HitPoint = hitPoint });
-                GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(this.gameObject);
+                GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(this.gameObject);
             }
         }
 

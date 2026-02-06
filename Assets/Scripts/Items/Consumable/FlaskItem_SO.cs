@@ -23,7 +23,7 @@ namespace HT
             base.AttemptToConsumeItem(player);
             //GameObject flask = Instantiate(itemModel, player.playerWeaponSlotManager.rightHandSlot.transform);
             //生成瓶子模型
-            GameObject flask = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(itemModelName);
+            GameObject flask = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(itemModelName);
             flask.transform.parent = player.playerWeaponSlotManager.rightHandSlot.transform;
             flask.transform.localPosition = Vector3.zero;
             flask.transform.localRotation = Quaternion.identity;
@@ -35,7 +35,7 @@ namespace HT
                 player.playerEffectsManager.isPoisoned = false;
                 if(player.playerEffectsManager.currentPoisonParticleFX != null)
                 {   //回收中毒特效
-                    GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(player.playerEffectsManager.currentPoisonParticleFX);
+                    GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(player.playerEffectsManager.currentPoisonParticleFX);
                     player.playerEffectsManager.currentPoisonParticleFX = null;
                 }
             }

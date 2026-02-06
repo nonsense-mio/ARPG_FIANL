@@ -23,7 +23,7 @@ namespace HT
             bowAnmatior.Play("Bow_TH_Fire_01");
 
             if (character.characterEffectsManager.instantiateFX != null)
-                GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(character.characterEffectsManager.instantiateFX);
+                GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(character.characterEffectsManager.instantiateFX);
             //设置玩家射箭动画
             character.characterAnimatorManager.PlayTargetAnimation("Bow_TH_Fire_01", true);
             character.animator.SetBool("isHoldingArrow", false);
@@ -32,7 +32,7 @@ namespace HT
             if (player != null)
             {
                 // 1. 获取对象
-                GameObject liveArrow = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn("Projectiles/Arrow_Live_Model");
+                GameObject liveArrow = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn("Projectiles/Arrow_Live_Model");
                 Rigidbody rigidbody = liveArrow.GetComponent<Rigidbody>();
 
                 // 2. 立即断开，使用 false 参数 (你之前的做法是对的)
@@ -108,7 +108,7 @@ namespace HT
             {
                 EnemyManager enemy = character as EnemyManager;
                 // 1. 获取对象
-                GameObject liveArrow = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn("Projectiles/Arrow_Live_Model");
+                GameObject liveArrow = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn("Projectiles/Arrow_Live_Model");
                 Rigidbody rigidbody = liveArrow.GetComponent<Rigidbody>();
 
                 // 2. 立即断开，使用 false 参数 (你之前的做法是对的)

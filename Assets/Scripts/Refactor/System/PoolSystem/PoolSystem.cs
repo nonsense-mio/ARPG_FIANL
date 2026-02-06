@@ -4,11 +4,12 @@ using UnityEngine;
 namespace ARPG
 {
     /// <summary>
-    /// 对象池系统实现 - 管理游戏对象的复用
-    /// 替代原 PoolManager (SingletonAutoMono)
+    /// 对象池系统实现 - 管理 GameObject 预制体池 + 非 MonoBehaviour 泛型池
     /// </summary>
-    public class PoolSystem : AbstractSystem
+    public class PoolSystem : AbstractSystem, IPoolSystem
     {
+        #region GameObject 池 字段
+
         // 每种预制体对应一个对象池容器
         private Dictionary<string, PoolContainer> poolContainers;
 
@@ -19,20 +20,29 @@ namespace ARPG
         //是否启用父节点管理功能
         private bool enableHierarchy = true;
 
+        #endregion
+
+        #region 泛型池 字段
+
+        // 泛型对象池字典
+        private Dictionary<string, GenericPoolBase> genericPools;
+
+        #endregion
+
         protected override void OnInit()
         {
             poolContainers = new Dictionary<string, PoolContainer>();
             prefabs = new Dictionary<string, GameObject>();
+            genericPools = new Dictionary<string, GenericPoolBase>();
 
             if (enableHierarchy)
             {
                 poolRoot = new GameObject("PoolSystem");
                 GameObject.DontDestroyOnLoad(poolRoot);
             }
-
-            // 监听场景切换事件，清理对象池
-            //this.RegisterEvent<SceneChangedEvent>(OnSceneChanged);
         }
+
+        #region GameObject 池 实现
 
         // 预热对象池，提前创建一定数量的对象
         public void WarmupPool(string prefabPath, int count)
@@ -63,7 +73,7 @@ namespace ARPG
             // 如果对象池容器不存在
             if (!poolContainers.ContainsKey(prefabPath))
             {
-                // 获取对象池 对象的缓存 
+                // 获取对象池 对象的缓存
                 GameObject prefab = GetOrLoadPrefab(prefabPath);
                 if (prefab == null)
                 {
@@ -71,7 +81,7 @@ namespace ARPG
                     return null;
                 }
 
-                //创建对象池容器 
+                //创建对象池容器
                 GetOrCreateContainer(prefabPath);
             }
 
@@ -92,6 +102,13 @@ namespace ARPG
                                       //添加到容器的活动对象中
                 container.RegisterNewObject(obj);
             }
+            else
+            {
+                // 从池中取出的对象：自动重置 Transform
+                obj.transform.localPosition = Vector3.zero;
+                obj.transform.localRotation = Quaternion.identity;
+                obj.transform.localScale = Vector3.one;
+            }
             //激活对象并移除父节点
             obj.SetActive(true);
             if (enableHierarchy)
@@ -101,9 +118,6 @@ namespace ARPG
             // 通知对象被生成，对象可以监听这个来初始化自己
             var poolable = obj.GetComponent<IPoolable>();
             poolable?.OnSpawn();
-
-            // 发送对象生成事件
-            //this.SendEvent(new ObjectSpawnedEvent { Obj = obj, PrefabPath = prefabPath });
 
             return obj;
         }
@@ -134,16 +148,6 @@ namespace ARPG
             }
             // 回收到池中
             poolContainers[prefabPath].Recycle(obj);
-            // 发送对象回收事件
-            //this.SendEvent(new ObjectRecycledEvent { Obj = obj, PrefabPath = poolName });
-        }
-
-        // 延迟回收对象
-        public void RecycleAfterDelay(GameObject obj, float delay)
-        {
-            // 这里需要一个协程，但 System 不是 MonoBehaviour
-            // 可以通过其他方式实现，比如使用定时器系统
-            //this.GetSystem<TimerSystem>().Schedule(delay, () => Recycle(obj));
         }
 
         // 清空指定的对象池
@@ -156,9 +160,10 @@ namespace ARPG
             prefabs.Remove(prefabPath);
         }
 
-        // 清空所有对象池
+        // 清空所有池 (GameObject 池 + 泛型池)
         public void ClearAllPools()
         {
+            // 清理 GameObject 池
             foreach (var container in poolContainers.Values)
             {
                 container.Clear();
@@ -179,18 +184,75 @@ namespace ARPG
                 poolRoot = new GameObject("PoolSystem");
                 GameObject.DontDestroyOnLoad(poolRoot);
             }
+
+            // 清理泛型池
+            genericPools.Clear();
         }
 
-        // 场景切换时的处理
-        // private void OnSceneChanged(SceneChangedEvent e)
-        // {
-        //     // 根据配置决定是否清空对象池
-        //     // 某些全局的对象池可能需要保留
-        //     if (e.ShouldClearPools)
-        //     {
-        //         ClearAllPools();
-        //     }
-        // }
+        /// <summary>
+        /// 获取对象池统计信息
+        /// </summary>
+        public PoolStats GetPoolStats(string prefabPath)
+        {
+            if (!poolContainers.ContainsKey(prefabPath))
+            {
+                return new PoolStats();
+            }
+
+            return poolContainers[prefabPath].GetStats();
+        }
+
+        #endregion
+
+        #region 泛型池 实现
+
+        /// <summary>
+        /// 从泛型池获取对象，池中无可用对象时自动创建新实例
+        /// </summary>
+        public T GetObj<T>(string nameSpace = "") where T : class, IPoolObject, new()
+        {
+            string poolName = nameSpace + "_" + typeof(T).Name;
+
+            if (genericPools.ContainsKey(poolName))
+            {
+                GenericPool<T> pool = genericPools[poolName] as GenericPool<T>;
+                if (pool.poolObjs.Count > 0)
+                {
+                    return pool.poolObjs.Dequeue();
+                }
+            }
+
+            return new T();
+        }
+
+        /// <summary>
+        /// 将对象回收到泛型池中，回收前自动调用 ResetInfo()
+        /// </summary>
+        public void PushObj<T>(T obj, string nameSpace = "") where T : class, IPoolObject
+        {
+            if (obj == null) return;
+
+            string poolName = nameSpace + "_" + typeof(T).Name;
+            GenericPool<T> pool;
+
+            if (genericPools.ContainsKey(poolName))
+            {
+                pool = genericPools[poolName] as GenericPool<T>;
+            }
+            else
+            {
+                pool = new GenericPool<T>();
+                genericPools.Add(poolName, pool);
+            }
+
+            // 放入池子之前先重置对象的数据
+            obj.ResetInfo();
+            pool.poolObjs.Enqueue(obj);
+        }
+
+        #endregion
+
+        #region 私有辅助
 
         // 加载或获取缓存的预制体
         private GameObject GetOrLoadPrefab(string prefabPath)
@@ -222,38 +284,23 @@ namespace ARPG
             return poolContainers[prefabPath];
         }
 
-        /// <summary>
-        /// 获取对象池统计信息
-        /// </summary>
-        public PoolStats GetPoolStats(string prefabPath)
-        {
-            if (!poolContainers.ContainsKey(prefabPath))
-            {
-                return new PoolStats();
-            }
+        #endregion
 
-            return poolContainers[prefabPath].GetStats();
+        #region 泛型池 内部类型
+
+        /// <summary>
+        /// 泛型池容器基类 (用于字典存储)
+        /// </summary>
+        private abstract class GenericPoolBase { }
+
+        /// <summary>
+        /// 泛型池容器 - 存储特定类型的可复用对象
+        /// </summary>
+        private class GenericPool<T> : GenericPoolBase where T : class
+        {
+            public Queue<T> poolObjs = new Queue<T>();
         }
 
-    }
-
-
-
-    /// <summary>
-    /// 对象池统计信息
-    /// </summary>
-    public struct PoolStats
-    {
-        public int AvailableCount;  // 可用对象数量
-        public int ActiveCount;     // 活动对象数量
-        public int TotalCount;      // 总对象数量
-        public int MaxCapacity;     // 最大容量
-    }
-
-    // 可池化对象的接口
-    public interface IPoolable
-    {
-        void OnSpawn();   // 从池中取出时调用
-        void OnRecycle(); // 回收到池中时调用
+        #endregion
     }
 }

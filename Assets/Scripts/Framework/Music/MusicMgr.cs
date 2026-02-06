@@ -23,11 +23,11 @@ public class MusicMgr : BaseManager<MusicMgr>
     // 添加标志位，防止在清理时Update执行
     private bool isClearing = false;
 
-    private PoolSystem poolSystem;
+    private IPoolSystem poolSystem;
 
     private MusicMgr()
     {
-        poolSystem = GameArchitecture.Interface.GetSystem<PoolSystem>();
+        poolSystem = GameArchitecture.Interface.GetSystem<IPoolSystem>();
         MonoMgr.Instance.AddFixedUpdateListener(Update);
         MusicData data = CurrentGameDataMgr.Instance.musicData;
         soundValue = data.soundValue;

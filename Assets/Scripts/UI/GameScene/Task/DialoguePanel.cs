@@ -15,12 +15,12 @@ namespace HT
         //当前对话片段
         public DialoguePiece currentDialoguePiece;
         int currentIndex = 0;
-        private PoolSystem poolSystem;
+        private IPoolSystem poolSystem;
         protected override void Awake()
         {
             base.Awake();
             txtContent = GetControl<Text>("txtContent");
-            poolSystem = this.GetSystem<PoolSystem>();
+            poolSystem = this.GetSystem<IPoolSystem>();
         }
         public void InitDialogueData(DialogueData_SO dialogueData)
         {

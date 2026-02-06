@@ -121,7 +121,7 @@ namespace HT
                     if (nowShowItem.ContainsKey(i))
                     {
                         if (nowShowItem[i] != null)
-                            GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(nowShowItem[i]);
+                            GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(nowShowItem[i]);
                         nowShowItem.Remove(i);
                     }
                 }
@@ -130,7 +130,7 @@ namespace HT
                     if (nowShowItem.ContainsKey(i))
                     {
                         if (nowShowItem[i] != null)
-                            GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(nowShowItem[i]);
+                            GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(nowShowItem[i]);
                         nowShowItem.Remove(i);
                     }
                 }
@@ -150,7 +150,7 @@ namespace HT
                     int index = i;
                     nowShowItem.Add(index, null);
                     //取出对象
-                    GameObject obj = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(itemResName);
+                    GameObject obj = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(itemResName);
                     //设置它的父对象
                     obj.transform.SetParent(content, false);
                     //重置相对缩放大小
@@ -183,7 +183,7 @@ namespace HT
                     if (nowShowItem.ContainsKey(index))
                         nowShowItem[index] = obj;
                     else
-                        GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(obj);
+                        GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(obj);
                 }
 
             }
@@ -194,7 +194,7 @@ namespace HT
             foreach (var item in nowShowItem)
             {
                 if (item.Value != null)
-                    GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(item.Value);
+                    GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(item.Value);
             }
             nowShowItem.Clear();
             oldMinIndex = -1;

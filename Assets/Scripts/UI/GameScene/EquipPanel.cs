@@ -15,7 +15,7 @@ namespace HT
         public List<BagItem> equipSlotList = new List<BagItem>();
 
         private IInventoryModel inventoryModel;
-        private PoolSystem poolSystem;
+        private IPoolSystem poolSystem;
 
         protected override void Awake()
         {
@@ -24,7 +24,7 @@ namespace HT
             armorGroup = GetControl<Image>("armorGroup");
             scGroup = GetControl<Image>("scGroup");
             inventoryModel = this.GetModel<IInventoryModel>();
-            poolSystem = this.GetSystem<PoolSystem>();
+            poolSystem = this.GetSystem<IPoolSystem>();
         }
 
         /// <summary>

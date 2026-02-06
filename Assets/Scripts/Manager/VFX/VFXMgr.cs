@@ -16,11 +16,11 @@ namespace HT
         [SerializeField] string slashFXPath = "FX/Slash";
         [SerializeField] string phaseShiftFXPath = "FX/PhaseShift";
 
-        private PoolSystem poolSystem;
+        private IPoolSystem poolSystem;
 
         private void OnEnable()
         {
-            poolSystem = GameArchitecture.Interface.GetSystem<PoolSystem>();
+            poolSystem = GameArchitecture.Interface.GetSystem<IPoolSystem>();
             GameArchitecture.Interface.RegisterEvent<BombHitEvent>(e => BombHitFX(e.BombTransform))
                 .UnRegisterWhenGameObjectDestroyed(gameObject);
             GameArchitecture.Interface.RegisterEvent<SlashEvent>(e => OnSlash(e.Character))

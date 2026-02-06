@@ -19,7 +19,7 @@ namespace HT
         }
         private void PushInPool()
         {
-            GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(this.gameObject);
+            GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(this.gameObject);
         }
     }
 }

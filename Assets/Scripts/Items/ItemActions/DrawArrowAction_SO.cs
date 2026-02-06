@@ -17,7 +17,7 @@ namespace HT
             character.characterAnimatorManager.PlayTargetAnimation("Bow_TH_Draw_01", true);
 
             //GameObject loadedArrow = Instantiate(player.playerInventoryManager.currentAmmo.loadedItemModel,player.playerWeaponSlotManager.leftHandSlot.transform);
-            GameObject loadedArrow = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(character.characterInventoryManager.currentAmmo.loadedItemModelName);
+            GameObject loadedArrow = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(character.characterInventoryManager.currentAmmo.loadedItemModelName);
             loadedArrow.transform.parent = character.characterWeaponSlotManager.leftHandSlot.parentOverride;
             loadedArrow.transform.localPosition = Vector3.zero;
             loadedArrow.transform.localScale = Vector3.one;

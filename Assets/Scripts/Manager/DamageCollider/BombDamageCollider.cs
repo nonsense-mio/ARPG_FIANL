@@ -35,7 +35,7 @@ namespace HT
                 hasCollided = true;
                 Explode();
                 //将炸弹放回对象池
-                GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(gameObject);
+                GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(gameObject);
                 EnemyManager enemyManager = hitCharacter as EnemyManager;
 
                 if (enemyManager != null)

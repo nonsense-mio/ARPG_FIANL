@@ -54,12 +54,12 @@ namespace HT
                 if (buildUpTransform != null)
                 {
                     //生成毒特效
-                    currentPoisonParticleFX = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(posionFX);
+                    currentPoisonParticleFX = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(posionFX);
                     currentPoisonParticleFX.transform.position = buildUpTransform.position;
                 }
                 else
                 {
-                    currentPoisonParticleFX = GameArchitecture.Interface.GetSystem<PoolSystem>().Spawn(posionFX);
+                    currentPoisonParticleFX = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(posionFX);
                     currentPoisonParticleFX.transform.position = character.transform.position;
                 }
                 currentPoisonParticleFX.transform.localScale = Vector3.one * 0.5f;
@@ -88,7 +88,7 @@ namespace HT
                 //移除毒特效
                 if (currentPoisonParticleFX != null)
                 {
-                    GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(currentPoisonParticleFX);
+                    GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(currentPoisonParticleFX);
                     currentPoisonParticleFX = null;
                 }
             }
@@ -100,7 +100,7 @@ namespace HT
             //将生成物放回对象池
             if (instantiateFX != null)
             {
-                GameArchitecture.Interface.GetSystem<PoolSystem>().Recycle(instantiateFX);
+                GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(instantiateFX);
             }
             if (character.isHoldingArrow)
             {

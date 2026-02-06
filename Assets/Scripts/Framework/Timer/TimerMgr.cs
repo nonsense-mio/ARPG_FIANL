@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -99,7 +100,7 @@ public class TimerMgr :BaseManager<TimerMgr>
                 //将计时器从字典中移除
                 timerDic.Remove(item.keyID);
                 //放入缓存池中
-                PoolMgr.Instance.PushObj<TimerItem>(item);
+                GameArchitecture.Interface.GetSystem<IPoolSystem>().PushObj<TimerItem>(item);
             }
             delList.Clear();
         }
@@ -118,7 +119,7 @@ public class TimerMgr :BaseManager<TimerMgr>
         //构建唯一ID
         int keyID = ++TIMER_KEY;
         //从缓存池中取出对应的计时器
-        TimerItem timerItem = PoolMgr.Instance.GetObj<TimerItem>();
+        TimerItem timerItem = GameArchitecture.Interface.GetSystem<IPoolSystem>().GetObj<TimerItem>();
         //初始化数据
         timerItem.InitInfo(keyID,allTime,overCallBack,intervalTime,callBack);
         //记录到字典中
@@ -137,13 +138,13 @@ public class TimerMgr :BaseManager<TimerMgr>
         if( timerDic.ContainsKey(keyID))
         {
             //移除对应ID计时器 放入缓存池中
-            PoolMgr.Instance.PushObj<TimerItem>(timerDic[keyID]);
+            GameArchitecture.Interface.GetSystem<IPoolSystem>().PushObj<TimerItem>(timerDic[keyID]);
             timerDic.Remove(keyID);
         }
         else if (realTimerDic.ContainsKey(keyID))
         {
             //移除对应ID计时器 放入缓存池中
-            PoolMgr.Instance.PushObj<TimerItem>(realTimerDic[keyID]);
+            GameArchitecture.Interface.GetSystem<IPoolSystem>().PushObj<TimerItem>(realTimerDic[keyID]);
             realTimerDic.Remove(keyID);
         }
     }
