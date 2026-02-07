@@ -8,6 +8,10 @@ namespace HT
     public class GameManager : BaseManager<GameManager>
     {
         public PlayerManager player;
+        private IMusicSystem musicSystem;
+        private IMusicSystem MusicSystem =>
+            musicSystem ?? (musicSystem = GameArchitecture.Interface.GetSystem<IMusicSystem>());
+
         private GameManager()
         {
 
@@ -21,7 +25,7 @@ namespace HT
         {
             LoadNPC();
             //更换背景音乐
-            MusicMgr.Instance.PlayBKMusic("GameScene1");
+            MusicSystem.PlayBGM("GameScene1");
             GameObject cameraObj = null;
             //同步加载摄像机 并实例化
             ABResMgr.Instance.LoadResAsync<GameObject>("character", "PlayerCamera", (obj) =>
@@ -116,7 +120,7 @@ namespace HT
         //初始化开始场景
         public void InitBeginScene()
         {
-            MusicMgr.Instance.PlayBKMusic("BeginScene");
+            MusicSystem.PlayBGM("BeginScene");
             UIMgr.Instance.ShowPanel<BeginPanel>();
         }
 
@@ -149,7 +153,7 @@ namespace HT
             // 停止游戏时长计时
             SaveMgr.Instance.StopPlayTimer();
 
-            MusicMgr.Instance.ClearSound();
+            MusicSystem.ClearAllSounds();
             GameArchitecture.Interface.GetSystem<IPoolSystem>().ClearAllPools();
             GameArchitecture.Interface.GetSystem<ITaskSystem>().ClearTasks();
         }

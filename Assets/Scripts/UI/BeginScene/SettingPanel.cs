@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-
-using UnityEngine;
-using UnityEngine.EventSystems;
+using ARPG;
+using Framework;
 using UnityEngine.UI;
 
 namespace HT
 {
     public class SettingPanel : BasePanel
     {
+        private IMusicSystem musicSystem;
 
         private void Start()
         {
@@ -21,6 +19,7 @@ namespace HT
         }
         public override void ShowMe()
         {
+            musicSystem = this.GetSystem<IMusicSystem>();
             //根据存储的音乐相关数据来初始化面板显示内容
             MusicData data = CurrentGameDataMgr.Instance.musicData;
             GetControl<Toggle>("togMusic").isOn = data.musicOpen;
@@ -50,11 +49,11 @@ namespace HT
             switch (sliderName)
             {
                 case "sliderMusic":
-                    MusicMgr.Instance.ChangeBKMusicValue(value);
+                    musicSystem.SetBGMVolume(value);
                     CurrentGameDataMgr.Instance.musicData.musicValue = value;
                     break;
                 case "sliderSound":
-                    MusicMgr.Instance.ChangeSoundValue(value);
+                    musicSystem.SetSoundVolume(value);
                     CurrentGameDataMgr.Instance.musicData.soundValue = value;
                     break;
             }
@@ -66,11 +65,11 @@ namespace HT
             switch (togName)
             {
                 case "togMusic":
-                    MusicMgr.Instance.PlayOrPauseBKMusic(value);
+                    musicSystem.SetBGMPlaying(value);
                     CurrentGameDataMgr.Instance.musicData.musicOpen = value;
                     break;
                 case "togSound":
-                    MusicMgr.Instance.PlayOrPauseSound(value);
+                    musicSystem.SetSoundPlaying(value);
                     CurrentGameDataMgr.Instance.musicData.soundOpen = value;
                     break;
             }

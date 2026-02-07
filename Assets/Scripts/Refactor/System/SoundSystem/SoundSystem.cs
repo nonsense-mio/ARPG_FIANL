@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ARPG
 {
     /// <summary>
-    /// 声音事件系统实现 - 订阅事件并委托 MusicMgr 播放对应音效
+    /// 声音事件系统实现 - 订阅事件并委托 IMusicSystem 播放对应音效
     /// 替代原 SoundManager (SingletonAutoMono)
     /// </summary>
     public class SoundSystem : AbstractSystem, ISoundSystem
@@ -18,8 +18,12 @@ namespace ARPG
         private const string FireballHitSound = "fireball_hit";
         private const string BombExplosionSound = "bomb_explosion";
 
+        private IMusicSystem musicSystem;
+
         protected override void OnInit()
         {
+            musicSystem = this.GetSystem<IMusicSystem>();
+
             this.RegisterEvent<BombHitEvent>(e => BombHitSound());
             this.RegisterEvent<SlashEvent>(e => SlashSound());
             this.RegisterEvent<FireBallHitEvent>(e => FireBallHitSound());
@@ -34,7 +38,7 @@ namespace ARPG
         {
             if (string.IsNullOrEmpty(soundName))
                 return;
-            MusicMgr.Instance.PlaySound(soundName, isLoop);
+            musicSystem.PlaySound(soundName, isLoop);
         }
 
         private void InteractSound(Interactable interactable)

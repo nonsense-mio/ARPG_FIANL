@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using HT;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -13,7 +14,7 @@ public class Main : MonoBehaviour
     void Start()
     {
         UIMgr.Instance.ShowPanel<BeginPanel>();
-        MusicMgr.Instance.PlayBKMusic("BeginScene");
+        GameArchitecture.Interface.GetSystem<IMusicSystem>().PlayBGM("BeginScene");
         // ABUpdateMgr.Instance.CheckUpdate((isOver) =>
         // {
         //     if (isOver)

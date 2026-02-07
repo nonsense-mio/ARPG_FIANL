@@ -48,7 +48,7 @@ public class DialogueActionHelper : MonoBehaviour
 
     public void RebuildHome()
     {
-        MusicMgr.Instance.PlayBKMusic("Home");
+        GameArchitecture.Interface.GetSystem<IMusicSystem>().PlayBGM("Home");
     }
 
 }

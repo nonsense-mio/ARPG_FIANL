@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -262,12 +263,19 @@ namespace HT
             trigger.triggers.Add(entry);
         }
 
+        private static IMusicSystem cachedMusicSystem;
+        private static IMusicSystem GetMusicSystem()
+        {
+            return cachedMusicSystem ??
+                   (cachedMusicSystem = GameArchitecture.Interface.GetSystem<IMusicSystem>());
+        }
+
         //鼠标悬停音效
         public static void AddUISelectSound(UIBehaviour control)
         {
             AddCustomEventListener(control, EventTriggerType.PointerEnter, (data) =>
             {
-                MusicMgr.Instance.PlaySound("UI_Select");
+                GetMusicSystem().PlaySound("UI_Select");
             });
         }
         //鼠标点击音效
@@ -275,7 +283,7 @@ namespace HT
         {
             AddCustomEventListener(control, EventTriggerType.PointerClick, (data) =>
             {
-                MusicMgr.Instance.PlaySound("UI_Confirm");
+                GetMusicSystem().PlaySound("UI_Confirm");
             });
         }
     }
