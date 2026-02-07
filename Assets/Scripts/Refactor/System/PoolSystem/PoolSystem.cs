@@ -209,7 +209,7 @@ namespace ARPG
         /// <summary>
         /// 从泛型池获取对象，池中无可用对象时自动创建新实例
         /// </summary>
-        public T GetObj<T>(string nameSpace = "") where T : class, IPoolObject, new()
+        public T Spawn<T>(string nameSpace = "") where T : class, IPoolObject, new()
         {
             string poolName = nameSpace + "_" + typeof(T).Name;
 
@@ -228,7 +228,7 @@ namespace ARPG
         /// <summary>
         /// 将对象回收到泛型池中，回收前自动调用 ResetInfo()
         /// </summary>
-        public void PushObj<T>(T obj, string nameSpace = "") where T : class, IPoolObject
+        public void Recyle<T>(T obj, string nameSpace = "") where T : class, IPoolObject
         {
             if (obj == null) return;
 

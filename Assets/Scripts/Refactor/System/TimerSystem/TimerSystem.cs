@@ -15,6 +15,7 @@ namespace ARPG
         private readonly Dictionary<int, TimerData> scaledTimers = new Dictionary<int, TimerData>();
         private readonly Dictionary<int, TimerData> realTimers = new Dictionary<int, TimerData>();
         private readonly List<TimerData> pendingRemove = new List<TimerData>();
+        private readonly List<TimerData> iteratingSnapshot = new List<TimerData>();
         private IPoolSystem poolSystem;
 
         protected override void OnInit()
@@ -31,8 +32,12 @@ namespace ARPG
 
         private void UpdateTimers(Dictionary<int, TimerData> dict, float dt)
         {
-            foreach (var timer in dict.Values)
+            // 快照当前值，避免回调中 CreateTimer/RemoveTimer 修改 Dictionary 导致迭代异常
+            iteratingSnapshot.AddRange(dict.Values);
+
+            for (int i = 0; i < iteratingSnapshot.Count; i++)
             {
+                var timer = iteratingSnapshot[i];
                 if (!timer.IsRunning) continue;
 
                 // 间隔回调
@@ -54,12 +59,15 @@ namespace ARPG
                     pendingRemove.Add(timer);
                 }
             }
+            iteratingSnapshot.Clear();
 
             // 移除已完成的计时器
             for (int i = 0; i < pendingRemove.Count; i++)
             {
-                dict.Remove(pendingRemove[i].Id);
-                poolSystem.PushObj(pendingRemove[i]);
+                var t = pendingRemove[i];
+                // 回调中可能已调用 RemoveTimer 将其移除，需检查
+                if (dict.Remove(t.Id))
+                    poolSystem.Recyle(t);
             }
             pendingRemove.Clear();
         }
@@ -68,7 +76,7 @@ namespace ARPG
                                float interval = 0f, Action onInterval = null)
         {
             int id = ++nextId;
-            var data = poolSystem.GetObj<TimerData>();
+            var data = poolSystem.Spawn<TimerData>();
             data.Init(id, duration, onComplete, interval, onInterval, isRealTime);
 
             if (isRealTime)
@@ -83,12 +91,12 @@ namespace ARPG
         {
             if (scaledTimers.TryGetValue(id, out var t))
             {
-                poolSystem.PushObj(t);
+                poolSystem.Recyle(t);
                 scaledTimers.Remove(id);
             }
             else if (realTimers.TryGetValue(id, out t))
             {
-                poolSystem.PushObj(t);
+                poolSystem.Recyle(t);
                 realTimers.Remove(id);
             }
         }
