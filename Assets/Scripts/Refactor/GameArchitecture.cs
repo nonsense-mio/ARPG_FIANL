@@ -19,6 +19,9 @@ namespace ARPG
             // 注册 System
             RegisterSystem<ITaskSystem>(new TaskSystem());
             RegisterSystem<IPoolSystem>(new PoolSystem());
+            RegisterSystem<ITimerSystem>(new TimerSystem());
+            RegisterSystem<IVFXSystem>(new VFXSystem());
+            RegisterSystem<ISoundSystem>(new SoundSystem());
         }
     }
 }

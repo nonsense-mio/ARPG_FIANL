@@ -55,9 +55,6 @@ namespace HT
             cameraMgr.inputMgr = player.inputMgr;
             cameraMgr.playerManager = player;
 
-            // 初始化VFX管理器
-            VFXMgr.Instance.Init();
-
             //显示游戏面板
             UIMgr.Instance.ShowPanel<GamePanel>();
             UIMgr.Instance.ShowPanel<InteractionPanel>();

@@ -13,8 +13,6 @@ public class Main : MonoBehaviour
     void Start()
     {
         UIMgr.Instance.ShowPanel<BeginPanel>();
-        // 初始化声音管理器
-        SoundManager.Instance.Init();
         MusicMgr.Instance.PlayBKMusic("BeginScene");
         // ABUpdateMgr.Instance.CheckUpdate((isOver) =>
         // {
