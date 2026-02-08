@@ -44,7 +44,7 @@ namespace ARPG
             bgmSource.volume = bgmVolume;
 
             // 注册 Update 检测 SFX 播放完毕
-            MonoMgr.Instance.AddUpdateListener(OnUpdate);
+            this.GetSystem<ITickSystem>().RegisterUpdate(OnUpdate);
         }
 
         private void OnUpdate()

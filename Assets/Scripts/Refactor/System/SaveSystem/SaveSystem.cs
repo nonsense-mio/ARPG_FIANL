@@ -22,10 +22,12 @@ namespace ARPG
         public bool IsPlaying { get; private set; } = false;
 
         private IStorage storage;
+        private ITickSystem tickSystem;
 
         protected override void OnInit()
         {
             storage = this.GetUtility<IStorage>();
+            tickSystem = this.GetSystem<ITickSystem>();
             SlotInfo = storage.LoadData<SaveSlotInfo>(SLOT_INFO_FILE);
         }
 
@@ -158,13 +160,13 @@ namespace ARPG
         public void StartPlayTimer()
         {
             IsPlaying = true;
-            MonoMgr.Instance.AddUpdateListener(UpdatePlayTime);
+            tickSystem.RegisterUpdate(UpdatePlayTime);
         }
 
         public void StopPlayTimer()
         {
             IsPlaying = false;
-            MonoMgr.Instance.RemoveUpdateListener(UpdatePlayTime);
+            tickSystem.UnregisterUpdate(UpdatePlayTime);
         }
 
         private void UpdatePlayTime()

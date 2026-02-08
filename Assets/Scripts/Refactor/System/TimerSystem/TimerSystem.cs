@@ -21,7 +21,7 @@ namespace ARPG
         protected override void OnInit()
         {
             poolSystem = this.GetSystem<IPoolSystem>();
-            MonoMgr.Instance.AddUpdateListener(OnUpdate);
+            this.GetSystem<ITickSystem>().RegisterUpdate(OnUpdate);
         }
 
         private void OnUpdate()
