@@ -7,6 +7,7 @@ namespace HT
     public class SettingPanel : BasePanel
     {
         private IMusicSystem musicSystem;
+        private IMusicModel musicModel;
 
         private void Start()
         {
@@ -20,17 +21,17 @@ namespace HT
         public override void ShowMe()
         {
             musicSystem = this.GetSystem<IMusicSystem>();
+            musicModel = this.GetModel<IMusicModel>();
             //根据存储的音乐相关数据来初始化面板显示内容
-            MusicData data = CurrentGameDataMgr.Instance.musicData;
-            GetControl<Toggle>("togMusic").isOn = data.musicOpen;
-            GetControl<Toggle>("togSound").isOn = data.soundOpen;
-            GetControl<Slider>("sliderMusic").value = data.musicValue;
-            GetControl<Slider>("sliderSound").value = data.soundValue;
+            GetControl<Toggle>("togMusic").isOn = musicModel.MusicOpen.Value;
+            GetControl<Toggle>("togSound").isOn = musicModel.SoundOpen.Value;
+            GetControl<Slider>("sliderMusic").value = musicModel.MusicValue.Value;
+            GetControl<Slider>("sliderSound").value = musicModel.SoundValue.Value;
         }
 
         public override void HideMe()
         {
-            CurrentGameDataMgr.Instance.SaveMusicData();
+            musicModel.SaveMusicSettings();
         }
         protected override void ClickBtn(string btnName)
         {
@@ -50,11 +51,11 @@ namespace HT
             {
                 case "sliderMusic":
                     musicSystem.SetBGMVolume(value);
-                    CurrentGameDataMgr.Instance.musicData.musicValue = value;
+                    musicModel.MusicValue.Value = value;
                     break;
                 case "sliderSound":
                     musicSystem.SetSoundVolume(value);
-                    CurrentGameDataMgr.Instance.musicData.soundValue = value;
+                    musicModel.SoundValue.Value = value;
                     break;
             }
         }
@@ -66,16 +67,13 @@ namespace HT
             {
                 case "togMusic":
                     musicSystem.SetBGMPlaying(value);
-                    CurrentGameDataMgr.Instance.musicData.musicOpen = value;
+                    musicModel.MusicOpen.Value = value;
                     break;
                 case "togSound":
                     musicSystem.SetSoundPlaying(value);
-                    CurrentGameDataMgr.Instance.musicData.soundOpen = value;
+                    musicModel.SoundOpen.Value = value;
                     break;
             }
         }
-
-
     }
 }
-

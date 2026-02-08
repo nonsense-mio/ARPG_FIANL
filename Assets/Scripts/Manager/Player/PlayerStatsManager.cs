@@ -241,10 +241,10 @@ namespace HT
 
         public void RespawnAtLastBonfire()
         {
-            var data = CurrentGameDataMgr.Instance.playerData;
+            var playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
 
             // 如果没有激活过任何篝火，使用默认出生点
-            if (string.IsNullOrEmpty(data.lastRestedBonfireID))
+            if (string.IsNullOrEmpty(playerModel.LastRestedBonfireID.Value))
             {
                 Debug.LogWarning("[PlayerStatsManager] 没有激活的篝火，使用默认位置");
                 // 可以设置一个默认出生点
@@ -252,7 +252,10 @@ namespace HT
             }
 
             // 传送到复活点
-            Vector3 respawnPosition = new Vector3(data.respawnX, data.respawnY, data.respawnZ);
+            Vector3 respawnPosition = new Vector3(
+                playerModel.RespawnX.Value,
+                playerModel.RespawnY.Value,
+                playerModel.RespawnZ.Value);
             player.SetPlayerPosition(respawnPosition);
 
             // 重置玩家状态
@@ -262,7 +265,7 @@ namespace HT
             // 播放复活动画（可选）
             player.playerAnimatorManager.PlayTargetAnimation("Get up", true);
 
-            Debug.Log($"[PlayerStatsManager] 在篝火 {data.lastRestedBonfireID} 复活");
+            Debug.Log($"[PlayerStatsManager] 在篝火 {playerModel.LastRestedBonfireID.Value} 复活");
         }
     }
 }

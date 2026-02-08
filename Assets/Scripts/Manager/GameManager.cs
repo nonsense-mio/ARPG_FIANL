@@ -43,15 +43,13 @@ namespace HT
             }, true);
             CameraMgr cameraMgr = cameraObj.GetComponent<CameraMgr>();
 
-            PlayerData playerData = CurrentGameDataMgr.Instance.playerData;
-
             //同步加载玩家并实例化玩家
             AssetSystem.LoadAssetAsync<GameObject>("character", "Player", (obj) =>
             {
                 GameObject playerObj = GameObject.Instantiate(obj);
                 player = playerObj.GetComponent<PlayerManager>();
                 //更新玩家数据到场景中
-                player.playerSaveManager.LoadDataFromGameDataMgr();
+                player.playerSaveManager.SyncFromModel();
 
                 // 恢复任务数据（需要在场景加载完成后调用，确保 TaskGiver 已存在）
                 var allTasks = CollectAllTasksFromScene();
@@ -121,7 +119,7 @@ namespace HT
         public void SaveCurrentGame()
         {
             if (player != null)
-                player.playerSaveManager.SaveDataToGameDataMgr();
+                player.playerSaveManager.SyncRuntimeToModel();
 
             SaveSystem.SaveCurrentGame();
         }

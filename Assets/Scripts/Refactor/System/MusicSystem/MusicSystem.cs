@@ -37,11 +37,11 @@ namespace ARPG
             bgmSource = bgmObj.AddComponent<AudioSource>();
             bgmSource.loop = true;
 
-            // 从 CurrentGameDataMgr 读取初始设置
-            MusicData data = CurrentGameDataMgr.Instance.musicData;
-            bgmVolume = data.musicValue;
-            soundVolume = data.soundValue;
-            soundEnabled = data.soundOpen;
+            // 从 IMusicModel 读取初始设置
+            var musicModel = this.GetModel<IMusicModel>();
+            bgmVolume = musicModel.MusicValue.Value;
+            soundVolume = musicModel.SoundValue.Value;
+            soundEnabled = musicModel.SoundOpen.Value;
             bgmSource.volume = bgmVolume;
 
             // 注册 Update 检测 SFX 播放完毕

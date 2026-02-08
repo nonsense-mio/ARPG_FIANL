@@ -4,10 +4,9 @@ using HT;
 namespace ARPG
 {
     /// <summary>
-    /// 添加物品到背包命令 - 三路写入:
+    /// 添加物品到背包命令 - 双路写入:
     /// 1. PlayerInventoryManager (运行时列表)
     /// 2. IInventoryModel (ID列表，驱动UI响应式更新)
-    /// 3. CurrentGameDataMgr (存档持久化)
     /// </summary>
     public class AddItemToInventoryCommand : AbstractCommand
     {
@@ -31,9 +30,6 @@ namespace ARPG
             // 2) 同步 IInventoryModel (根据ID范围自动分类)
             var model = this.GetModel<IInventoryModel>();
             model.AddItem(item.itemID);
-
-            // 3) 导出到 CurrentGameDataMgr (持久化)
-            model.ExportToInventoryData(CurrentGameDataMgr.Instance.playerInventoryData);
         }
     }
 }

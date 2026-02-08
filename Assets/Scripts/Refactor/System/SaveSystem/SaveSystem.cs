@@ -43,19 +43,17 @@ namespace ARPG
             SlotInfo.lastUsedSlot = slotIndex;
             CurrentPlayTime = 0f;
 
-            // 初始化默认数据
-            CurrentGameDataMgr.Instance.playerData = new PlayerData { playerName = playerName };
-            CurrentGameDataMgr.Instance.playerInventoryData = new PlayerInventoryData();
-            CurrentGameDataMgr.Instance.taskData = new TaskData();
-            CurrentGameDataMgr.Instance.sceneStateData = new SceneStateData();
+            // 创建默认数据 → 直接 Import 到 Model 层
+            this.GetModel<IPlayerModel>().ImportFromPlayerData(new PlayerData { playerName = playerName });
+            this.GetModel<IInventoryModel>().ImportFromInventoryData(new PlayerInventoryData());
+            this.GetModel<ITaskModel>().ImportFromTaskData(new TaskData());
+            this.GetModel<ISceneStateModel>().ImportFromSceneStateData(new SceneStateData());
 
-            // 同步到 QFramework Model 层
-            SyncToModels();
             SaveCurrentGame();
         }
 
         /// <summary>
-        /// 加载存档：从指定槽位读取数据到内存
+        /// 加载存档：从指定槽位读取数据到 Model 层
         /// </summary>
         public bool LoadGame(int slotIndex)
         {
@@ -68,25 +66,26 @@ namespace ARPG
             CurrentSlotIndex = slotIndex;
             SlotInfo.lastUsedSlot = slotIndex;
 
-            // 从文件加载到 GameDataMgr
+            // 从文件加载 transient data → 直接 Import 到 Model 层
             string suffix = $"_{slotIndex}";
-            CurrentGameDataMgr.Instance.playerData = storage.LoadData<PlayerData>(PLAYER_DATA_FILE + suffix);
-            CurrentGameDataMgr.Instance.playerInventoryData = storage.LoadData<PlayerInventoryData>(INVENTORY_DATA_FILE + suffix);
-            CurrentGameDataMgr.Instance.taskData = storage.LoadData<TaskData>(TASK_DATA_FILE + suffix);
-            CurrentGameDataMgr.Instance.sceneStateData = storage.LoadData<SceneStateData>(SCENE_STATE_FILE + suffix);
+            this.GetModel<IPlayerModel>().ImportFromPlayerData(
+                storage.LoadData<PlayerData>(PLAYER_DATA_FILE + suffix));
+            this.GetModel<IInventoryModel>().ImportFromInventoryData(
+                storage.LoadData<PlayerInventoryData>(INVENTORY_DATA_FILE + suffix));
+            this.GetModel<ITaskModel>().ImportFromTaskData(
+                storage.LoadData<TaskData>(TASK_DATA_FILE + suffix));
+            this.GetModel<ISceneStateModel>().ImportFromSceneStateData(
+                storage.LoadData<SceneStateData>(SCENE_STATE_FILE + suffix));
 
             // 恢复游戏时长
             CurrentPlayTime = SlotInfo.GetSlot(slotIndex)?.playTimeSeconds ?? 0f;
-
-            // 同步到 QFramework Model 层
-            SyncToModels();
 
             storage.SaveData(SlotInfo, SLOT_INFO_FILE);
             return true;
         }
 
         /// <summary>
-        /// 保存当前游戏：将内存数据写入当前槽位
+        /// 保存当前游戏：从 Model 层导出数据写入当前槽位
         /// </summary>
         public void SaveCurrentGame()
         {
@@ -96,9 +95,12 @@ namespace ARPG
                 return;
             }
 
-            // 仅对已迁移到 Model 层写入的模块执行导出
-            var sceneStateModel = this.GetModel<ISceneStateModel>();
-            sceneStateModel.ExportToSceneStateData(CurrentGameDataMgr.Instance.sceneStateData);
+            // 导出所有 Model → transient data objects
+            var playerData = new PlayerData();
+            this.GetModel<IPlayerModel>().ExportToPlayerData(playerData);
+
+            var inventoryData = new PlayerInventoryData();
+            this.GetModel<IInventoryModel>().ExportToInventoryData(inventoryData);
 
             // 同步 TaskSystem 运行时状态到 TaskModel
             var taskSystem = this.GetSystem<ITaskSystem>();
@@ -109,20 +111,23 @@ namespace ARPG
             foreach (var giver in Object.FindObjectsOfType<TaskGiver>())
                 taskModel.SetGiverProgress(giver.GetGiverId(), giver.CurrentTaskIndex);
 
-            // 导出 TaskModel 到 CurrentGameDataMgr
-            taskModel.ExportToTaskData(CurrentGameDataMgr.Instance.taskData);
+            // 导出 TaskModel
+            var taskData = new TaskData();
+            taskModel.ExportToTaskData(taskData);
+
+            var sceneStateData = new SceneStateData();
+            this.GetModel<ISceneStateModel>().ExportToSceneStateData(sceneStateData);
 
             // 更新槽位元数据（用于UI显示）
             SaveSlotData slot = SlotInfo.GetSlot(CurrentSlotIndex);
-            PlayerData pd = CurrentGameDataMgr.Instance.playerData;
 
             slot.isEmpty = false;
-            slot.playerName = pd.playerName;
-            slot.playerLevel = pd.playerLevel;
-            slot.currentSouls = pd.currentSoulCount;
-            slot.maxHealth = pd.healthLevel * 10;
-            slot.maxStamina = pd.staminaLevel * 10;
-            slot.maxFocus = pd.focusLevel * 10;
+            slot.playerName = playerData.playerName;
+            slot.playerLevel = playerData.playerLevel;
+            slot.currentSouls = playerData.currentSoulCount;
+            slot.maxHealth = playerData.healthLevel * 10;
+            slot.maxStamina = playerData.staminaLevel * 10;
+            slot.maxFocus = playerData.focusLevel * 10;
             slot.playTimeSeconds = CurrentPlayTime;
             slot.UpdateSaveTime();
             // 保存最后使用的槽位索引
@@ -130,10 +135,10 @@ namespace ARPG
 
             // 保存到文件
             string suffix = $"_{CurrentSlotIndex}";
-            storage.SaveData(CurrentGameDataMgr.Instance.playerData, PLAYER_DATA_FILE + suffix);
-            storage.SaveData(CurrentGameDataMgr.Instance.playerInventoryData, INVENTORY_DATA_FILE + suffix);
-            storage.SaveData(CurrentGameDataMgr.Instance.taskData, TASK_DATA_FILE + suffix);
-            storage.SaveData(CurrentGameDataMgr.Instance.sceneStateData, SCENE_STATE_FILE + suffix);
+            storage.SaveData(playerData, PLAYER_DATA_FILE + suffix);
+            storage.SaveData(inventoryData, INVENTORY_DATA_FILE + suffix);
+            storage.SaveData(taskData, TASK_DATA_FILE + suffix);
+            storage.SaveData(sceneStateData, SCENE_STATE_FILE + suffix);
             storage.SaveData(SlotInfo, SLOT_INFO_FILE);
         }
 
@@ -179,45 +184,5 @@ namespace ARPG
             string path = $"{Application.persistentDataPath}/{fileName}.json";
             if (File.Exists(path)) File.Delete(path);
         }
-
-        #region QFramework Model 同步
-
-        /// <summary>
-        /// 将 CurrentGameDataMgr 数据同步到 QFramework Model 层
-        /// </summary>
-        private void SyncToModels()
-        {
-            var playerModel = this.GetModel<IPlayerModel>();
-            playerModel.ImportFromPlayerData(CurrentGameDataMgr.Instance.playerData);
-
-            var inventoryModel = this.GetModel<IInventoryModel>();
-            inventoryModel.ImportFromInventoryData(CurrentGameDataMgr.Instance.playerInventoryData);
-
-            var taskModel = this.GetModel<ITaskModel>();
-            taskModel.ImportFromTaskData(CurrentGameDataMgr.Instance.taskData);
-
-            var sceneStateModel = this.GetModel<ISceneStateModel>();
-            sceneStateModel.ImportFromSceneStateData(CurrentGameDataMgr.Instance.sceneStateData);
-        }
-
-        /// <summary>
-        /// 从 QFramework Model 层导出数据到 CurrentGameDataMgr
-        /// </summary>
-        private void SyncFromModels()
-        {
-            var playerModel = this.GetModel<IPlayerModel>();
-            playerModel.ExportToPlayerData(CurrentGameDataMgr.Instance.playerData);
-
-            var inventoryModel = this.GetModel<IInventoryModel>();
-            inventoryModel.ExportToInventoryData(CurrentGameDataMgr.Instance.playerInventoryData);
-
-            var taskModel = this.GetModel<ITaskModel>();
-            taskModel.ExportToTaskData(CurrentGameDataMgr.Instance.taskData);
-
-            var sceneStateModel = this.GetModel<ISceneStateModel>();
-            sceneStateModel.ExportToSceneStateData(CurrentGameDataMgr.Instance.sceneStateData);
-        }
-
-        #endregion
     }
 }

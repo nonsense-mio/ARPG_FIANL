@@ -8,10 +8,9 @@ using UnityEngine;
 namespace ARPG
 {
     /// <summary>
-    /// 更换装备命令 - 三路写入:
+    /// 更换装备命令 - 双路写入:
     /// 1. PlayerInventoryManager (运行时逻辑 + 视觉更新)
     /// 2. IInventoryModel (ID列表，驱动UI响应式更新)
-    /// 3. CurrentGameDataMgr (存档持久化)
     /// </summary>
     public class ChangeEquipItemCommand : AbstractCommand
     {
@@ -39,9 +38,6 @@ namespace ARPG
             // 2) 同步 IInventoryModel (从运行时读回最终状态)
             var model = this.GetModel<IInventoryModel>();
             SyncModelFromRuntime(model, inv);
-
-            // 3) 导出到 CurrentGameDataMgr (持久化)
-            model.ExportToInventoryData(CurrentGameDataMgr.Instance.playerInventoryData);
         }
 
         /// <summary>

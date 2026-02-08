@@ -24,7 +24,7 @@ namespace HT
         {
             GameArchitecture.Interface.SendEvent(new PerformInteractionEvent { Target = this });
             //交互后保存游戏数据
-            playerManager.playerSaveManager.SaveDataToGameDataMgr();
+            //playerManager.playerSaveManager.SaveDataToGameDataMgr();
         }
     }
 }

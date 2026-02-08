@@ -239,19 +239,6 @@ namespace HT
                 playerModel.MaxFocus.Value = (int)stats.maxFocus;
             }
 
-            // 3) 同步 CurrentGameDataMgr (存档持久化)
-            var pd = CurrentGameDataMgr.Instance.playerData;
-            pd.playerLevel = projectedPlayerLevel;
-            pd.healthLevel = newHealthLevel;
-            pd.staminaLevel = newStaminaLevel;
-            pd.focusLevel = newFocusLevel;
-            pd.poiseLevel = newPoiseLevel;
-            pd.strengthLevel = newStrengthLevel;
-            pd.dexterityLevel = newDexterityLevel;
-            pd.intelligenceLevel = newIntelligenceLevel;
-            pd.faithLevel = newFaithLevel;
-            pd.currentSoulCount = newSoulCount;
-
             UIMgr.Instance.HidePanel<LevelUpPanel>();
             UIMgr.Instance.ShowPanel<DialoguePanel>();
         }

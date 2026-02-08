@@ -57,7 +57,7 @@ namespace HT
 
         public override void Interact(PlayerManager playerManager)
         {
-            var data = CurrentGameDataMgr.Instance.playerData;
+            var playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
 
             if (!hasBeenActived)
             {
@@ -66,7 +66,7 @@ namespace HT
             }
 
             // 设置为当前复活点
-            SetAsRespawnPoint(data);
+            SetAsRespawnPoint(playerModel);
 
             base.Interact(playerManager);
 
@@ -97,17 +97,17 @@ namespace HT
             sceneStateModel.SetBonfireActivated(bonfireID, true);
         }
 
-        private void SetAsRespawnPoint(PlayerData data)
+        private void SetAsRespawnPoint(IPlayerModel playerModel)
         {
             // 设置当前篝火为复活点
-            data.lastRestedBonfireID = bonfireID;
+            playerModel.LastRestedBonfireID.Value = bonfireID;
 
             // 保存传送点坐标
-            Vector3 respawnPos = bonfireTeleportPoint != null? bonfireTeleportPoint.position : transform.position;
+            Vector3 respawnPos = bonfireTeleportPoint != null ? bonfireTeleportPoint.position : transform.position;
 
-            data.respawnX = respawnPos.x;
-            data.respawnY = respawnPos.y;
-            data.respawnZ = respawnPos.z;
+            playerModel.RespawnX.Value = respawnPos.x;
+            playerModel.RespawnY.Value = respawnPos.y;
+            playerModel.RespawnZ.Value = respawnPos.z;
         }
 
         /// <summary>
