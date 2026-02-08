@@ -14,6 +14,9 @@ namespace HT
         private ISaveSystem saveSystem;
         private ISaveSystem SaveSystem =>
             saveSystem ?? (saveSystem = GameArchitecture.Interface.GetSystem<ISaveSystem>());
+        private IAssetSystem assetSystem;
+        private IAssetSystem AssetSystem =>
+            assetSystem ?? (assetSystem = GameArchitecture.Interface.GetUtility<IAssetSystem>());
 
         private GameManager()
         {
@@ -31,7 +34,7 @@ namespace HT
             MusicSystem.PlayBGM("GameScene1");
             GameObject cameraObj = null;
             //同步加载摄像机 并实例化
-            ABResMgr.Instance.LoadResAsync<GameObject>("character", "PlayerCamera", (obj) =>
+            AssetSystem.LoadAssetAsync<GameObject>("character", "PlayerCamera", (obj) =>
             {
                 cameraObj = GameObject.Instantiate(obj);
             }, true);
@@ -40,7 +43,7 @@ namespace HT
             PlayerData playerData = CurrentGameDataMgr.Instance.playerData;
 
             //同步加载玩家并实例化玩家
-            ABResMgr.Instance.LoadResAsync<GameObject>("character", "Player", (obj) =>
+            AssetSystem.LoadAssetAsync<GameObject>("character", "Player", (obj) =>
             {
                 GameObject playerObj = GameObject.Instantiate(obj);
                 player = playerObj.GetComponent<PlayerManager>();
@@ -73,16 +76,16 @@ namespace HT
         }
         private void LoadNPC()
         {
-            ABResMgr.Instance.LoadResAsync<GameObject>("character", "CiriPos", (obj) =>
+            AssetSystem.LoadAssetAsync<GameObject>("character", "CiriPos", (obj) =>
             {
-                ABResMgr.Instance.LoadResAsync<GameObject>("character", "Ciri", (prefab) =>
+                AssetSystem.LoadAssetAsync<GameObject>("character", "Ciri", (prefab) =>
                 {
                     GameObject npcObj = GameObject.Instantiate(prefab, obj.transform.position, obj.transform.rotation);
                 }, true);
             }, true);
-            ABResMgr.Instance.LoadResAsync<GameObject>("character", "GeraltPos", (obj) =>
+            AssetSystem.LoadAssetAsync<GameObject>("character", "GeraltPos", (obj) =>
             {
-                ABResMgr.Instance.LoadResAsync<GameObject>("character", "Geralt", (prefab) =>
+                AssetSystem.LoadAssetAsync<GameObject>("character", "Geralt", (prefab) =>
                 {
                     GameObject npcObj = GameObject.Instantiate(prefab, obj.transform.position, obj.transform.rotation);
                 }, true);

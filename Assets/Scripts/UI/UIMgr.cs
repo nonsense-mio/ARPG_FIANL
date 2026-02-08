@@ -144,7 +144,7 @@ namespace HT
             //不存在面板 先将信息存入字典
             panelDic.Add(panelName, new PanelInfo<T>(callBack));
             //加载面板
-            ABResMgr.Instance.LoadResAsync<GameObject>("ui", panelName, (res) =>
+            GetAssetSystem().LoadAssetAsync<GameObject>("ui", panelName, (res) =>
             {
                 //取出字典中已经占好位置的数据
                 PanelInfo<T> panelInfo = panelDic[panelName] as PanelInfo<T>;
@@ -261,6 +261,13 @@ namespace HT
             entry.callback.AddListener(callBack);
 
             trigger.triggers.Add(entry);
+        }
+
+        private static IAssetSystem cachedAssetSystem;
+        private static IAssetSystem GetAssetSystem()
+        {
+            return cachedAssetSystem ??
+                   (cachedAssetSystem = GameArchitecture.Interface.GetUtility<IAssetSystem>());
         }
 
         private static IMusicSystem cachedMusicSystem;

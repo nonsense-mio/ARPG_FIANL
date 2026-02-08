@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Framework;
-using HT;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,6 +20,7 @@ namespace ARPG
         private bool isClearing;
 
         private IPoolSystem poolSystem;
+        private IAssetSystem assetSystem;
 
         private const string SoundObjPoolPath = "Sound/soundObj";
         private const string MusicBundleName = "music";
@@ -29,6 +29,7 @@ namespace ARPG
         protected override void OnInit()
         {
             poolSystem = this.GetSystem<IPoolSystem>();
+            assetSystem = this.GetUtility<IAssetSystem>();
 
             // 创建 BGM AudioSource (DontDestroyOnLoad)
             var bgmObj = new GameObject("[MusicSystem] BGM");
@@ -81,7 +82,7 @@ namespace ARPG
         #region BGM
         public void PlayBGM(string name)
         {
-            ABResMgr.Instance.LoadResAsync<AudioClip>(MusicBundleName, name, (clip) =>
+            assetSystem.LoadAssetAsync<AudioClip>(MusicBundleName, name, (clip) =>
             {
                 bgmSource.clip = clip;
                 bgmSource.volume = bgmVolume;
@@ -121,7 +122,7 @@ namespace ARPG
             if (!soundEnabled)
                 return;
 
-            ABResMgr.Instance.LoadResAsync<AudioClip>(SoundBundleName, name, (clip) =>
+            assetSystem.LoadAssetAsync<AudioClip>(SoundBundleName, name, (clip) =>
             {
                 AudioSource source = poolSystem.Spawn(SoundObjPoolPath).GetComponent<AudioSource>();
                 source.Stop();
