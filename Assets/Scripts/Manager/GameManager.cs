@@ -11,6 +11,9 @@ namespace HT
         private IMusicSystem musicSystem;
         private IMusicSystem MusicSystem =>
             musicSystem ?? (musicSystem = GameArchitecture.Interface.GetSystem<IMusicSystem>());
+        private ISaveSystem saveSystem;
+        private ISaveSystem SaveSystem =>
+            saveSystem ?? (saveSystem = GameArchitecture.Interface.GetSystem<ISaveSystem>());
 
         private GameManager()
         {
@@ -19,7 +22,7 @@ namespace HT
 
         /// <summary>
         /// 切换场景时初始化游戏信息
-        /// 注意：在调用此方法前，应该已经通过 SaveMgr 加载了存档数据
+        /// 注意：在调用此方法前，应该已经通过 ISaveSystem 加载了存档数据
         /// </summary>
         public void InitGameScene()
         {
@@ -66,7 +69,7 @@ namespace HT
 
 
             // 开始游戏时长计时
-            SaveMgr.Instance.StartPlayTimer();
+            SaveSystem.StartPlayTimer();
         }
         private void LoadNPC()
         {
@@ -90,7 +93,7 @@ namespace HT
         /// </summary>
         public void StartNewGame(int slotIndex, string playerName = "Player")
         {
-            SaveMgr.Instance.CreateNewGame(slotIndex, playerName);
+            SaveSystem.CreateNewGame(slotIndex, playerName);
             SceneMgr.Instance.LoadSceneAsync("GameScene", InitGameScene);
         }
 
@@ -99,7 +102,7 @@ namespace HT
         /// </summary>
         public bool ContinueGame(int slotIndex)
         {
-            if (!SaveMgr.Instance.LoadGame(slotIndex))
+            if (!SaveSystem.LoadGame(slotIndex))
                 return false;
 
             SceneMgr.Instance.LoadSceneAsync("GameScene", InitGameScene);
@@ -114,7 +117,7 @@ namespace HT
             if (player != null)
                 player.playerSaveManager.SaveDataToGameDataMgr();
 
-            SaveMgr.Instance.SaveCurrentGame();
+            SaveSystem.SaveCurrentGame();
         }
 
         //初始化开始场景
@@ -151,7 +154,7 @@ namespace HT
         public void ClearInfo()
         {
             // 停止游戏时长计时
-            SaveMgr.Instance.StopPlayTimer();
+            SaveSystem.StopPlayTimer();
 
             MusicSystem.ClearAllSounds();
             GameArchitecture.Interface.GetSystem<IPoolSystem>().ClearAllPools();

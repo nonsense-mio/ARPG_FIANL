@@ -23,6 +23,7 @@ namespace ARPG
             RegisterSystem<IVFXSystem>(new VFXSystem());
             RegisterSystem<IMusicSystem>(new MusicSystem());
             RegisterSystem<ISoundSystem>(new SoundSystem());
+            RegisterSystem<ISaveSystem>(new SaveSystem());
         }
     }
 }

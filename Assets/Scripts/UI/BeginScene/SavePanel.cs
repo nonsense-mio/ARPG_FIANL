@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -78,7 +80,7 @@ namespace HT
         /// </summary>
         private void RefreshAllSlots()
         {
-            SaveSlotInfo slotInfo = SaveMgr.Instance.SlotInfo;
+            SaveSlotInfo slotInfo = this.GetSystem<ISaveSystem>().SlotInfo;
             // 更新每个槽位的显示
             for (int i = 0; i < slotUIList.Count && i < SaveSlotInfo.MAX_SLOTS; i++)
             {
@@ -117,7 +119,7 @@ namespace HT
             {
                 panel.SetTipInfo("确定要删除该存档吗？", () =>
                 {
-                    SaveMgr.Instance.DeleteSave(slotIndex);
+                    this.GetSystem<ISaveSystem>().DeleteSave(slotIndex);
                     RefreshAllSlots();
                 });
             });

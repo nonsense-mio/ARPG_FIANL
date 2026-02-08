@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace HT
@@ -30,9 +32,9 @@ namespace HT
                     break;
                 case "btnContinue":
                     // 继续游戏：直接进入最近使用的存档
-                    if (SaveMgr.Instance.HasAnySave())
+                    if (this.GetSystem<ISaveSystem>().HasAnySave())
                     {
-                        int lastSlot = SaveMgr.Instance.SlotInfo.lastUsedSlot;
+                        int lastSlot = this.GetSystem<ISaveSystem>().SlotInfo.lastUsedSlot;
                         if (lastSlot >= 0)
                         {
                             UIMgr.Instance.HidePanel<BeginPanel>();

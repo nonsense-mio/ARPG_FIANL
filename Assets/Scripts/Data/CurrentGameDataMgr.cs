@@ -1,8 +1,10 @@
+using ARPG;
+using Framework;
 using UnityEngine;
 
 /// <summary>
 /// 游戏数据容器：保存当前游戏的内存数据
-/// 存档读写由 SaveMgr 负责
+/// 存档读写由 ISaveSystem 负责
 /// </summary>
 public class CurrentGameDataMgr : BaseManager<CurrentGameDataMgr>
 {
@@ -18,14 +20,14 @@ public class CurrentGameDataMgr : BaseManager<CurrentGameDataMgr>
         playerInventoryData = new PlayerInventoryData();
         taskData = new TaskData();
         sceneStateData = new SceneStateData();
-        musicData = JsonMgr.Instance.LoadData<MusicData>("MusicData");
+        musicData = GameArchitecture.Interface.GetUtility<IStorage>().LoadData<MusicData>("MusicData");
     }
-    
+
     /// <summary>
     /// 保存音乐设置（全局设置，不随存档变化）
     /// </summary>
     public void SaveMusicData()
     {
-        JsonMgr.Instance.SaveData(musicData, "MusicData");
+        GameArchitecture.Interface.GetUtility<IStorage>().SaveData(musicData, "MusicData");
     }
 }

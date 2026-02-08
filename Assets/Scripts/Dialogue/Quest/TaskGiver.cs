@@ -24,7 +24,7 @@ public class TaskGiver : MonoBehaviour
     [SerializeField] private string currentTaskName = "无";
 
     /// <summary>
-    /// 供 SaveMgr 在保存时读取当前任务索引
+    /// 供 ISaveSystem 在保存时读取当前任务索引
     /// </summary>
     public int CurrentTaskIndex => currentTaskIndex;
 
