@@ -20,6 +20,9 @@ namespace HT
         private ISceneSystem sceneSystem;
         private ISceneSystem SceneSystem =>
             sceneSystem ?? (sceneSystem = GameArchitecture.Interface.GetSystem<ISceneSystem>());
+        private IUISystem uiSystem;
+        private IUISystem UISystem =>
+            uiSystem ?? (uiSystem = GameArchitecture.Interface.GetSystem<IUISystem>());
 
         private GameManager()
         {
@@ -67,8 +70,8 @@ namespace HT
             cameraMgr.playerManager = player;
 
             //显示游戏面板
-            UIMgr.Instance.ShowPanel<GamePanel>();
-            UIMgr.Instance.ShowPanel<InteractionPanel>();
+            UISystem.ShowPanel<GamePanel>();
+            UISystem.ShowPanel<InteractionPanel>();
 
 
 
@@ -128,7 +131,7 @@ namespace HT
         public void InitBeginScene()
         {
             MusicSystem.PlayBGM("BeginScene");
-            UIMgr.Instance.ShowPanel<BeginPanel>();
+            UISystem.ShowPanel<BeginPanel>();
         }
 
         /// <summary>

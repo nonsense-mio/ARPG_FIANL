@@ -15,24 +15,24 @@ namespace HT
         //添加按钮音效
         private void Start()
         {
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnBack"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnBack"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot1"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot2"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot3"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot4"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot1"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot2"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot3"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot4"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot1"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot2"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot3"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot4"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot1"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot2"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot3"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot4"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnBack"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnBack"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot1"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot2"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot3"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot4"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot1"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot2"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot3"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot4"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot1"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot2"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot3"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSaveSlot4"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot1"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot2"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot3"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnDeleteSlot4"));
 
         }
 
@@ -43,8 +43,8 @@ namespace HT
             switch (btnName)
             {
                 case "btnBack":
-                    UIMgr.Instance.HidePanel<SavePanel>();
-                    UIMgr.Instance.ShowPanel<BeginPanel>();
+                    this.GetSystem<IUISystem>().HidePanel<SavePanel>();
+                    this.GetSystem<IUISystem>().ShowPanel<BeginPanel>();
                     break;
                 //槽位按钮
                 case "btnSaveSlot1":
@@ -97,8 +97,8 @@ namespace HT
 
             bool isEmpty = slotUIList[slotIndex].IsEmpty();
 
-            UIMgr.Instance.HidePanel<SavePanel>();
-            UIMgr.Instance.HidePanel<BeginPanel>();
+            this.GetSystem<IUISystem>().HidePanel<SavePanel>();
+            this.GetSystem<IUISystem>().HidePanel<BeginPanel>();
             GameManager.Instance.ClearInfo();
 
             if (isEmpty)
@@ -115,7 +115,7 @@ namespace HT
 
         private void DeleteSaveSlot(int slotIndex)
         {
-            UIMgr.Instance.ShowPanel<TipPanel>(E_UILayer.Top, (panel) =>
+            this.GetSystem<IUISystem>().ShowPanel<TipPanel>(E_UILayer.Top, (panel) =>
             {
                 panel.SetTipInfo("确定要删除该存档吗？", () =>
                 {

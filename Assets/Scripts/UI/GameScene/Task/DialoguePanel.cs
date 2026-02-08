@@ -72,8 +72,8 @@ namespace HT
                         if (currentIndex >= currentDialogueData.dialoguePieces.Count)
                         {
                             //对话结束
-                            UIMgr.Instance.HidePanel<DialoguePanel>();
-                            UIMgr.Instance.ShowPanel<GamePanel>();
+                            this.GetSystem<IUISystem>().HidePanel<DialoguePanel>();
+                            this.GetSystem<IUISystem>().ShowPanel<GamePanel>();
                         }
                         //还有对话，刷新显示
                         else

@@ -11,14 +11,14 @@ namespace HT
 
         private void Start()
         {
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnStart"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnContinue"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSetting"));
-            UIMgr.AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnQuit"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnStart"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnContinue"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSetting"));
-            UIMgr.AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnQuit"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnStart"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnContinue"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnSetting"));
+            AddUISelectSound(GetControl<UnityEngine.UI.Button>("btnQuit"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnStart"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnContinue"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnSetting"));
+            AddUIConfirmSound(GetControl<UnityEngine.UI.Button>("btnQuit"));
         }
 
         protected override void ClickBtn(string btnName)
@@ -27,8 +27,8 @@ namespace HT
             {
                 case "btnStart":
                     // 开始游戏：打开存档面板
-                    UIMgr.Instance.ShowPanel<SavePanel>();
-                    UIMgr.Instance.HidePanel<BeginPanel>();
+                    this.GetSystem<IUISystem>().ShowPanel<SavePanel>();
+                    this.GetSystem<IUISystem>().HidePanel<BeginPanel>();
                     break;
                 case "btnContinue":
                     // 继续游戏：直接进入最近使用的存档
@@ -37,7 +37,7 @@ namespace HT
                         int lastSlot = this.GetSystem<ISaveSystem>().SlotInfo.lastUsedSlot;
                         if (lastSlot >= 0)
                         {
-                            UIMgr.Instance.HidePanel<BeginPanel>();
+                            this.GetSystem<IUISystem>().HidePanel<BeginPanel>();
                             GameManager.Instance.ClearInfo();
                             GameManager.Instance.ContinueGame(lastSlot);
                         }
@@ -46,14 +46,14 @@ namespace HT
                     //没有存档则提示
                     else
                     {
-                        UIMgr.Instance.ShowPanel<TipPanel>(E_UILayer.Top, (panel) =>
+                        this.GetSystem<IUISystem>().ShowPanel<TipPanel>(E_UILayer.Top, (panel) =>
                         {
                             panel.SetTipInfo("没有可继续的存档");
                         });
                     }
                     break;
                 case "btnSetting":
-                    UIMgr.Instance.ShowPanel<SettingPanel>();
+                    this.GetSystem<IUISystem>().ShowPanel<SettingPanel>();
                     break;
                 case "btnQuit":
                     Application.Quit();

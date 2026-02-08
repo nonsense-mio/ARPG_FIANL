@@ -86,13 +86,13 @@ public class OptionUI : MonoBehaviour, IPoolable
         //根据选项的目标片段ID跳转到对应的对话片段
         if (string.IsNullOrEmpty(nextPieceID))
         {
-            UIMgr.Instance.HidePanel<DialoguePanel>();
-            UIMgr.Instance.ShowPanel<GamePanel>();
+            GameArchitecture.Interface.GetSystem<IUISystem>().HidePanel<DialoguePanel>();
+            GameArchitecture.Interface.GetSystem<IUISystem>().ShowPanel<GamePanel>();
         }
         else
         {
             //获取当前面板并跳转到目标对话片段
-            UIMgr.Instance.GetPanel<DialoguePanel>((panel) =>
+            GameArchitecture.Interface.GetSystem<IUISystem>().GetPanel<DialoguePanel>((panel) =>
             {
                 panel.JumpToPiece(nextPieceID);
             });

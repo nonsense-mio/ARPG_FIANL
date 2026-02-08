@@ -222,13 +222,13 @@ namespace HT
                 onEquipCallback(item);
                 // 执行完回调后，关闭背包面板，刷新显示
                 //选完装备就关闭背包回装备面板
-                UIMgr.Instance.HidePanel<BagPanel>();
-                UIMgr.Instance.ShowPanel<EquipPanel>(callBack: (equipPanel) =>
+                this.GetSystem<IUISystem>().HidePanel<BagPanel>();
+                this.GetSystem<IUISystem>().ShowPanel<EquipPanel>(callBack: (equipPanel) =>
                 {
                     equipPanel.Refresh();
                 });
                 //更新快捷栏UI显示
-                UIMgr.Instance.GetPanel<GamePanel>((panel) =>
+                this.GetSystem<IUISystem>().GetPanel<GamePanel>((panel) =>
                 {
                     panel.UpdateAllQuickSlots();
                 });

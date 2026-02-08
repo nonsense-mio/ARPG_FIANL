@@ -1,8 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using ARPG;
+using Framework;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 namespace HT
@@ -113,6 +115,34 @@ namespace HT
         protected virtual void ToggleValueChange(string togName, bool value)
         {
 
+        }
+
+        protected static void AddCustomEventListener(UIBehaviour control, EventTriggerType type, UnityAction<BaseEventData> callBack)
+        {
+            EventTrigger trigger = control.GetComponent<EventTrigger>();
+            if (trigger == null)
+                trigger = control.AddComponent<EventTrigger>();
+
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = type;
+            entry.callback.AddListener(callBack);
+            trigger.triggers.Add(entry);
+        }
+
+        protected void AddUISelectSound(UIBehaviour control)
+        {
+            AddCustomEventListener(control, EventTriggerType.PointerEnter, (data) =>
+            {
+                this.GetSystem<IMusicSystem>().PlaySound("UI_Select");
+            });
+        }
+
+        protected void AddUIConfirmSound(UIBehaviour control)
+        {
+            AddCustomEventListener(control, EventTriggerType.PointerClick, (data) =>
+            {
+                this.GetSystem<IMusicSystem>().PlaySound("UI_Confirm");
+            });
         }
 
         private void FindChildrenControl<T>() where T : UIBehaviour

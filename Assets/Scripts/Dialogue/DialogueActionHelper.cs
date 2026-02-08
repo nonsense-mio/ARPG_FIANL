@@ -16,10 +16,14 @@ public class DialogueActionHelper : MonoBehaviour
     {
         npc = GetComponent<EnemyManager>();
     }
+    private IUISystem uiSystem;
+    private IUISystem UISystem =>
+        uiSystem ?? (uiSystem = GameArchitecture.Interface.GetSystem<IUISystem>());
+
     public void OpenLevelUpPanel()
     {
-        UIMgr.Instance.HidePanel<DialoguePanel>();
-        UIMgr.Instance.ShowPanel<LevelUpPanel>();
+        UISystem.HidePanel<DialoguePanel>();
+        UISystem.ShowPanel<LevelUpPanel>();
     }
 
     public void Task1EnemySpawn()

@@ -89,7 +89,7 @@ namespace HT
                 //背包按钮
                 case "btnBag":
                     {
-                        UIMgr.Instance.ShowPanel<BagPanel>(callBack: (bagPanel) =>
+                        this.GetSystem<IUISystem>().ShowPanel<BagPanel>(callBack: (bagPanel) =>
                         {
                             bagPanel.RequestInitAllInventory();
                         });
@@ -99,7 +99,7 @@ namespace HT
                 //装备按钮
                 case "btnEquip":
                     {
-                        UIMgr.Instance.ShowPanel<EquipPanel>(callBack: (equipPanel) =>
+                        this.GetSystem<IUISystem>().ShowPanel<EquipPanel>(callBack: (equipPanel) =>
                         {
                             equipPanel.Refresh();
                         });
@@ -108,21 +108,21 @@ namespace HT
                     break;
                 case "btnTask":
                     {
-                        UIMgr.Instance.ShowPanel<TaskPanel>();
+                        this.GetSystem<IUISystem>().ShowPanel<TaskPanel>();
                         SetActiveSelectWindow(false);
                     }
                     break;
                 //退出按钮
                 case "btnQuit":
                     {
-                        UIMgr.Instance.ShowPanel<TipPanel>(E_UILayer.Top, (tipPanel) =>
+                        this.GetSystem<IUISystem>().ShowPanel<TipPanel>(E_UILayer.Top, (tipPanel) =>
                         {
                             tipPanel.SetTipInfo("是否返回标题界面？", () =>
                             {
-                                UIMgr.Instance.HidePanel<InteractionPanel>(true);
-                                UIMgr.Instance.HidePanel<EquipPanel>(true);
-                                UIMgr.Instance.HidePanel<BagPanel>(true);
-                                UIMgr.Instance.HidePanel<GamePanel>(true);
+                                this.GetSystem<IUISystem>().HidePanel<InteractionPanel>(true);
+                                this.GetSystem<IUISystem>().HidePanel<EquipPanel>(true);
+                                this.GetSystem<IUISystem>().HidePanel<BagPanel>(true);
+                                this.GetSystem<IUISystem>().HidePanel<GamePanel>(true);
                                 //保存并清理
                                 GameManager.Instance.SaveCurrentGame();
                                 GameManager.Instance.ClearInfo();

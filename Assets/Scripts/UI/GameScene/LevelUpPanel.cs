@@ -239,8 +239,8 @@ namespace HT
                 playerModel.MaxFocus.Value = (int)stats.maxFocus;
             }
 
-            UIMgr.Instance.HidePanel<LevelUpPanel>();
-            UIMgr.Instance.ShowPanel<DialoguePanel>();
+            this.GetSystem<IUISystem>().HidePanel<LevelUpPanel>();
+            this.GetSystem<IUISystem>().ShowPanel<DialoguePanel>();
         }
 
         //计算升级所需魂数

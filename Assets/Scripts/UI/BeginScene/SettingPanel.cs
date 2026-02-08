@@ -11,12 +11,12 @@ namespace HT
 
         private void Start()
         {
-            UIMgr.AddUISelectSound(GetControl<Button>("btnClose"));
-            UIMgr.AddUISelectSound(GetControl<Toggle>("togMusic"));
-            UIMgr.AddUISelectSound(GetControl<Toggle>("togSound"));
-            UIMgr.AddUIConfirmSound(GetControl<Button>("btnClose"));
-            UIMgr.AddUIConfirmSound(GetControl<Toggle>("togMusic"));
-            UIMgr.AddUIConfirmSound(GetControl<Toggle>("togSound"));
+            AddUISelectSound(GetControl<Button>("btnClose"));
+            AddUISelectSound(GetControl<Toggle>("togMusic"));
+            AddUISelectSound(GetControl<Toggle>("togSound"));
+            AddUIConfirmSound(GetControl<Button>("btnClose"));
+            AddUIConfirmSound(GetControl<Toggle>("togMusic"));
+            AddUIConfirmSound(GetControl<Toggle>("togSound"));
         }
         public override void ShowMe()
         {
@@ -39,7 +39,7 @@ namespace HT
             switch (btnName)
             {
                 case "btnClose":
-                    UIMgr.Instance.HidePanel<SettingPanel>();
+                    this.GetSystem<IUISystem>().HidePanel<SettingPanel>();
                     break;
             }
         }

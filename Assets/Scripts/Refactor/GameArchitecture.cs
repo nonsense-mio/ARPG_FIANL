@@ -29,6 +29,7 @@ namespace ARPG
             RegisterSystem<IMusicSystem>(new MusicSystem());
             RegisterSystem<ISoundSystem>(new SoundSystem());
             RegisterSystem<ISaveSystem>(new SaveSystem());
+            RegisterSystem<IUISystem>(new UISystem());
         }
     }
 }

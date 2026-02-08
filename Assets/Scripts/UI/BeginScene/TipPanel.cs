@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using ARPG;
+using Framework;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -12,10 +12,10 @@ namespace HT
 
         private void Start()
         {
-            UIMgr.AddUISelectSound(GetControl<Button>("btnClose"));
-            UIMgr.AddUISelectSound(GetControl<Button>("btnSure"));
-            UIMgr.AddUIConfirmSound(GetControl<Button>("btnClose"));
-            UIMgr.AddUIConfirmSound(GetControl<Button>("btnSure"));
+            AddUISelectSound(GetControl<Button>("btnClose"));
+            AddUISelectSound(GetControl<Button>("btnSure"));
+            AddUIConfirmSound(GetControl<Button>("btnClose"));
+            AddUIConfirmSound(GetControl<Button>("btnSure"));
         }
 
         protected override void ClickBtn(string btnName)
@@ -24,12 +24,12 @@ namespace HT
             {
                 //确认时执行回调
                 case "btnSure":
-                    UIMgr.Instance.HidePanel<TipPanel>();
+                    this.GetSystem<IUISystem>().HidePanel<TipPanel>();
                     sureCallBack?.Invoke();
                     break;
                 //关闭时不执行回调 仅关闭提示面板
                 case "btnClose":
-                    UIMgr.Instance.HidePanel<TipPanel>();
+                    this.GetSystem<IUISystem>().HidePanel<TipPanel>();
                     break;
             }
         }

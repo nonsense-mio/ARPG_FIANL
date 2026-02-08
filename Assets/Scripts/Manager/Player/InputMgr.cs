@@ -10,6 +10,9 @@ namespace HT
     public class InputMgr : MonoBehaviour
     {
         public bool canProcessInput = true;
+        private IUISystem uiSystem;
+        private IUISystem UISystem =>
+            uiSystem ?? (uiSystem = GameArchitecture.Interface.GetSystem<IUISystem>());
         PlayerManager player;
         public float horizontal;
         public float vertical;
@@ -536,16 +539,16 @@ namespace HT
                 if (inventoryFlag)
                 {
                     GameArchitecture.Interface.SendEvent(new SelectWindowEvent { IsOpen = true });
-                    UIMgr.Instance.HidePanel<GamePanel>();
+                    UISystem.HidePanel<GamePanel>();
                 }
                 else
                 {
                     GameArchitecture.Interface.SendEvent(new SelectWindowEvent { IsOpen = false });
-                    UIMgr.Instance.HidePanel<EquipPanel>();
-                    UIMgr.Instance.HidePanel<BagPanel>();
-                    UIMgr.Instance.HidePanel<LevelUpPanel>();
-                    UIMgr.Instance.HidePanel<TaskPanel>();
-                    UIMgr.Instance.ShowPanel<GamePanel>();
+                    UISystem.HidePanel<EquipPanel>();
+                    UISystem.HidePanel<BagPanel>();
+                    UISystem.HidePanel<LevelUpPanel>();
+                    UISystem.HidePanel<TaskPanel>();
+                    UISystem.ShowPanel<GamePanel>();
 
                 }
             }

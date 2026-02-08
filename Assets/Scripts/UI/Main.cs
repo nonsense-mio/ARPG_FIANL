@@ -13,7 +13,7 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UIMgr.Instance.ShowPanel<BeginPanel>();
+        GameArchitecture.Interface.GetSystem<IUISystem>().ShowPanel<BeginPanel>();
         GameArchitecture.Interface.GetSystem<IMusicSystem>().PlayBGM("BeginScene");
         // ABUpdateMgr.Instance.CheckUpdate((isOver) =>
         // {

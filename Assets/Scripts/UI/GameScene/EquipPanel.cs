@@ -85,8 +85,8 @@ namespace HT
         //打开背包并选择
         private void OpenBagAndSelect(Action<BagPanel> initBag)
         {
-            UIMgr.Instance.HidePanel<EquipPanel>();
-            UIMgr.Instance.ShowPanel<BagPanel>(callBack: (bagPanel) =>
+            this.GetSystem<IUISystem>().HidePanel<EquipPanel>();
+            this.GetSystem<IUISystem>().ShowPanel<BagPanel>(callBack: (bagPanel) =>
             {
                 bagPanel.RequestInitAllInventory();
                 initBag?.Invoke(bagPanel);
