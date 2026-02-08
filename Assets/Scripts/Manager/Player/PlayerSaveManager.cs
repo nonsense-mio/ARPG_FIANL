@@ -57,6 +57,14 @@ namespace HT
             stats.intelligenceLevel = data.intelligenceLevel;
             stats.faithLevel = data.faithLevel;
             stats.currentSoulCount = data.currentSoulCount;
+
+            // 根据加载的等级重新计算 max 值
+            stats.SetMaxHealthFromHealthLevel();
+            stats.SetMaxStaminaFromStaminaLevel();
+            stats.SetMaxFocusPointsFromFocusLevel();
+            // 满状态恢复
+            player.playerStatsManager.FullPlayerStats();
+
             Vector3 loadPos = new Vector3(data.respawnX, data.respawnY, data.respawnZ);
             player.SetPlayerPosition(loadPos);
             // 加载库存数据
