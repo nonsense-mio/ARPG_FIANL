@@ -59,12 +59,12 @@ namespace HT
         private UIMgr()
         {
             //动态创建唯一的Canvas和EventSystem(摄像机)
-            uiCamera = GameObject.Instantiate(ResMgr.Instance.Load<GameObject>("UI/UICamera")).GetComponent<Camera>();
+            uiCamera = GameObject.Instantiate(GetResourceSystem().Load<GameObject>("UI/UICamera")).GetComponent<Camera>();
             //ui摄像机过场景不移除
             GameObject.DontDestroyOnLoad(uiCamera.gameObject);
 
             //动态创建Canvas
-            uiCanvas = GameObject.Instantiate(ResMgr.Instance.Load<GameObject>("UI/Canvas")).GetComponent<Canvas>();
+            uiCanvas = GameObject.Instantiate(GetResourceSystem().Load<GameObject>("UI/Canvas")).GetComponent<Canvas>();
             //设置使用的UI摄像机
             uiCanvas.worldCamera = uiCamera;
             //过场景不移除
@@ -78,7 +78,7 @@ namespace HT
 
 
             //动态创建EventSystem
-            uiEventSystem = GameObject.Instantiate(ResMgr.Instance.Load<GameObject>("UI/EventSystem")).GetComponent<EventSystem>();
+            uiEventSystem = GameObject.Instantiate(GetResourceSystem().Load<GameObject>("UI/EventSystem")).GetComponent<EventSystem>();
             GameObject.DontDestroyOnLoad(uiEventSystem.gameObject);
         }
 
@@ -261,6 +261,13 @@ namespace HT
             entry.callback.AddListener(callBack);
 
             trigger.triggers.Add(entry);
+        }
+
+        private static IResourceSystem cachedResourceSystem;
+        private static IResourceSystem GetResourceSystem()
+        {
+            return cachedResourceSystem ??
+                   (cachedResourceSystem = GameArchitecture.Interface.GetUtility<IResourceSystem>());
         }
 
         private static IAssetSystem cachedAssetSystem;

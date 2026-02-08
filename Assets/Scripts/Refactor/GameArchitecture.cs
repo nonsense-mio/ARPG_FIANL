@@ -10,6 +10,7 @@ namespace ARPG
             // 注册 Utility
             RegisterUtility<IStorage>(new JsonStorage());
             RegisterUtility<IAssetSystem>(new AssetSystem());
+            RegisterUtility<IResourceSystem>(new ResourceSystem());
 
             // 注册 Model
             RegisterModel<IPlayerModel>(new PlayerModel());

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using ARPG;
 using HT;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ public class ItemDataBase : ScriptableObject
             if (_instance == null)
             {
                 // 从Resources/Data目录加载
-                _instance = ResMgr.Instance.Load<ItemDataBase>("Data/ItemDataBase");
+                _instance = GameArchitecture.Interface.GetUtility<IResourceSystem>().Load<ItemDataBase>("Data/ItemDataBase");
                 if (_instance == null)
                 {
                     Debug.LogError("ItemDataBase not found in Resources/Data/ItemDataBase!");
