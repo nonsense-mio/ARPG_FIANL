@@ -1,12 +1,13 @@
 using System;
+using System.Collections;
 using Framework;
 using UnityEngine;
 
 namespace ARPG
 {
     /// <summary>
-    /// Tick 系统实现 - 通过内部 MonoBehaviour 获取 Unity 生命周期回调
-    /// 替代 MonoMgr 的 Update 事件分发职责 (不替代协程托管)
+    /// Tick 系统实现 - 通过内部 MonoBehaviour 获取 Unity 生命周期回调 + 协程托管
+    /// 替代 MonoMgr 的 Update 事件分发 + StartCoroutine 职责
     /// </summary>
     public class TickSystem : AbstractSystem, ITickSystem
     {
@@ -14,11 +15,13 @@ namespace ARPG
         private event Action fixedUpdateEvent;
         private event Action lateUpdateEvent;
 
+        private TickBehaviour behaviour;
+
         protected override void OnInit()
         {
             var go = new GameObject("[TickSystem]");
             GameObject.DontDestroyOnLoad(go);
-            var behaviour = go.AddComponent<TickBehaviour>();
+            behaviour = go.AddComponent<TickBehaviour>();
             behaviour.owner = this;
         }
 
@@ -30,6 +33,9 @@ namespace ARPG
 
         public void RegisterLateUpdate(Action onLateUpdate) => lateUpdateEvent += onLateUpdate;
         public void UnregisterLateUpdate(Action onLateUpdate) => lateUpdateEvent -= onLateUpdate;
+
+        public Coroutine StartCoroutine(IEnumerator routine) => behaviour.StartCoroutine(routine);
+        public void StopCoroutine(Coroutine coroutine) => behaviour.StopCoroutine(coroutine);
 
         private class TickBehaviour : MonoBehaviour
         {

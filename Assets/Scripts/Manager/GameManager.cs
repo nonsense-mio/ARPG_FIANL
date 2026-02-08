@@ -17,6 +17,9 @@ namespace HT
         private IAssetSystem assetSystem;
         private IAssetSystem AssetSystem =>
             assetSystem ?? (assetSystem = GameArchitecture.Interface.GetUtility<IAssetSystem>());
+        private ISceneSystem sceneSystem;
+        private ISceneSystem SceneSystem =>
+            sceneSystem ?? (sceneSystem = GameArchitecture.Interface.GetSystem<ISceneSystem>());
 
         private GameManager()
         {
@@ -97,7 +100,7 @@ namespace HT
         public void StartNewGame(int slotIndex, string playerName = "Player")
         {
             SaveSystem.CreateNewGame(slotIndex, playerName);
-            SceneMgr.Instance.LoadSceneAsync("GameScene", InitGameScene);
+            SceneSystem.LoadSceneAsync("GameScene", InitGameScene);
         }
 
         /// <summary>
@@ -108,7 +111,7 @@ namespace HT
             if (!SaveSystem.LoadGame(slotIndex))
                 return false;
 
-            SceneMgr.Instance.LoadSceneAsync("GameScene", InitGameScene);
+            SceneSystem.LoadSceneAsync("GameScene", InitGameScene);
             return true;
         }
 

@@ -21,6 +21,7 @@ namespace ARPG
             RegisterSystem<ITaskSystem>(new TaskSystem());
             RegisterSystem<IPoolSystem>(new PoolSystem());
             RegisterSystem<ITickSystem>(new TickSystem());
+            RegisterSystem<ISceneSystem>(new SceneSystem());
             RegisterSystem<ITimerSystem>(new TimerSystem());
             RegisterSystem<IVFXSystem>(new VFXSystem());
             RegisterSystem<IMusicSystem>(new MusicSystem());

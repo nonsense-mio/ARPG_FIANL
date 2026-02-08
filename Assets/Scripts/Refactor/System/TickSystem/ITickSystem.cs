@@ -1,11 +1,13 @@
 using System;
+using System.Collections;
 using Framework;
+using UnityEngine;
 
 namespace ARPG
 {
     /// <summary>
-    /// Tick 系统接口 - 提供 Unity Update/FixedUpdate/LateUpdate 生命周期回调注册
-    /// 替代 MonoMgr 的 AddUpdateListener 等 API (仅限已迁移的 System 层)
+    /// Tick 系统接口 - 提供 Unity 生命周期回调注册 + 协程托管
+    /// 替代 MonoMgr 的 AddUpdateListener / StartCoroutine 等 API
     /// </summary>
     public interface ITickSystem : ISystem
     {
@@ -17,5 +19,8 @@ namespace ARPG
 
         void RegisterLateUpdate(Action onLateUpdate);
         void UnregisterLateUpdate(Action onLateUpdate);
+
+        Coroutine StartCoroutine(IEnumerator routine);
+        void StopCoroutine(Coroutine coroutine);
     }
 }

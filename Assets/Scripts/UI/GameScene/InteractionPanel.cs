@@ -127,7 +127,7 @@ namespace HT
                                 GameManager.Instance.SaveCurrentGame();
                                 GameManager.Instance.ClearInfo();
                                 //异步加载场景
-                                SceneMgr.Instance.LoadSceneAsync("BeginScene", () =>
+                                this.GetSystem<ISceneSystem>().LoadSceneAsync("BeginScene", () =>
                                 {
                                     GameManager.Instance.InitBeginScene();
                                 });
