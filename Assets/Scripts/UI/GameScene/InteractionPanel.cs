@@ -124,12 +124,12 @@ namespace HT
                                 this.GetSystem<IUISystem>().HidePanel<BagPanel>(true);
                                 this.GetSystem<IUISystem>().HidePanel<GamePanel>(true);
                                 //保存并清理
-                                GameManager.Instance.SaveCurrentGame();
-                                GameManager.Instance.ClearInfo();
+                                this.SendCommand(new SaveGameCommand());
+                                this.SendCommand(new ClearGameInfoCommand());
                                 //异步加载场景
                                 this.GetSystem<ISceneSystem>().LoadSceneAsync("BeginScene", () =>
                                 {
-                                    GameManager.Instance.InitBeginScene();
+                                    GameArchitecture.Interface.SendCommand(new InitBeginSceneCommand());
                                 });
                             });
 

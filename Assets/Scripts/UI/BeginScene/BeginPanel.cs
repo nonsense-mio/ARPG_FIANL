@@ -38,8 +38,8 @@ namespace HT
                         if (lastSlot >= 0)
                         {
                             this.GetSystem<IUISystem>().HidePanel<BeginPanel>();
-                            GameManager.Instance.ClearInfo();
-                            GameManager.Instance.ContinueGame(lastSlot);
+                            this.SendCommand(new ClearGameInfoCommand());
+                            this.SendCommand(new ContinueGameCommand(lastSlot));
                         }
 
                     }

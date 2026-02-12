@@ -74,7 +74,7 @@ namespace HT
             playerManager.playerStatsManager.FullPlayerStats();
 
             // 保存游戏
-            GameManager.Instance.SaveCurrentGame();
+            GameArchitecture.Interface.SendCommand(new SaveGameCommand());
         }
 
         private void ActivateBonfire(PlayerManager playerManager)

@@ -99,17 +99,17 @@ namespace HT
 
             this.GetSystem<IUISystem>().HidePanel<SavePanel>();
             this.GetSystem<IUISystem>().HidePanel<BeginPanel>();
-            GameManager.Instance.ClearInfo();
+            this.SendCommand(new ClearGameInfoCommand());
 
             if (isEmpty)
             {
                 // 空槽位：开始新游戏
-                GameManager.Instance.StartNewGame(slotIndex, "Player");
+                this.SendCommand(new StartNewGameCommand(slotIndex, "Player"));
             }
             else
             {
                 // 有存档：加载游戏
-                GameManager.Instance.ContinueGame(slotIndex);
+                this.SendCommand(new ContinueGameCommand(slotIndex));
             }
         }
 
