@@ -1,11 +1,12 @@
 using ARPG;
+using Framework;
 using UnityEngine;
 
 /// <summary>
 /// 对话动作辅助器 - 桥接 UnityEvent 和游戏系统
 /// 挂在对话NPC上，供 UnityEvent 调用
 /// </summary>
-public class DialogueActionHelper : MonoBehaviour
+public class DialogueActionHelper : ARPGController
 {
     [SerializeField]EnemyManager npc;
     private void Awake()
@@ -14,7 +15,7 @@ public class DialogueActionHelper : MonoBehaviour
     }
     private IUISystem uiSystem;
     private IUISystem UISystem =>
-        uiSystem ?? (uiSystem = GameArchitecture.Interface.GetSystem<IUISystem>());
+        uiSystem ?? (uiSystem = this.GetSystem<IUISystem>());
 
     public void OpenLevelUpPanel()
     {
@@ -24,7 +25,7 @@ public class DialogueActionHelper : MonoBehaviour
 
     public void Task1EnemySpawn()
     {
-        GameArchitecture.Interface.SendEvent(new SpawnEnemyEvent());
+        this.SendEvent(new SpawnEnemyEvent());
     }
 
     public void Task2EnemySpawn()
@@ -34,21 +35,21 @@ public class DialogueActionHelper : MonoBehaviour
 
     public void SpawnBoss()
     {
-        GameArchitecture.Interface.SendEvent(new SpawnBossEvent());
+        this.SendEvent(new SpawnBossEvent());
     }
 
     public void NPCGOFollowPlayer()
     {
-        GameArchitecture.Interface.SendEvent(new NPCFollowPlayerEvent { IsFollowing = true });
+        this.SendEvent(new NPCFollowPlayerEvent { IsFollowing = true });
     }
     public void NPCGoHome()
     {
-        GameArchitecture.Interface.SendEvent(new NPCFollowPlayerEvent { IsFollowing = false });
+        this.SendEvent(new NPCFollowPlayerEvent { IsFollowing = false });
     }
 
     public void RebuildHome()
     {
-        GameArchitecture.Interface.GetSystem<IMusicSystem>().PlayBGM("Home");
+        this.GetSystem<IMusicSystem>().PlayBGM("Home");
     }
 
 }

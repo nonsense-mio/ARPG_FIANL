@@ -70,8 +70,8 @@ namespace ARPG
             if (!hasCollided)
             {
                 hasCollided = true;
-                GameArchitecture.Interface.SendEvent(new FireBallHitEvent { HitPoint = hitPoint });
-                GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(this.gameObject);
+                this.SendEvent(new FireBallHitEvent { HitPoint = hitPoint });
+                this.GetSystem<IPoolSystem>().Recycle(this.gameObject);
             }
         }
 

@@ -27,7 +27,7 @@ namespace ARPG
             player.playerStatsManager.HealCharacter(amountToBeHealed);
             player.playerStatsManager.AddFocusPoints(focusTobeAdded);
             // 触发治疗事件，VFXSystem和SoundSystem都会响应（一对多广播）
-            GameArchitecture.Interface.SendEvent(new PlayerDrinkPotionEvent { Player = player });
+            this.SendEvent(new PlayerDrinkPotionEvent { Player = player });
         }
 
 

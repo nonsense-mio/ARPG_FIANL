@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace ARPG
 {
-    public class CharacterManager : MonoBehaviour
+    public class CharacterManager : ARPGController
     {
         public Animator animator;
         public CharacterController characterController;

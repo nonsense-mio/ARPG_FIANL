@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ARPG
 {
-    public class CharacterWeaponSlotManager : MonoBehaviour
+    public class CharacterWeaponSlotManager : ARPGController
     {
         protected CharacterManager character;
         public WeaponItem_SO unarmedWeapon;
@@ -173,7 +173,7 @@ namespace ARPG
                 leftHandDamageCollider.EnableDamageCollider();
             }
             //触发挥砍事件
-            GameArchitecture.Interface.SendEvent(new SlashEvent { Character = character });
+            this.SendEvent(new SlashEvent { Character = character });
         }
  
         /// <summary>

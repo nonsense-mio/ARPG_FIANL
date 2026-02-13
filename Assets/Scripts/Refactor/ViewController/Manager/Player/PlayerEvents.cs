@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ARPG
 {
-    public class PlayerEvents : MonoBehaviour
+    public class PlayerEvents : ARPGController
     {
         private PlayerManager player;
 
@@ -14,16 +14,16 @@ namespace ARPG
         }
         void OnEnable()
         {
-            GameArchitecture.Interface.RegisterEvent<CharacterDeathEvent>(e => ClearPlayerLockOn(e.Character))
+            this.RegisterEvent<CharacterDeathEvent>(e => ClearPlayerLockOn(e.Character))
                 .UnRegisterWhenGameObjectDestroyed(gameObject);
-            GameArchitecture.Interface.RegisterEvent<EnableInputEvent>(e => player.inputMgr.EnableOrDisableInput(e.Enabled))
+            this.RegisterEvent<EnableInputEvent>(e => player.inputMgr.EnableOrDisableInput(e.Enabled))
                 .UnRegisterWhenGameObjectDestroyed(gameObject);
-            GameArchitecture.Interface.RegisterEvent<TaskTurnedInEvent>(e =>
+            this.RegisterEvent<TaskTurnedInEvent>(e =>
             {
                 foreach (var reward in e.Task.rewardList)
-                    GameArchitecture.Interface.SendCommand(new AddItemToInventoryCommand(reward));
+                    this.SendCommand(new AddItemToInventoryCommand(reward));
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
-            GameArchitecture.Interface.RegisterEvent<CharacterDeathEvent>(e => player.playerStatsManager.AddSouls(e.Character))
+            this.RegisterEvent<CharacterDeathEvent>(e => player.playerStatsManager.AddSouls(e.Character))
                 .UnRegisterWhenGameObjectDestroyed(gameObject);
         }
         //当玩家死亡时清空锁定目标 或 玩家锁定目标死亡时清空

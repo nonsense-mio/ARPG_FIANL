@@ -5,7 +5,7 @@ using UnityEngine;
 namespace ARPG
 {
     //可交互物品的基类
-    public class Interactable : MonoBehaviour
+    public class Interactable : ARPGController
     {
         public float radius = 0.6f;
         public string interactionPrompt = "交互";
@@ -22,9 +22,8 @@ namespace ARPG
         /// <param name="playerManager"></param>
         public virtual void Interact(PlayerManager playerManager)
         {
-            GameArchitecture.Interface.SendEvent(new PerformInteractionEvent { Target = this });
-            //交互后保存游戏数据
-            //playerManager.playerSaveManager.SaveDataToGameDataMgr();
+            this.SendEvent(new PerformInteractionEvent { Target = this });
+            //交互后保存游戏数据;
         }
     }
 }

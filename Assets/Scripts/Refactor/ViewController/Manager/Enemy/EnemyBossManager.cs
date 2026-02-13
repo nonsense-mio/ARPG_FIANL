@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ARPG
 {
-    public class EnemyBossManager : MonoBehaviour
+    public class EnemyBossManager : ARPGController
     {
         public string bossName;
 
@@ -23,7 +23,7 @@ namespace ARPG
 
         private void OnEnable()
         {
-            GameArchitecture.Interface.RegisterEvent<BossPhaseShiftEvent>(e => OnBossPhaseShift(e.Boss))
+            this.RegisterEvent<BossPhaseShiftEvent>(e => OnBossPhaseShift(e.Boss))
                 .UnRegisterWhenGameObjectDisabled(gameObject);
         }
 

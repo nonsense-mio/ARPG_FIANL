@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Framework;
-using ARPG;
+
 
 namespace ARPG
 {
@@ -25,7 +23,7 @@ namespace ARPG
         private void Start()
         {
             // 从 SceneStateModel 读取篝火激活状态
-            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            var sceneStateModel = this.GetModel<ISceneStateModel>();
             hasBeenActived = sceneStateModel.IsBonfireActivated(bonfireID);
 
             // 根据激活状态设置表现
@@ -57,7 +55,7 @@ namespace ARPG
 
         public override void Interact(PlayerManager playerManager)
         {
-            var playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
+            var playerModel = this.GetModel<IPlayerModel>();
 
             if (!hasBeenActived)
             {
@@ -74,7 +72,7 @@ namespace ARPG
             playerManager.playerStatsManager.FullPlayerStats();
 
             // 保存游戏
-            GameArchitecture.Interface.SendCommand(new SaveGameCommand());
+            this.SendCommand(new SaveGameCommand());
         }
 
         private void ActivateBonfire(PlayerManager playerManager)
@@ -93,7 +91,7 @@ namespace ARPG
             UpdateBonfireVisual();
 
             // 更新 SceneStateModel 篝火状态
-            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            var sceneStateModel = this.GetModel<ISceneStateModel>();
             sceneStateModel.SetBonfireActivated(bonfireID, true);
         }
 

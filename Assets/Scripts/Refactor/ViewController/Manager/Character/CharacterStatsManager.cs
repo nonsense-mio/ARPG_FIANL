@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ARPG
 {   //人物基类
-    public class CharacterStatsManager : MonoBehaviour
+    public class CharacterStatsManager : ARPGController
     {
         CharacterManager character;
         public string characterName;
@@ -210,7 +210,7 @@ namespace ARPG
                 character.characterAnimatorManager.PlayTargetAnimation("Dead_01", true);
             print("人物死亡");
             character.isDead = true;
-            GameArchitecture.Interface.SendEvent(new CharacterDeathEvent { Character = character });
+            this.SendEvent(new CharacterDeathEvent { Character = character });
         }
 
     }

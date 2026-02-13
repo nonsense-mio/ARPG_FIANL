@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ARPG
 {
-    public class PlayerSaveManager : MonoBehaviour
+    public class PlayerSaveManager : ARPGController
     {
         PlayerManager player;
 
@@ -20,7 +20,7 @@ namespace ARPG
         //保存玩家数据到 Model 层
         public void SyncRuntimeToModel()
         {
-            var playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
+            var playerModel = this.GetModel<IPlayerModel>();
             var stats = player.playerStatsManager;
 
             playerModel.PlayerName.Value = stats.characterName;
@@ -45,7 +45,7 @@ namespace ARPG
         //从 Model 层加载玩家数据
         public void SyncFromModel()
         {
-            var playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
+            var playerModel = this.GetModel<IPlayerModel>();
             var stats = player.playerStatsManager;
 
             stats.characterName = playerModel.PlayerName.Value;
@@ -91,7 +91,7 @@ namespace ARPG
         /// </summary>
         private void SyncInventoryToModel()
         {
-            var model = GameArchitecture.Interface.GetModel<IInventoryModel>();
+            var model = this.GetModel<IInventoryModel>();
             var inv = player.playerInventoryManager;
 
             // 库存列表
@@ -152,7 +152,7 @@ namespace ARPG
         /// </summary>
         private void SyncInventoryFromModel()
         {
-            var model = GameArchitecture.Interface.GetModel<IInventoryModel>();
+            var model = this.GetModel<IInventoryModel>();
             var inv = player.playerInventoryManager;
             ItemDataBase itemDB = ItemDataBase.Instance;
 

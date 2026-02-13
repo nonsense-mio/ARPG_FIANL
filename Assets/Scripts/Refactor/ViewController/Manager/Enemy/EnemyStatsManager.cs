@@ -43,7 +43,7 @@ namespace ARPG
                 return false;
 
             hasPublishedPhaseShift = true;
-            GameArchitecture.Interface.SendEvent(new BossPhaseShiftEvent { Boss = enemy });
+            this.SendEvent(new BossPhaseShiftEvent { Boss = enemy });
             return true;
         }
 
@@ -137,7 +137,7 @@ namespace ARPG
 
             string bossName = (enemy != null && enemy.enemyBossManager != null) ? enemy.enemyBossManager.bossName : "Boss";
             var data = new BossHudData(bossName, currentHealth, maxHealth);
-            GameArchitecture.Interface.SendEvent(new BossHudChangedEvent { Data = data });
+            this.SendEvent(new BossHudChangedEvent { Data = data });
         }
 
         protected override void HandleDeath()

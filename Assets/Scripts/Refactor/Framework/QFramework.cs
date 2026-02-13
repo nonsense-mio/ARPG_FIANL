@@ -190,7 +190,7 @@ namespace Framework
     #endregion
 
     #region Controller
-    public interface IController : IBelongToArchitecture, ICanSendCommand, ICanGetSystem, ICanGetModel, ICanRegisterEvent, ICanSendQuery, ICanGetUtility
+    public interface IController : IBelongToArchitecture, ICanSendCommand, ICanGetSystem, ICanGetModel, ICanRegisterEvent, ICanSendEvent, ICanSendQuery, ICanGetUtility
     {
 
     }

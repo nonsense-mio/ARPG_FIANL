@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace ARPG
@@ -65,13 +63,11 @@ namespace ARPG
         /// </summary> <summary>
         public void SuccessfulyThrowFireBomb()
         {
-            //Destroy(player.playerEffectsManager.instantiatedFXModel);
             //扔出炸弹时将之前的模型回收到对象池中
-            GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(player.playerEffectsManager.instantiatedFXModel);
+            this.GetSystem<IPoolSystem>().Recycle(player.playerEffectsManager.instantiatedFXModel);
             BombConsumableItem_SO fireBombItem = player.playerInventoryManager.currentConsumable as BombConsumableItem_SO;
-            //GameObject activeModelBomb = Instantiate(fireBombItem.liveBombModel,rightHandSlot.transform.position,player.cameraHandler.cameraPivotTransform.rotation);
             //从池子中获取扔出去的炸弹模型
-            GameObject activeModelBomb = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(fireBombItem.liveBombModelName);
+            GameObject activeModelBomb = this.GetSystem<IPoolSystem>().Spawn(fireBombItem.liveBombModelName);
             activeModelBomb.transform.position = rightHandSlot.transform.position;
             activeModelBomb.transform.rotation = player.cameraMgr.cameraPivotTransform.rotation;
             activeModelBomb.transform.rotation = Quaternion.Euler (player.cameraMgr.cameraPivotTransform.eulerAngles.x,player.cameraMgr.cameraPivotTransform.eulerAngles.y,0);

@@ -35,7 +35,7 @@ namespace ARPG
                 hasCollided = true;
                 Explode();
                 //将炸弹放回对象池
-                GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(gameObject);
+                this.GetSystem<IPoolSystem>().Recycle(gameObject);
                 EnemyManager enemyManager = hitCharacter as EnemyManager;
 
                 if (enemyManager != null)
@@ -58,7 +58,7 @@ namespace ARPG
                 }
             }
             //从对象池中取出爆炸特效 发布事件
-            GameArchitecture.Interface.SendEvent(new BombHitEvent { BombTransform = this.transform });
+            this.SendEvent(new BombHitEvent { BombTransform = this.transform });
         }
         public void OnSpawn() { }
 

@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using ARPG;
 using Framework;
 
 namespace ARPG
@@ -19,7 +17,7 @@ namespace ARPG
         {
             base.Init(characterMgr);
             player = characterMgr as PlayerManager;
-            playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
+            playerModel = this.GetModel<IPlayerModel>();
 
             maxHealth = SetMaxHealthFromHealthLevel();
             currentHealth = maxHealth;
@@ -241,8 +239,6 @@ namespace ARPG
 
         public void RespawnAtLastBonfire()
         {
-            var playerModel = GameArchitecture.Interface.GetModel<IPlayerModel>();
-
             // 如果没有激活过任何篝火，使用默认出生点
             if (string.IsNullOrEmpty(playerModel.LastRestedBonfireID.Value))
             {

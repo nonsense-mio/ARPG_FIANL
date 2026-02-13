@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace ARPG
@@ -9,7 +10,7 @@ namespace ARPG
     {
         private IUISystem uiSystem;
         private IUISystem UISystem =>
-            uiSystem ?? (uiSystem = GameArchitecture.Interface.GetSystem<IUISystem>());
+            uiSystem ?? (uiSystem = this.GetSystem<IUISystem>());
 
         public override void Interact(PlayerManager playerManager)
         {

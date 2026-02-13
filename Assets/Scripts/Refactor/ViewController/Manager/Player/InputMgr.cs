@@ -7,12 +7,12 @@ using UnityEngine.XR;
 
 namespace ARPG
 {
-    public class InputMgr : MonoBehaviour
+    public class InputMgr : ARPGController
     {
         public bool canProcessInput = true;
         private IUISystem uiSystem;
         private IUISystem UISystem =>
-            uiSystem ?? (uiSystem = GameArchitecture.Interface.GetSystem<IUISystem>());
+            uiSystem ?? (uiSystem = this.GetSystem<IUISystem>());
         PlayerManager player;
         public float horizontal;
         public float vertical;
@@ -383,7 +383,7 @@ namespace ARPG
                 {
                     player.isAiming = false;
                     //player.uiManager.crossHair.SetActive(false);
-                    GameArchitecture.Interface.SendEvent(new AimActionEvent { IsAiming = false });
+                    this.SendEvent(new AimActionEvent { IsAiming = false });
                     //重置摄像机的旋转
                     player.cameraMgr.ResetAimCameraRotation();
                 }
@@ -505,7 +505,7 @@ namespace ARPG
                 d_Pad_Right = false;
                 player.playerInventoryManager.ChangeRightWeapon();
                 player.playerWeaponSlotManager.LoadBothWeaponsOnSlots();
-                var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
+                var inventoryModel = this.GetModel<IInventoryModel>();
                 inventoryModel.CurrentRightWeaponIndex.Value = player.playerInventoryManager.currentRightWeaponIndex;
             }
             else if (d_Pad_Left)
@@ -513,21 +513,21 @@ namespace ARPG
                 d_Pad_Left = false;
                 player.playerInventoryManager.ChangeLeftWeapon();
                 player.playerWeaponSlotManager.LoadBothWeaponsOnSlots();
-                var inventoryModel = GameArchitecture.Interface.GetModel<IInventoryModel>();
+                var inventoryModel = this.GetModel<IInventoryModel>();
                 inventoryModel.CurrentLeftWeaponIndex.Value = player.playerInventoryManager.currentLeftWeaponIndex;
             }
             else if (d_Pad_Up)
             {
                 d_Pad_Up = false;
                 player.playerInventoryManager.ChangeConsumable();
-                var inv = GameArchitecture.Interface.GetModel<IInventoryModel>();
+                var inv = this.GetModel<IInventoryModel>();
                 inv.CurrentConsumableIndex.Value = player.playerInventoryManager.currentConsumableIndex;
             }
             else if (d_Pad_Down)
             {
                 d_Pad_Down = false;
                 player.playerInventoryManager.ChangeSpell();
-                var inv = GameArchitecture.Interface.GetModel<IInventoryModel>();
+                var inv = this.GetModel<IInventoryModel>();
                 inv.CurrentSpellIndex.Value = player.playerInventoryManager.currentSpellIndex;
             }
         }
@@ -538,12 +538,12 @@ namespace ARPG
                 inventoryFlag = !inventoryFlag;
                 if (inventoryFlag)
                 {
-                    GameArchitecture.Interface.SendEvent(new SelectWindowEvent { IsOpen = true });
+                    this.SendEvent(new SelectWindowEvent { IsOpen = true });
                     UISystem.HidePanel<GamePanel>();
                 }
                 else
                 {
-                    GameArchitecture.Interface.SendEvent(new SelectWindowEvent { IsOpen = false });
+                    this.SendEvent(new SelectWindowEvent { IsOpen = false });
                     UISystem.HidePanel<EquipPanel>();
                     UISystem.HidePanel<BagPanel>();
                     UISystem.HidePanel<LevelUpPanel>();

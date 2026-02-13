@@ -3,16 +3,16 @@ using ARPG;
 using Framework;
 using UnityEngine;
 
-public class EnemySpawnMgr : MonoBehaviour
+public class EnemySpawnMgr : ARPGController
 {
     public List<EnemyManager> enemyList = new List<EnemyManager>();
     public EnemyManager boss;
 
     void Start()
     {
-        GameArchitecture.Interface.RegisterEvent<SpawnEnemyEvent>(_ => SpawnEnemy())
+        this.RegisterEvent<SpawnEnemyEvent>(_ => SpawnEnemy())
             .UnRegisterWhenGameObjectDestroyed(gameObject);
-        GameArchitecture.Interface.RegisterEvent<SpawnBossEvent>(_ => SpawnBoss())
+        this.RegisterEvent<SpawnBossEvent>(_ => SpawnBoss())
             .UnRegisterWhenGameObjectDestroyed(gameObject);
     }
 

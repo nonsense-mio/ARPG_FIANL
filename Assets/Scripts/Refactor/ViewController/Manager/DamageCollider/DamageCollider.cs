@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ARPG
 {
-    public class DamageCollider : MonoBehaviour
+    public class DamageCollider : ARPGController
     {
         public CharacterManager characterManager;
         protected Collider damageCollider;
@@ -98,7 +98,7 @@ namespace ARPG
                     ChooseWhichDirectionDamageCameFrom(directionHitFrom);
                     //播放受击特效
                     //enemyManager.characterEffectsManager.PlayBloodSplatterFX(contactPoint);
-                    GameArchitecture.Interface.SendEvent(new CharacterDamageEvent { HitPoint = contactPoint });
+                    this.SendEvent(new CharacterDamageEvent { HitPoint = contactPoint });
                     enemyManager.characterEffectsManager.InterrupEffect();
 
                     //根据攻击类型造成伤害

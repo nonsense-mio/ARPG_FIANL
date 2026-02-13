@@ -95,7 +95,7 @@ namespace ARPG
         }
         void OnEnable()
         {
-            GameArchitecture.Interface.RegisterEvent<NPCFollowPlayerEvent>(e => IsNPCChanged(e.IsFollowing))
+            this.RegisterEvent<NPCFollowPlayerEvent>(e => IsNPCChanged(e.IsFollowing))
                 .UnRegisterWhenGameObjectDisabled(gameObject);
         }
         private void Start()

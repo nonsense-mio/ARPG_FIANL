@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using ARPG;
+using Framework;
 using UnityEngine;
 
 namespace ARPG
 {
-    public class CharacterEffectsManager : MonoBehaviour
+    public class CharacterEffectsManager : ARPGController
     {
         protected CharacterManager character;
 
@@ -54,12 +55,12 @@ namespace ARPG
                 if (buildUpTransform != null)
                 {
                     //生成毒特效
-                    currentPoisonParticleFX = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(posionFX);
+                    currentPoisonParticleFX = this.GetSystem<IPoolSystem>().Spawn(posionFX);
                     currentPoisonParticleFX.transform.position = buildUpTransform.position;
                 }
                 else
                 {
-                    currentPoisonParticleFX = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(posionFX);
+                    currentPoisonParticleFX = this.GetSystem<IPoolSystem>().Spawn(posionFX);
                     currentPoisonParticleFX.transform.position = character.transform.position;
                 }
                 currentPoisonParticleFX.transform.localScale = Vector3.one * 0.5f;
@@ -88,7 +89,7 @@ namespace ARPG
                 //移除毒特效
                 if (currentPoisonParticleFX != null)
                 {
-                    GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(currentPoisonParticleFX);
+                    this.GetSystem<IPoolSystem>().Recycle(currentPoisonParticleFX);
                     currentPoisonParticleFX = null;
                 }
             }
@@ -100,7 +101,7 @@ namespace ARPG
             //将生成物放回对象池
             if (instantiateFX != null)
             {
-                GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(instantiateFX);
+                this.GetSystem<IPoolSystem>().Recycle(instantiateFX);
             }
             if (character.isHoldingArrow)
             {

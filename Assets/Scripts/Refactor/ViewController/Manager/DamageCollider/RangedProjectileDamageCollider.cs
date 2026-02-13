@@ -87,7 +87,7 @@ namespace ARPG
 
                 ChooseWhichDirectionDamageCameFrom(directionHitFrom);
                 //播放受击特效
-                GameArchitecture.Interface.SendEvent(new CharacterDamageEvent { HitPoint = contactPoint });
+                this.SendEvent(new CharacterDamageEvent { HitPoint = contactPoint });
                 enemyManager.characterEffectsManager.InterrupEffect();
 
                 if (enemyManager.characterStatsManager.totalPoiseDefense > poiseBreak)

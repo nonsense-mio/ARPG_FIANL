@@ -2,13 +2,12 @@ using System.Collections.Generic;
 using ARPG;
 using Framework;
 using UnityEngine;
-using ARPG;
 
 /// <summary>
 /// 任务发放者 - 支持任务链的事件驱动模式
 /// </summary>
 [RequireComponent(typeof(DialogueController))]
-public class TaskGiver : MonoBehaviour
+public class TaskGiver : ARPGController
 {
     DialogueController dialogueController;
 
@@ -75,15 +74,15 @@ public class TaskGiver : MonoBehaviour
     void Awake()
     {
         dialogueController = GetComponent<DialogueController>();
-        taskSystem = GameArchitecture.Interface.GetSystem<ITaskSystem>();
-        taskModel = GameArchitecture.Interface.GetModel<ITaskModel>();
+        taskSystem = this.GetSystem<ITaskSystem>();
+        taskModel = this.GetModel<ITaskModel>();
     }
 
     void OnEnable()
     {
-        GameArchitecture.Interface.RegisterEvent<TaskTurnedInEvent>(e => OnTaskTurnedIn(e.Task))
+        this.RegisterEvent<TaskTurnedInEvent>(e => OnTaskTurnedIn(e.Task))
             .UnRegisterWhenGameObjectDestroyed(gameObject);
-        GameArchitecture.Interface.RegisterEvent<GameDataLoadedEvent>(e => OnGameDataLoaded())
+        this.RegisterEvent<GameDataLoadedEvent>(e => OnGameDataLoaded())
             .UnRegisterWhenGameObjectDestroyed(gameObject);
     }
 

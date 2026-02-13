@@ -1,11 +1,6 @@
-
-using System.Collections;
-using System.Collections.Generic;
-using ARPG;
 using Framework;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem;
+
 
 namespace ARPG
 {
@@ -141,7 +136,7 @@ namespace ARPG
                     {
                         //当交互键按下时 执行物品的Interact逻辑
                         //发布UI交互事件 UI面板订阅该事件 显示交互提示
-                        GameArchitecture.Interface.SendEvent(new InteractPromptEvent { Target = interactObj });
+                        this.SendEvent(new InteractPromptEvent { Target = interactObj });
                         isShowingInteractInfo = true;
                         if (inputMgr.interact_Input)
                         {
@@ -158,7 +153,7 @@ namespace ARPG
                 {
                     isShowingInteractInfo = false;
                     //发布UI交互事件 UI面板订阅该事件 隐藏交互提示
-                    GameArchitecture.Interface.SendEvent(new InteractPromptEvent { Target = null });
+                    this.SendEvent(new InteractPromptEvent { Target = null });
                 }
 
             }

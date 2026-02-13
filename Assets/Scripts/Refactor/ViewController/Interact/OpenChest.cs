@@ -29,7 +29,7 @@ namespace ARPG
         private void Start()
         {
             // 从 SceneStateModel 读取宝箱状态
-            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            var sceneStateModel = this.GetModel<ISceneStateModel>();
             hasOpened = sceneStateModel.IsChestOpened(chestID);
 
             if (hasOpened)
@@ -57,7 +57,7 @@ namespace ARPG
             StartCoroutine(SpawnItemInChest());
 
             // 更新 SceneStateModel 宝箱状态
-            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            var sceneStateModel = this.GetModel<ISceneStateModel>();
             sceneStateModel.SetChestOpened(chestID, true);
             hasOpened = true;
         }
@@ -68,7 +68,7 @@ namespace ARPG
 
             for (int i = 0; i < itemsInChest.Count; i++)
             {
-                GameObject obj = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(itemSpawnerName);
+                GameObject obj = this.GetSystem<IPoolSystem>().Spawn(itemSpawnerName);
                 obj.transform.position = transform.position;
                 ItemPickUp itemPickUp = obj.GetComponent<ItemPickUp>();
                 if (itemPickUp != null)

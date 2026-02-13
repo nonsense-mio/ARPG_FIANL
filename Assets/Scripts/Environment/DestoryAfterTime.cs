@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using ARPG;
+using Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 namespace ARPG
 {
-    public class DestoryAfterTime : MonoBehaviour
+    public class DestoryAfterTime : ARPGController
     {
         public float timeToDestory = 2f;
         void OnEnable()
@@ -19,7 +20,7 @@ namespace ARPG
         }
         private void PushInPool()
         {
-            GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(this.gameObject);
+            this.GetSystem<IPoolSystem>().Recycle(this.gameObject);
         }
     }
 }

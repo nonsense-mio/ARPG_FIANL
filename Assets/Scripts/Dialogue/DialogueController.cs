@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using ARPG;
-using ARPG;
+using Framework;
 using UnityEngine;
 
 public class DialogueController : Interactable
@@ -14,7 +14,7 @@ public class DialogueController : Interactable
 
     private IUISystem uiSystem;
     private IUISystem UISystem =>
-        uiSystem ?? (uiSystem = GameArchitecture.Interface.GetSystem<IUISystem>());
+        uiSystem ?? (uiSystem = this.GetSystem<IUISystem>());
 
     override protected void Awake()
     {

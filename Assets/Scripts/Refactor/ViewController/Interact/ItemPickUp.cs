@@ -1,4 +1,5 @@
 using ARPG;
+using Framework;
 
 
 namespace ARPG
@@ -34,9 +35,9 @@ namespace ARPG
             //播放拾取物品的动画
             player.playerAnimatorManager.PlayTargetAnimation(animationName, true);
             //把拾取到的物品添加到玩家库存中 (三路写入: Runtime + Model + 持久化)
-            GameArchitecture.Interface.SendCommand(new AddItemToInventoryCommand(item));
+            this.SendCommand(new AddItemToInventoryCommand(item));
 
-            GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(gameObject);
+            this.GetSystem<IPoolSystem>().Recycle(gameObject);
         }
     }
 }

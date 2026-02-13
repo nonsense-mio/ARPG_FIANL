@@ -7,7 +7,7 @@ using ARPG;
 namespace ARPG
 {
     [Hotfix]
-    public class BossFightManager : MonoBehaviour
+    public class BossFightManager : ARPGController
     {
         [SerializeField] private string bossID;
         public EnemyManager boss;
@@ -21,7 +21,7 @@ namespace ARPG
         void Start()
         {
             // 从 SceneStateModel 读取 Boss 击败状态
-            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            var sceneStateModel = this.GetModel<ISceneStateModel>();
             bossHasBeenDefeated = sceneStateModel.IsBossDefeated(bossID);
 
             // 如果 Boss 已被击败，禁用 Boss 和相关组件
@@ -37,7 +37,7 @@ namespace ARPG
 
         void OnEnable()
         {
-            GameArchitecture.Interface.RegisterEvent<CharacterDeathEvent>(e => OnCharacterDeath(e.Character))
+            this.RegisterEvent<CharacterDeathEvent>(e => OnCharacterDeath(e.Character))
                 .UnRegisterWhenGameObjectDisabled(gameObject);
         }
 
@@ -88,10 +88,10 @@ namespace ARPG
             }
 
             // 隐藏 HUD
-            GameArchitecture.Interface.SendEvent(new BossHudChangedEvent { Data = null });
+            this.SendEvent(new BossHudChangedEvent { Data = null });
 
             // 更新 SceneStateModel Boss 击败状态
-            var sceneStateModel = GameArchitecture.Interface.GetModel<ISceneStateModel>();
+            var sceneStateModel = this.GetModel<ISceneStateModel>();
             sceneStateModel.SetBossDefeated(bossID, true);
         }
 
@@ -107,7 +107,7 @@ namespace ARPG
                 boss.enemyStatsManager.maxHealth
             );
 
-            GameArchitecture.Interface.SendEvent(new BossHudChangedEvent { Data = data });
+            this.SendEvent(new BossHudChangedEvent { Data = data });
         }
     }
 }
