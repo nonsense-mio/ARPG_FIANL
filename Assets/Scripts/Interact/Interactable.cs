@@ -2,7 +2,7 @@ using ARPG;
 using Framework;
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     //可交互物品的基类
     public class Interactable : MonoBehaviour

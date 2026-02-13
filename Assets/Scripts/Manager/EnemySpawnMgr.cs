@@ -1,22 +1,22 @@
-using System.Collections;
 using System.Collections.Generic;
-using HT;
+using ARPG;
+using Framework;
 using UnityEngine;
 
-public class EnemySpawnMgr : SingletonMono<EnemySpawnMgr>
+public class EnemySpawnMgr : MonoBehaviour
 {
     public List<EnemyManager> enemyList = new List<EnemyManager>();
     public EnemyManager boss;
-    protected override void Awake()
+
+    void Start()
     {
-        if (instance != null)
-        {
-            Destroy(this);
-            return;
-        }
-        instance = this;
+        GameArchitecture.Interface.RegisterEvent<SpawnEnemyEvent>(_ => SpawnEnemy())
+            .UnRegisterWhenGameObjectDestroyed(gameObject);
+        GameArchitecture.Interface.RegisterEvent<SpawnBossEvent>(_ => SpawnBoss())
+            .UnRegisterWhenGameObjectDestroyed(gameObject);
     }
-    public void SpawnEnemy()
+
+    private void SpawnEnemy()
     {
         foreach (var enemy in enemyList)
         {
@@ -24,7 +24,7 @@ public class EnemySpawnMgr : SingletonMono<EnemySpawnMgr>
         }
     }
 
-    public void SpawnBoss()
+    private void SpawnBoss()
     {
         boss.gameObject.SetActive(true);
     }

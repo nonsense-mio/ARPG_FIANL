@@ -4,7 +4,7 @@ using UnityEngine;
 using Framework;
 using ARPG;
 
-namespace HT
+namespace ARPG
 {
     public class BonFire : Interactable
     {

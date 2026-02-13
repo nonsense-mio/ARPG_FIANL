@@ -2,7 +2,7 @@ using ARPG;
 using Framework;
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {   //人物基类
     public class CharacterStatsManager : MonoBehaviour
     {

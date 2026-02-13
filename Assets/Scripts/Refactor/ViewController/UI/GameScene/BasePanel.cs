@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-namespace HT
+namespace ARPG
 {
     public abstract class BasePanel : ARPGController
     {

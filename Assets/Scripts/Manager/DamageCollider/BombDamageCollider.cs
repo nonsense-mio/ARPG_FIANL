@@ -1,7 +1,7 @@
 using ARPG;
 using Framework;
 using UnityEngine;
-namespace HT
+namespace ARPG
 {
     public class BombDamageCollider : DamageCollider, IPoolable
     {

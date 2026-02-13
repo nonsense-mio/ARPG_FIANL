@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace HT
+namespace ARPG
 {
     public class TipPanel : BasePanel
     {

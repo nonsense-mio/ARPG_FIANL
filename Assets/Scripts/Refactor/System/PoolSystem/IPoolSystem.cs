@@ -50,7 +50,7 @@ namespace ARPG
         /// <summary>
         /// 将对象回收到泛型池中，回收前自动调用 ResetInfo()
         /// </summary>
-        void Recyle<T>(T obj, string nameSpace = "") where T : class, IPoolObject;
+        void Recycle<T>(T obj, string nameSpace = "") where T : class, IPoolObject;
         #endregion
     }
 

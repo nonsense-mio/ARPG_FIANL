@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     //玩家库存类
     public class PlayerInventoryManager : CharacterInventoryManager

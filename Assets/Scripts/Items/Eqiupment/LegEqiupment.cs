@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     [CreateAssetMenu(menuName = "Items/Eqiupment/Leg Eqiupment")]
     public class LegEquipment : EqiupmentItem_SO

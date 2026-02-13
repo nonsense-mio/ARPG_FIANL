@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
-namespace HT
+namespace ARPG
 {
     [CreateAssetMenu(menuName = "Item Actions/Pyromancy Spell Action")]
     public class PyromancySpellAction_SO : ItemAction_SO

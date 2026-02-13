@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ARPG;
 using Unity.VisualScripting;
 using UnityEngine;
-namespace HT
+namespace ARPG
 {
     public class DestoryAfterTime : MonoBehaviour
     {

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using Framework;
 
-namespace HT
+namespace ARPG
 {
     public class DialoguePanel : BasePanel
     {

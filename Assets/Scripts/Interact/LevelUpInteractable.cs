@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ARPG;
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     public class LevelUpInteractable : Interactable
     {

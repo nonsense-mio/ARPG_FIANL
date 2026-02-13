@@ -4,7 +4,7 @@ using XLua;
 using Framework;
 using ARPG;
 
-namespace HT
+namespace ARPG
 {
     [Hotfix]
     public class BossFightManager : MonoBehaviour

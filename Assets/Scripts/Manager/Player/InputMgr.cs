@@ -5,7 +5,7 @@ using Framework;
 using UnityEngine;
 using UnityEngine.XR;
 
-namespace HT
+namespace ARPG
 {
     public class InputMgr : MonoBehaviour
     {

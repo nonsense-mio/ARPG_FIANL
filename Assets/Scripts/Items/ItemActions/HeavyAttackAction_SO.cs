@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     [CreateAssetMenu(menuName = "Item Actions/Heavy Attack Action")]
     public class HeavyAttackAction_SO : ItemAction_SO

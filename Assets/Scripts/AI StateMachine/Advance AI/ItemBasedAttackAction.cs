@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     [CreateAssetMenu(menuName = "A.I/Humanoid Actions/Item Based Attack Action")]
     public class ItemBasedAttackAction : EnemyAction

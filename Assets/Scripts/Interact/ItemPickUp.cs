@@ -1,7 +1,7 @@
 using ARPG;
 
 
-namespace HT
+namespace ARPG
 {
     //物品交互类
     public class ItemPickUp : Interactable

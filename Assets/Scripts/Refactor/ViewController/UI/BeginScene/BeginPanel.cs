@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using ARPG;
 using Framework;
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     public class BeginPanel : BasePanel
     {

@@ -2,7 +2,7 @@ using ARPG;
 using Framework;
 using UnityEngine.UI;
 
-namespace HT
+namespace ARPG
 {
     public class SettingPanel : BasePanel
     {

@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 
-namespace HT
+namespace ARPG
 {
 
     public class LeftHandModelChanger : ModelChanger

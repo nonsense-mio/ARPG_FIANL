@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events; // 引入 UnityAction
 using UnityEngine.UI;     // 引入 Button
 
-namespace HT
+namespace ARPG
 {
     /// <summary>
     /// 该接口 作为必须被 格子对象继承的类 用于实现初始化格子的方法

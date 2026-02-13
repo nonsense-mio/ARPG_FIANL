@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 
-namespace HT
+namespace ARPG
 {
     public class CombatStanceStateHumanoid : State
     {

@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace HT
+namespace ARPG
 {
     public class PlayerManager : CharacterManager
     {

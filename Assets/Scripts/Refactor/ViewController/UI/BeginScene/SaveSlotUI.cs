@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace HT
+namespace ARPG
 {
     /// <summary>
     /// 存档槽位UI：显示单个槽位的信息（空槽位显示"新游戏"，有存档显示详细信息）

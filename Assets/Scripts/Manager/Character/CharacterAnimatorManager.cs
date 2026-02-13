@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
-namespace HT
+namespace ARPG
 {
     public class CharacterAnimatorManager : MonoBehaviour
     {

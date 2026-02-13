@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using ARPG;
+
 using UnityEngine;
-namespace HT
+namespace ARPG
 {
     [CreateAssetMenu(menuName ="Items/Consumbales/Bomb Item")]
     public class BombConsumableItem_SO : ConsumableItem_SO

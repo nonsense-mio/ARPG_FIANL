@@ -4,7 +4,7 @@ using UnityEngine;
 using ARPG;
 using Framework;
 
-namespace HT
+namespace ARPG
 {
     //玩家状态类
     public class PlayerStatsManager : CharacterStatsManager

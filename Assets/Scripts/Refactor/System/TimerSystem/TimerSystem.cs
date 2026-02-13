@@ -67,7 +67,7 @@ namespace ARPG
                 var t = pendingRemove[i];
                 // 回调中可能已调用 RemoveTimer 将其移除，需检查
                 if (dict.Remove(t.Id))
-                    poolSystem.Recyle(t);
+                    poolSystem.Recycle(t);
             }
             pendingRemove.Clear();
         }
@@ -91,12 +91,12 @@ namespace ARPG
         {
             if (scaledTimers.TryGetValue(id, out var t))
             {
-                poolSystem.Recyle(t);
+                poolSystem.Recycle(t);
                 scaledTimers.Remove(id);
             }
             else if (realTimers.TryGetValue(id, out t))
             {
-                poolSystem.Recyle(t);
+                poolSystem.Recycle(t);
                 realTimers.Remove(id);
             }
         }

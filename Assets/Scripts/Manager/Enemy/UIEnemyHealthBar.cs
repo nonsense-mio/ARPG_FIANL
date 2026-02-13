@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace HT
+namespace ARPG
 {
     /// <summary>
     /// 敌人的血条

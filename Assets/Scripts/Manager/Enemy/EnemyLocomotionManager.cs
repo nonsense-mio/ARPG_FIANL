@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace HT
+namespace ARPG
 {
     public class EnemyLocomotionManager : CharacterLocomotionManager
     {

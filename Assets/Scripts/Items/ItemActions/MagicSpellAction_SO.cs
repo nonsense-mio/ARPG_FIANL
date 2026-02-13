@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     [CreateAssetMenu(menuName = "Item Actions/Magic Spell Action")]
     public class MagicSpellAction_SO : ItemAction_SO

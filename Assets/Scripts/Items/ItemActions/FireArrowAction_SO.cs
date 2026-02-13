@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using ARPG;
+
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
 
     [CreateAssetMenu(menuName = "Item Actions/Fire Arrow Action")]

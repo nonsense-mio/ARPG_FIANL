@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using ARPG;
+
 using UnityEngine;
-namespace HT
+namespace ARPG
 {
     [CreateAssetMenu(menuName = "Item Actions/Draw Arrow Action")]
     public class DrawArrowAction_SO : ItemAction_SO

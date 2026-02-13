@@ -4,7 +4,7 @@ using Framework;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace HT
+namespace ARPG
 {
     public class GamePanel : BasePanel
     {

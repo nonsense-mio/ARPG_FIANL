@@ -1,8 +1,7 @@
-using ARPG;
-using Framework;
+
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     [CreateAssetMenu(menuName = "Item Actions/Aim Action")]
     public class AimAction_SO : ItemAction_SO

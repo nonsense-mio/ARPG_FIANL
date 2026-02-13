@@ -228,7 +228,7 @@ namespace ARPG
         /// <summary>
         /// 将对象回收到泛型池中，回收前自动调用 ResetInfo()
         /// </summary>
-        public void Recyle<T>(T obj, string nameSpace = "") where T : class, IPoolObject
+        public void Recycle<T>(T obj, string nameSpace = "") where T : class, IPoolObject
         {
             if (obj == null) return;
 

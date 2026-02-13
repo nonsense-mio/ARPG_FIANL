@@ -1,14 +1,10 @@
 using ARPG;
-using Framework;
-using HT;
 using UnityEngine;
-using XLua;
 
 /// <summary>
 /// 对话动作辅助器 - 桥接 UnityEvent 和游戏系统
 /// 挂在对话NPC上，供 UnityEvent 调用
 /// </summary>
-[Hotfix]
 public class DialogueActionHelper : MonoBehaviour
 {
     [SerializeField]EnemyManager npc;
@@ -28,7 +24,7 @@ public class DialogueActionHelper : MonoBehaviour
 
     public void Task1EnemySpawn()
     {
-        EnemySpawnMgr.Instance.SpawnEnemy();
+        GameArchitecture.Interface.SendEvent(new SpawnEnemyEvent());
     }
 
     public void Task2EnemySpawn()
@@ -38,7 +34,7 @@ public class DialogueActionHelper : MonoBehaviour
 
     public void SpawnBoss()
     {
-        EnemySpawnMgr.Instance.SpawnBoss();
+        GameArchitecture.Interface.SendEvent(new SpawnBossEvent());
     }
 
     public void NPCGOFollowPlayer()

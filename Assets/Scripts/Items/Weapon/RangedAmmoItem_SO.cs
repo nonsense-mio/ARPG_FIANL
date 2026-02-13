@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace HT
+namespace ARPG
 {
     [CreateAssetMenu( menuName = "Items/Ammo Item")]
     public class RangedAmmoItem_SO : Item_SO

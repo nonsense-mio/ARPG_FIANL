@@ -5,7 +5,7 @@ using Framework;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace HT
+namespace ARPG
 {
     public class EnemyManager : CharacterManager
     {
