@@ -1,18 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using ARPG;
 using Framework;
 using UnityEngine;
-using UnityEngine.XR;
 
 namespace ARPG
 {
     public class InputMgr : ARPGController
     {
         public bool canProcessInput = true;
-        private IUISystem uiSystem;
-        private IUISystem UISystem =>
-            uiSystem ?? (uiSystem = this.GetSystem<IUISystem>());
         PlayerManager player;
         public float horizontal;
         public float vertical;
@@ -75,11 +68,8 @@ namespace ARPG
         }
         public void EnableOrDisableInput(bool enable)
         {
-            //if (enable)
-            //{
             // 恢复输入前，清空所有缓存的输入状态
             ClearAllInputs();
-            //}
             canProcessInput = enable;
         }
 
@@ -216,15 +206,41 @@ namespace ARPG
             HandleQuedInput();
         }
 
+        #region 武器动作分发
+
+        /// <summary>
+        /// 统一的武器动作分发 — 消除重复的单手/双手判断样板代码
+        /// </summary>
+        private void DispatchWeaponAction(
+            System.Func<WeaponItem_SO, ItemAction_SO> ohSelector,
+            System.Func<WeaponItem_SO, ItemAction_SO> thSelector,
+            bool isRightHand = true)
+        {
+            var weapon = isRightHand
+                ? player.playerInventoryManager.rightWeapon
+                : player.playerInventoryManager.leftWeapon;
+
+            var action = player.isTwoHandingWeapon
+                ? thSelector(weapon)
+                : ohSelector(weapon);
+
+            if (action == null) return;
+
+            player.UpdateWhichHandCharacterIsUsing(isRightHand);
+            player.playerInventoryManager.currentItemBeingUsed = weapon;
+            action.PerformAction(player);
+        }
+
+        #endregion
+
+        #region 移动输入
+
         private void HandleMoveInput()
         {
             if (player.isHoldingArrow || walk_Input)
             {
-                //水平方向位移偏量
                 horizontal = movementInput.x;
-                //前后位移偏量
                 vertical = movementInput.y;
-                //位移偏量
                 moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
                 if (moveAmount > 0.5f)
                 {
@@ -235,16 +251,12 @@ namespace ARPG
             }
             else
             {
-                //水平方向位移偏量
                 horizontal = movementInput.x;
-                //前后位移偏量
                 vertical = movementInput.y;
-                //位移偏量
                 moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
                 mouseX = cameraInput.x;
                 mouseY = cameraInput.y;
             }
-
         }
 
         private void HandleRollInput()
@@ -271,86 +283,32 @@ namespace ARPG
                 }
                 rollInputTimer = 0;
             }
-
         }
-        /// <summary>
-        /// 攻击输入相关
-        /// </summary>
-        /// <param name="delta"></param>
+
+        #endregion
+
+        #region 战斗输入
+
         private void HandleTap_Mouse_L_Input()
         {
-            if (tap_Mouse_L_Input) //rb
-            {
-                tap_Mouse_L_Input = false;
-                if (player.isTwoHandingWeapon)
-                {
-                    if (player.playerInventoryManager.rightWeapon.th_tap_Mouse_L_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.th_tap_Mouse_L_Action.PerformAction(player);
-                }
-                else
-                {
-                    if (player.playerInventoryManager.rightWeapon.oh_tap_Mouse_L_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.oh_tap_Mouse_L_Action.PerformAction(player);
-                }
-
-            }
+            if (!tap_Mouse_L_Input) return;
+            tap_Mouse_L_Input = false;
+            DispatchWeaponAction(w => w.oh_tap_Mouse_L_Action, w => w.th_tap_Mouse_L_Action);
         }
 
         private void HandleHold_Mouse_L_Input()
         {
-            if (hold_MouseL_Input)
-            {
-                if (player.isTwoHandingWeapon)
-                {
-                    if (player.playerInventoryManager.rightWeapon.th_hold_Mouse_L_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.th_hold_Mouse_L_Action.PerformAction(player);
-                }
-                else
-                {
-                    if (player.playerInventoryManager.rightWeapon.oh_hold_Mouse_L_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.oh_hold_Mouse_L_Action.PerformAction(player);
-                }
-
-
-
-            }
+            if (!hold_MouseL_Input) return;
+            DispatchWeaponAction(w => w.oh_hold_Mouse_L_Action, w => w.th_hold_Mouse_L_Action);
         }
 
         private void HandleTap_Mouse_R_Input()
         {
-            if (tap_Mouse_R_Input)//lb
-            {
-                tap_Mouse_R_Input = false;
-                if (player.isTwoHandingWeapon)
-                {
-                    if (player.playerInventoryManager.rightWeapon.th_tap_Mouse_R_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.th_tap_Mouse_R_Action.PerformAction(player);
-                }
-                else
-                {
-                    if (player.playerInventoryManager.rightWeapon.oh_tap_Mouse_R_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.oh_tap_Mouse_R_Action.PerformAction(player);
-                }
-            }
+            if (!tap_Mouse_R_Input) return;
+            tap_Mouse_R_Input = false;
+            DispatchWeaponAction(w => w.oh_tap_Mouse_R_Action, w => w.th_tap_Mouse_R_Action);
         }
+
         private void HandleHold_Mouse_R_Input()
         {
             if (!player.isGrounded || player.isSprinting || player.isFiringSpell)
@@ -360,31 +318,14 @@ namespace ARPG
             }
             if (hold_mouseR_Input)
             {
-                if (player.isTwoHandingWeapon)
-                {
-                    if (player.playerInventoryManager.rightWeapon.th_hold_Mouse_R_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.th_hold_Mouse_R_Action.PerformAction(player);
-                }
-                else
-                {
-                    if (player.playerInventoryManager.rightWeapon.oh_hold_Mouse_R_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.oh_hold_Mouse_R_Action.PerformAction(player);
-                }
+                DispatchWeaponAction(w => w.oh_hold_Mouse_R_Action, w => w.th_hold_Mouse_R_Action);
             }
             else
             {
                 if (player.isAiming)
                 {
                     player.isAiming = false;
-                    //player.uiManager.crossHair.SetActive(false);
                     this.SendEvent(new AimActionEvent { IsAiming = false });
-                    //重置摄像机的旋转
                     player.cameraMgr.ResetAimCameraRotation();
                 }
                 if (player.isBlocking)
@@ -394,165 +335,99 @@ namespace ARPG
             }
         }
 
-
         private void HandleTap_R_Input()
         {
-            if (tap_R_Input)//rt
-            {
-                tap_R_Input = false;
-                if (player.isTwoHandingWeapon)
-                {
-                    if (player.playerInventoryManager.rightWeapon.th_tap_R_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.th_tap_R_Action.PerformAction(player);
-                }
-                else
-                {
-                    if (player.playerInventoryManager.rightWeapon.oh_tap_R_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.oh_tap_R_Action.PerformAction(player);
-                }
-
-            }
+            if (!tap_R_Input) return;
+            tap_R_Input = false;
+            DispatchWeaponAction(w => w.oh_tap_R_Action, w => w.th_tap_R_Action);
         }
 
         private void HandleHold_R_Input()
         {
             player.animator.SetBool("isChargingAttack", hold_R_Input);
-            if (hold_R_Input)//rt
-            {
-
-                if (player.isTwoHandingWeapon)
-                {
-                    if (player.playerInventoryManager.rightWeapon.th_hold_R_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.th_hold_R_Action.PerformAction(player);
-                }
-                else
-                {
-                    if (player.playerInventoryManager.rightWeapon.oh_hold_R_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.oh_hold_R_Action.PerformAction(player);
-                }
-
-            }
+            if (!hold_R_Input) return;
+            DispatchWeaponAction(w => w.oh_hold_R_Action, w => w.th_hold_R_Action);
         }
 
         //Q代表左手的输入
         private void HandleTap_Q_Input()
         {
-            if (tap_Q_Input)//lt
-            {
-                tap_Q_Input = false;
-                if (player.isTwoHandingWeapon)
-                {
-                    if (player.playerInventoryManager.rightWeapon.th_tap_Q_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.th_tap_Q_Action.PerformAction(player);
-                }
-                else
-                {
-                    if (player.playerInventoryManager.leftWeapon.oh_tap_Q_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(false);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.leftWeapon;
-                    player.playerInventoryManager.leftWeapon.oh_tap_Q_Action.PerformAction(player);
-                }
-            }
-
+            if (!tap_Q_Input) return;
+            tap_Q_Input = false;
+            if (player.isTwoHandingWeapon)
+                DispatchWeaponAction(w => w.oh_tap_Q_Action, w => w.th_tap_Q_Action, true);
+            else
+                DispatchWeaponAction(w => w.oh_tap_Q_Action, w => w.th_tap_Q_Action, false);
         }
+
         private void HandleHold_Q_Input()
         {
-            if (hold_Q_Input)//lt
-            {
-                if (player.isTwoHandingWeapon)
-                {
-                    if (player.playerInventoryManager.rightWeapon.th_hold_Q_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(true);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.rightWeapon;
-                    player.playerInventoryManager.rightWeapon.th_hold_Q_Action.PerformAction(player);
-                }
-                else
-                {
-                    if (player.playerInventoryManager.leftWeapon.oh_hold_Q_Action == null)
-                        return;
-                    player.UpdateWhichHandCharacterIsUsing(false);
-                    player.playerInventoryManager.currentItemBeingUsed = player.playerInventoryManager.leftWeapon;
-                    player.playerInventoryManager.leftWeapon.oh_hold_Q_Action.PerformAction(player);
-                }
-            }
+            if (!hold_Q_Input) return;
+            if (player.isTwoHandingWeapon)
+                DispatchWeaponAction(w => w.oh_hold_Q_Action, w => w.th_hold_Q_Action, true);
+            else
+                DispatchWeaponAction(w => w.oh_hold_Q_Action, w => w.th_hold_Q_Action, false);
         }
 
+        #endregion
 
-        /// <summary>
-        /// 切换快速插槽的输入相关
-        /// </summary>
+        #region 快捷输入 (Command 分发)
+
         private void HandleQuickSlotsInput()
         {
             if (d_Pad_Right)
             {
                 d_Pad_Right = false;
-                player.playerInventoryManager.ChangeRightWeapon();
-                player.playerWeaponSlotManager.LoadBothWeaponsOnSlots();
-                var inventoryModel = this.GetModel<IInventoryModel>();
-                inventoryModel.CurrentRightWeaponIndex.Value = player.playerInventoryManager.currentRightWeaponIndex;
+                this.SendCommand(new ChangeQuickSlotCommand(E_QuickSlotType.RightWeapon));
             }
             else if (d_Pad_Left)
             {
                 d_Pad_Left = false;
-                player.playerInventoryManager.ChangeLeftWeapon();
-                player.playerWeaponSlotManager.LoadBothWeaponsOnSlots();
-                var inventoryModel = this.GetModel<IInventoryModel>();
-                inventoryModel.CurrentLeftWeaponIndex.Value = player.playerInventoryManager.currentLeftWeaponIndex;
+                this.SendCommand(new ChangeQuickSlotCommand(E_QuickSlotType.LeftWeapon));
             }
             else if (d_Pad_Up)
             {
                 d_Pad_Up = false;
-                player.playerInventoryManager.ChangeConsumable();
-                var inv = this.GetModel<IInventoryModel>();
-                inv.CurrentConsumableIndex.Value = player.playerInventoryManager.currentConsumableIndex;
+                this.SendCommand(new ChangeQuickSlotCommand(E_QuickSlotType.Consumable));
             }
             else if (d_Pad_Down)
             {
                 d_Pad_Down = false;
-                player.playerInventoryManager.ChangeSpell();
-                var inv = this.GetModel<IInventoryModel>();
-                inv.CurrentSpellIndex.Value = player.playerInventoryManager.currentSpellIndex;
+                this.SendCommand(new ChangeQuickSlotCommand(E_QuickSlotType.Spell));
             }
         }
+
         private void HandleInventoryInput()
         {
             if (inventory_Input)
             {
                 inventoryFlag = !inventoryFlag;
-                if (inventoryFlag)
-                {
-                    this.SendEvent(new SelectWindowEvent { IsOpen = true });
-                    UISystem.HidePanel<GamePanel>();
-                }
-                else
-                {
-                    this.SendEvent(new SelectWindowEvent { IsOpen = false });
-                    UISystem.HidePanel<EquipPanel>();
-                    UISystem.HidePanel<BagPanel>();
-                    UISystem.HidePanel<LevelUpPanel>();
-                    UISystem.HidePanel<TaskPanel>();
-                    UISystem.ShowPanel<GamePanel>();
-
-                }
+                this.SendCommand(new ToggleInventoryCommand(inventoryFlag));
             }
         }
+
+        private void HandleTwoHandInput()
+        {
+            if (twoHand_Input)
+            {
+                twoHand_Input = false;
+                twoHandFlag = !twoHandFlag;
+                this.SendCommand(new ToggleTwoHandCommand(twoHandFlag));
+            }
+        }
+
+        private void HandleUseComsumableInput()
+        {
+            if (x_Input)
+            {
+                x_Input = false;
+                this.SendCommand(new UseConsumableCommand());
+            }
+        }
+
+        #endregion
+
+        #region 视角锁定
 
         private void HandleLockOnInput()
         {
@@ -599,45 +474,12 @@ namespace ARPG
             player.cameraMgr.SetCameraHeight();
         }
 
-        private void HandleTwoHandInput()
-        {
-            if (twoHand_Input)
-            {
-                twoHand_Input = false;
-                twoHandFlag = !twoHandFlag;
-                if (twoHandFlag)
-                {
-                    player.isTwoHandingWeapon = true;
-                    //双手模式
-                    player.playerWeaponSlotManager.LoadWeaponOnSlot(player.playerInventoryManager.rightWeapon, false);
+        #endregion
 
-                    player.playerWeaponSlotManager.LoadTwoHandIKTargets(true);
-                }
-                else
-                {
-                    player.isTwoHandingWeapon = false;
-                    player.playerWeaponSlotManager.LoadWeaponOnSlot(player.playerInventoryManager.rightWeapon, false);
-                    player.playerWeaponSlotManager.LoadWeaponOnSlot(player.playerInventoryManager.leftWeapon, true);
-                    player.playerWeaponSlotManager.LoadTwoHandIKTargets(false);
-
-                }
-            }
-        }
-
-
-        private void HandleUseComsumableInput()
-        {
-            if (x_Input)
-            {
-                x_Input = false;
-                //使用消耗品
-                player.playerInventoryManager.currentConsumable.AttemptToConsumeItem(player);
-            }
-        }
+        #region 输入队列
 
         private void QueInput(ref bool quedInput)
         {
-
             //如果角色正在交互 则将输入放入队列
             if (player.isInteracting)
             {
@@ -645,7 +487,6 @@ namespace ARPG
                 current_Qued_Input_Timer = default_Qued_Input_Time;
                 input_Has_Been_Qued = true;
             }
-
         }
 
         private void HandleQuedInput()
@@ -655,12 +496,10 @@ namespace ARPG
                 if (current_Qued_Input_Timer > 0)
                 {
                     current_Qued_Input_Timer -= Time.deltaTime;
-                    //执行队列输入
                     ProcessQuedInput();
                 }
                 else
                 {
-                    //时间到 清空队列输入
                     input_Has_Been_Qued = false;
                     qued_Mouse_L_Input = false;
                     qued_Mouse_R_Input = false;
@@ -671,17 +510,12 @@ namespace ARPG
 
         private void ProcessQuedInput()
         {
-
             if (qued_Mouse_L_Input)
-            {
                 tap_Mouse_L_Input = true;
-            }
             if (qued_Mouse_R_Input)
-            {
                 tap_Mouse_R_Input = true;
-            }
-
         }
+
+        #endregion
     }
 }
-
