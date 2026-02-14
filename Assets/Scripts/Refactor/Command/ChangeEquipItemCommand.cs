@@ -26,17 +26,17 @@ namespace ARPG
 
         protected override void OnExecute()
         {
-            var pm = PlayerManager.localPlayer;
-            if (pm == null) return;
+            var player = PlayerManager.localPlayer;
+            if (player == null) return;
 
-            var inv = pm.playerInventoryManager;
+            var inventory = player.playerInventoryManager;
 
             // 1) 运行时逻辑: 库存交换 + 视觉/武器切换
-            inv.ChangeEquipItem(slotIndex, newItem);
+            inventory.ChangeEquipItem(slotIndex, newItem);
 
             // 2) 同步 IInventoryModel (从运行时读回最终状态)
             var model = this.GetModel<IInventoryModel>();
-            SyncModelFromRuntime(model, inv);
+            SyncModelFromRuntime(model, inventory);
         }
 
         /// <summary>

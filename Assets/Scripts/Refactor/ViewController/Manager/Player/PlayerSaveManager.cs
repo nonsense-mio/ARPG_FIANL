@@ -140,11 +140,11 @@ namespace ARPG
             model.CurrentHandsID.Value = (inv.currentHands != null && inv.currentHands.itemIcon != null)
                 ? inv.currentHands.itemID : IInventoryModel.EMPTY_HANDS_ID;
 
-            // 当前索引 (保存时 -1 偏移，与原 SaveInventoryToData 一致)
-            model.CurrentRightWeaponIndex.Value = inv.currentRightWeaponIndex - 1;
-            model.CurrentLeftWeaponIndex.Value = inv.currentLeftWeaponIndex - 1;
-            model.CurrentConsumableIndex.Value = inv.currentConsumableIndex - 1;
-            model.CurrentSpellIndex.Value = inv.currentSpellIndex - 1;
+            // 当前索引 (直接保存实际索引，不做偏移)
+            model.CurrentRightWeaponIndex.Value = inv.currentRightWeaponIndex;
+            model.CurrentLeftWeaponIndex.Value = inv.currentLeftWeaponIndex;
+            model.CurrentConsumableIndex.Value = inv.currentConsumableIndex;
+            model.CurrentSpellIndex.Value = inv.currentSpellIndex;
         }
 
         /// <summary>
@@ -226,23 +226,20 @@ namespace ARPG
             inv.currentLegs = itemDB.GetLegByID(model.CurrentLegsID.Value);
             inv.currentHands = itemDB.GetHandByID(model.CurrentHandsID.Value);
 
-            // 加载当前索引
+            // 加载当前索引并直接设置运行时引用（不使用 Change* 循环方法，避免索引偏移）
             inv.currentRightWeaponIndex = model.CurrentRightWeaponIndex.Value;
             inv.currentLeftWeaponIndex = model.CurrentLeftWeaponIndex.Value;
             inv.currentConsumableIndex = model.CurrentConsumableIndex.Value;
             inv.currentSpellIndex = model.CurrentSpellIndex.Value;
 
-            //更新武器和物品状态
-            inv.ChangeLeftWeapon();
-            inv.ChangeRightWeapon();
-            inv.ChangeConsumable();
-            inv.ChangeSpell();
-
-            // Change* 方法会推进索引（因为保存时做了 -1 偏移），同步回 Model 层
-            model.CurrentRightWeaponIndex.Value = inv.currentRightWeaponIndex;
-            model.CurrentLeftWeaponIndex.Value = inv.currentLeftWeaponIndex;
-            model.CurrentConsumableIndex.Value = inv.currentConsumableIndex;
-            model.CurrentSpellIndex.Value = inv.currentSpellIndex;
+            if (inv.currentRightWeaponIndex >= 0 && inv.currentRightWeaponIndex < inv.weaponInRightHandSlots.Length)
+                inv.rightWeapon = inv.weaponInRightHandSlots[inv.currentRightWeaponIndex];
+            if (inv.currentLeftWeaponIndex >= 0 && inv.currentLeftWeaponIndex < inv.weaponInLeftHandSlots.Length)
+                inv.leftWeapon = inv.weaponInLeftHandSlots[inv.currentLeftWeaponIndex];
+            if (inv.currentConsumableIndex >= 0 && inv.currentConsumableIndex < inv.consumableSlots.Length)
+                inv.currentConsumable = inv.consumableSlots[inv.currentConsumableIndex];
+            if (inv.currentSpellIndex >= 0 && inv.currentSpellIndex < inv.spellSlots.Length)
+                inv.currentSpell = inv.spellSlots[inv.currentSpellIndex];
         }
 
         #endregion
