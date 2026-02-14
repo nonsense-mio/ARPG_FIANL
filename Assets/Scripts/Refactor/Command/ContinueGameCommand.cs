@@ -18,7 +18,7 @@ namespace ARPG
 
             this.GetSystem<ISceneSystem>().LoadSceneAsync("GameScene", () =>
             {
-                GameArchitecture.Interface.SendCommand(new InitGameSceneCommand());
+                this.SendCommand(new InitGameSceneCommand());
             });
         }
     }

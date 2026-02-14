@@ -129,7 +129,7 @@ namespace ARPG
                                 //异步加载场景
                                 this.GetSystem<ISceneSystem>().LoadSceneAsync("BeginScene", () =>
                                 {
-                                    GameArchitecture.Interface.SendCommand(new InitBeginSceneCommand());
+                                    this.SendCommand(new InitBeginSceneCommand());
                                 });
                             });
 

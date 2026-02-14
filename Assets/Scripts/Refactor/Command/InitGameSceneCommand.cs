@@ -36,7 +36,7 @@ namespace ARPG
                 var taskSystem = this.GetSystem<ITaskSystem>();
                 taskSystem.RebuildFromModel(allTasks);
 
-                GameArchitecture.Interface.SendEvent(new GameDataLoadedEvent());
+                this.SendEvent(new GameDataLoadedEvent());
             }, true);
 
             cameraMgr.targetTransform = player.transform;

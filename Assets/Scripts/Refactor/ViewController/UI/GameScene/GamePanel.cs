@@ -188,12 +188,12 @@ namespace ARPG
 
         public override void HideMe()
         {
-            GameArchitecture.Interface.SendEvent(new EnableInputEvent { Enabled = false });
+            this.SendEvent(new EnableInputEvent { Enabled = false });
         }
 
         public override void ShowMe()
         {
-            GameArchitecture.Interface.SendEvent(new EnableInputEvent { Enabled = true });
+            this.SendEvent(new EnableInputEvent { Enabled = true });
         }
     }
 }

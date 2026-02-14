@@ -66,7 +66,7 @@ namespace ARPG
             }
 
             //生成任务列表
-            var taskSystem = GameArchitecture.Interface.GetSystem<ITaskSystem>();
+            var taskSystem = this.GetSystem<ITaskSystem>();
             var allTasks = taskSystem.GetAllTaskData();
             for (int i = 0; i < allTasks.Count; i++)
             {

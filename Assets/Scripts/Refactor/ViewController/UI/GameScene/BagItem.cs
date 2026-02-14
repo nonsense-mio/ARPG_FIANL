@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using ARPG;
 using ARPG;
 using UnityEngine;
 using UnityEngine.UI;
