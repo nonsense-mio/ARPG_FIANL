@@ -26,11 +26,6 @@ namespace ARPG
         }
 
 
-        public override void AttemptBlock(DamageCollider attackingWeapon, float physicalDamage, float fireDamage, string blockAnimation)
-        {
-            base.AttemptBlock(attackingWeapon, physicalDamage, fireDamage, blockAnimation);
-            player.playerStatsManager.DeductStamina(0); //更新体力UI
-        }
     }
 }
 

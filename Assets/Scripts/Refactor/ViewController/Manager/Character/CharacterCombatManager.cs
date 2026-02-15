@@ -68,26 +68,6 @@ namespace ARPG
         }
 
 
-        public virtual void AttemptBlock(DamageCollider attackingWeapon, float physicalDamage, float fireDamage, string blockAnimation)
-        {
-            float staminaDamageAbsorption = (physicalDamage + fireDamage) * attackingWeapon.guardBreakModifier * (character.characterStatsManager.blockingStabilityRating / 100f);
-
-            float staminaDamage = (physicalDamage + fireDamage) * attackingWeapon.guardBreakModifier - staminaDamageAbsorption;
-            //格挡被攻击消耗体力
-            character.characterStatsManager.currentStamina -= staminaDamage;
-
-            if (character.characterStatsManager.currentStamina <= 0)
-            {
-                //体力不足 破防 
-                character.isBlocking = false;
-                character.characterAnimatorManager.PlayTargetAnimation("Guard Break", true);
-            }
-            else
-            {
-                character.characterAnimatorManager.PlayTargetAnimation(blockAnimation, true);
-            }
-        }
-
 
 
         private void SuccessfullyCastSpell()

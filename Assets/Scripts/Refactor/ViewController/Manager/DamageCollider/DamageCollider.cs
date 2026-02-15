@@ -137,62 +137,65 @@ namespace ARPG
         //格挡
         protected virtual void CheckForBlock(CharacterManager enemyManager)
         {
-            CharacterStatsManager enemyShield = enemyManager.characterStatsManager;
-            Vector3 directionFromEnemyToAttacker = (characterManager.transform.position - enemyManager.transform.position).normalized;
-            //点乘 
-            float facing = Vector3.Dot(directionFromEnemyToAttacker, enemyManager.transform.forward);
-            // 0.3 ≈ cos(72.54°)，意味着攻击者在敌人正前方约 ±72° 的扇形内
-            if (enemyManager.isBlocking && facing > 0.3f)
+            var enemyStats = enemyManager.characterStatsManager;
+            var blockResult = this.SendQuery(new CalculateBlockResultQuery(new BlockInput
             {
-                shieldHasBeenHit = true;
-                float physicalDamageAfterBlock = physicalDamage - (physicalDamage * enemyShield.blockingPhysicalDamageAbsorption) / 100;
-                float fireDamageAfterBlock = fireDamage - (fireDamage * enemyShield.blockingFireDamageAbsorption) / 100;
-                enemyManager.characterCombatManager.AttemptBlock(this, physicalDamage, fireDamage, "Block Guard");
-                enemyShield.TakeDamageAfterBlock(Mathf.RoundToInt(physicalDamageAfterBlock), Mathf.RoundToInt(fireDamageAfterBlock), characterManager);
+                AttackerPosition = characterManager.transform.position,
+                DefenderPosition = enemyManager.transform.position,
+                DefenderForward = enemyManager.transform.forward,
+                IsDefenderBlocking = enemyManager.isBlocking,
+                PhysicalDamage = physicalDamage,
+                FireDamage = fireDamage,
+                GuardBreakModifier = guardBreakModifier,
+                BlockingPhysicalAbsorption = enemyStats.blockingPhysicalDamageAbsorption,
+                BlockingFireAbsorption = enemyStats.blockingFireDamageAbsorption,
+                BlockingStabilityRating = enemyStats.blockingStabilityRating,
+                DefenderCurrentStamina = enemyStats.currentStamina
+            }));
+
+            if (!blockResult.IsBlocked) return;
+
+            shieldHasBeenHit = true;
+            // 扣除格挡体力
+            enemyStats.currentStamina -= blockResult.StaminaDamage;
+            // 玩家角色需要同步体力到 Model (驱动 UI 更新)
+            if (enemyManager is PlayerManager pm)
+                pm.playerStatsManager.DeductStamina(0);
+            // 破防或播放格挡动画
+            if (blockResult.IsGuardBroken)
+            {
+                enemyManager.isBlocking = false;
+                enemyManager.characterAnimatorManager.PlayTargetAnimation("Guard Break", true);
             }
-
-
+            else
+            {
+                enemyManager.characterAnimatorManager.PlayTargetAnimation("Block Guard", true);
+            }
+            // 穿透伤害
+            enemyStats.TakeDamageAfterBlock(blockResult.PhysicalDamageAfterBlock, blockResult.FireDamageAfterBlock, characterManager);
         }
 
         //根据攻击类型造成伤害
         protected virtual void DamageBasedOnAttackType(CharacterManager enemyManager)
         {
-            float finalPhysicalDamage = physicalDamage;
-            if (characterManager.isUsingRightHand)
-            {
-                if (characterManager.characterCombatManager.currentAttackType == E_AttackType.LightAttack)
-                {
-                    //轻攻击伤害计算
-                    finalPhysicalDamage *= characterManager.characterInventoryManager.rightWeapon.lightAttackDamageModifier;
-                }
-                else if (characterManager.characterCombatManager.currentAttackType == E_AttackType.HeavyAttack)
-                {
-                    //重攻击伤害计算
-                    finalPhysicalDamage *= characterManager.characterInventoryManager.rightWeapon.heavyAttackDamageModifier;
-                }
-            }
-            else if (characterManager.isUsingLeftHand)
-            {
-                if (characterManager.characterCombatManager.currentAttackType == E_AttackType.LightAttack)
-                {
-                    //轻攻击伤害计算
-                    finalPhysicalDamage *= characterManager.characterInventoryManager.leftWeapon.lightAttackDamageModifier;
-                }
-                else if (characterManager.characterCombatManager.currentAttackType == E_AttackType.HeavyAttack)
-                {
-                    //重攻击伤害计算
-                    finalPhysicalDamage *= characterManager.characterInventoryManager.leftWeapon.heavyAttackDamageModifier;
-                }
-            }
+            var inv = characterManager.characterInventoryManager;
+            int finalPhysicalDamage = this.SendQuery(new CalculateAttackTypeDamageQuery(
+                physicalDamage,
+                characterManager.characterCombatManager.currentAttackType,
+                characterManager.isUsingRightHand,
+                inv.rightWeapon.lightAttackDamageModifier,
+                inv.rightWeapon.heavyAttackDamageModifier,
+                inv.leftWeapon.lightAttackDamageModifier,
+                inv.leftWeapon.heavyAttackDamageModifier));
+
             //根据敌人破防情况决定受击动画播放与否
             if (enemyManager.characterStatsManager.totalPoiseDefense > poiseBreak)
             {
-                enemyManager.characterStatsManager.TakeDamageNoAnimation(Mathf.RoundToInt(finalPhysicalDamage), 0, characterManager);
+                enemyManager.characterStatsManager.TakeDamageNoAnimation(finalPhysicalDamage, 0, characterManager);
             }
-            //破防后能够播放受击动画
             else
             {
-                enemyManager.characterStatsManager.TakeDamage(Mathf.RoundToInt(finalPhysicalDamage), 0, currentDamageAnimation, characterManager);
+                enemyManager.characterStatsManager.TakeDamage(finalPhysicalDamage, 0, currentDamageAnimation, characterManager);
             }
         }
 

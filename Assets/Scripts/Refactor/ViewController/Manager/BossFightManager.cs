@@ -10,6 +10,7 @@ namespace ARPG
     public class BossFightManager : ARPGController
     {
         [SerializeField] private string bossID;
+        public string BossID => bossID;
         public EnemyManager boss;
         public List<FogWall> fogWalls = new List<FogWall>();
         public PassThroughFogWall passThroughFogWall;
@@ -53,46 +54,18 @@ namespace ARPG
 
         /// <summary>
         /// 激活Boss战
-        /// </summary> <summary>
+        /// </summary>
         public void ActivateBossFight()
         {
-            if (bossHasBeenDefeated) return;
-            if (bossFightIsActive) return;
-            if( !boss.isActiveAndEnabled) return;
-            bossFightIsActive = true;
-            bossHasBeenAwakened = true;
-
-            // 开雾墙
-            foreach (var fogWall in fogWalls)
-            {
-                if (fogWall != null) fogWall.ActivateFogWall(true);
-            }
-
-            // 显示 HUD（用快照，不传 EnemyManager）
-            PublishBossHud();
+            this.SendCommand(new ActivateBossFightCommand(this));
         }
+
         /// <summary>
         /// Boss被打败
         /// </summary>
         public void BossHasBeenDefeated()
         {
-            if (!bossFightIsActive) return;
-
-            bossFightIsActive = false;
-            bossHasBeenDefeated = true;
-
-            // 关雾墙
-            foreach (var fogWall in fogWalls)
-            {
-                if (fogWall != null) fogWall.ActivateFogWall(false);
-            }
-
-            // 隐藏 HUD
-            this.SendEvent(new BossHudChangedEvent { Data = null });
-
-            // 更新 SceneStateModel Boss 击败状态
-            var sceneStateModel = this.GetModel<ISceneStateModel>();
-            sceneStateModel.SetBossDefeated(bossID, true);
+            this.SendCommand(new BossDefeatedCommand(this));
         }
 
 
