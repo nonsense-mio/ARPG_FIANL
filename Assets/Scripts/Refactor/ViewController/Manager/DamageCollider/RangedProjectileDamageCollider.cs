@@ -85,7 +85,7 @@ namespace ARPG
                 Vector3 contactPoint = collision.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
                 float directionHitFrom = Vector3.SignedAngle(characterManager.transform.forward, enemyManager.transform.forward, Vector3.up);
 
-                ChooseWhichDirectionDamageCameFrom(directionHitFrom);
+                currentDamageAnimation = this.SendQuery(new GetHitDirectionQuery(directionHitFrom));
                 //播放受击特效
                 this.SendEvent(new CharacterDamageEvent { HitPoint = contactPoint });
                 enemyManager.characterEffectsManager.InterrupEffect();

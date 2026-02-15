@@ -119,21 +119,8 @@ namespace ARPG
                         {
                             tipPanel.SetTipInfo("是否返回标题界面？", () =>
                             {
-                                this.GetSystem<IUISystem>().HidePanel<InteractionPanel>(true);
-                                this.GetSystem<IUISystem>().HidePanel<EquipPanel>(true);
-                                this.GetSystem<IUISystem>().HidePanel<BagPanel>(true);
-                                this.GetSystem<IUISystem>().HidePanel<GamePanel>(true);
-                                //保存并清理
-                                this.SendCommand(new SaveGameCommand());
-                                this.SendCommand(new ClearGameInfoCommand());
-                                //异步加载场景
-                                this.GetSystem<ISceneSystem>().LoadSceneAsync("BeginScene", () =>
-                                {
-                                    this.SendCommand(new InitBeginSceneCommand());
-                                });
+                                this.SendCommand(new ReturnToMainMenuCommand());
                             });
-
-
                         });
                     }
                     break;

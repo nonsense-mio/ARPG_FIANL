@@ -79,39 +79,35 @@ namespace ARPG
         }
         /// <summary>
         /// 计算并减去最终伤害 在受伤时调用
+        /// (伤害公式委托给 CalculateFinalDamageQuery)
         /// </summary>
-        /// <param name="physicalDamage"></param>
-        /// <param name="fireDamage"></param>
-        private void CalculateDamge(int physicalDamage, int fireDamage, CharacterManager enemyCharacterDamagingMe = null)
+        private void CalculateDamage(int physicalDamage, int fireDamage, CharacterManager enemyCharacterDamagingMe = null)
         {
-            physicalDamage = Mathf.RoundToInt(physicalDamage * (enemyCharacterDamagingMe.characterStatsManager.physicalDamagePercentageModifier / 100));
-            fireDamage = Mathf.RoundToInt(fireDamage * (enemyCharacterDamagingMe.characterStatsManager.fireDamagePercentageModifier / 100));
-            //物理伤害吸收总百分比
-            float totalPhysicalDamageAbsorption = 1 -
-                (1 - physicalDamageAbsorptionHead / 100) *
-                (1 - physicalDamageAbsorptionBody / 100) *
-                (1 - physicalDamageAbsorptionLegs / 100) *
-                (1 - physicalDamageAbsorptionHands / 100);
-            //火焰伤害吸收总百分比
-            float totalFireDamageAbsorption = 1 -
-                (1 - fireDamageAbsorptionHead / 100) *
-                (1 - fireDamageAbsorptionBody / 100) *
-                (1 - fireDamageAbsorptionLegs / 100) *
-                (1 - fireDamageAbsorptionHands / 100);
-            physicalDamage = Mathf.RoundToInt(physicalDamage - physicalDamage * totalPhysicalDamageAbsorption);
-            fireDamage = Mathf.RoundToInt(fireDamage - fireDamage * totalFireDamageAbsorption);
-            Debug.Log("计算后伤害 物理：" + physicalDamage );
-            physicalDamage = Mathf.RoundToInt(physicalDamage * (1 - physicalAbsorptionPercentageModifier / 100));
-            fireDamage = Mathf.RoundToInt(fireDamage * (1 - fireAbsorptionPercentageModifier / 100));
-            float finalDamage = physicalDamage + fireDamage;
-            if (enemyCharacterDamagingMe != null && enemyCharacterDamagingMe.isPerformingFullyChargeAttack)
+            var input = new DamageInput
             {
-                // 充能攻击伤害加成50%
-                finalDamage *= 2f;
-            }
-            
+                RawPhysicalDamage = physicalDamage,
+                RawFireDamage = fireDamage,
+                AttackerPhysicalModifier = enemyCharacterDamagingMe != null
+                    ? enemyCharacterDamagingMe.characterStatsManager.physicalDamagePercentageModifier : 100f,
+                AttackerFireModifier = enemyCharacterDamagingMe != null
+                    ? enemyCharacterDamagingMe.characterStatsManager.fireDamagePercentageModifier : 100f,
+                IsFullyChargedAttack = enemyCharacterDamagingMe != null
+                    && enemyCharacterDamagingMe.isPerformingFullyChargeAttack,
+                PhysicalAbsorptionHead = physicalDamageAbsorptionHead,
+                PhysicalAbsorptionBody = physicalDamageAbsorptionBody,
+                PhysicalAbsorptionLegs = physicalDamageAbsorptionLegs,
+                PhysicalAbsorptionHands = physicalDamageAbsorptionHands,
+                FireAbsorptionHead = fireDamageAbsorptionHead,
+                FireAbsorptionBody = fireDamageAbsorptionBody,
+                FireAbsorptionLegs = fireDamageAbsorptionLegs,
+                FireAbsorptionHands = fireDamageAbsorptionHands,
+                PhysicalAbsorptionModifier = physicalAbsorptionPercentageModifier,
+                FireAbsorptionModifier = fireAbsorptionPercentageModifier
+            };
+
+            int finalDamage = this.SendQuery(new CalculateFinalDamageQuery(input));
             Debug.Log("最终伤害：" + finalDamage);
-            currentHealth -= Mathf.RoundToInt(finalDamage);
+            currentHealth -= finalDamage;
         }
         public virtual void TakeDamage(int physicalDamage, int fireDamage, string damageAnimation, CharacterManager enemyCharacterDamagingMe)
         {
@@ -120,7 +116,7 @@ namespace ARPG
 
 
             character.characterAnimatorManager.EraseHandIKForWeapon();
-            CalculateDamge(physicalDamage, fireDamage, enemyCharacterDamagingMe);
+            CalculateDamage(physicalDamage, fireDamage, enemyCharacterDamagingMe);
         }
         //格挡时收到的伤害
         public virtual void TakeDamageAfterBlock(int physicalDamage, int fireDamage, CharacterManager enemyCharacterDamagingMe)
@@ -129,7 +125,7 @@ namespace ARPG
                 return;
 
             character.characterAnimatorManager.EraseHandIKForWeapon();
-            CalculateDamge(physicalDamage, fireDamage, enemyCharacterDamagingMe);
+            CalculateDamage(physicalDamage, fireDamage, enemyCharacterDamagingMe);
         }
 
 
@@ -141,7 +137,7 @@ namespace ARPG
         {
             if (character.isDead)
                 return;
-            CalculateDamge(physicalDamage, fireDamage, enemyCharacterDamagingMe);
+            CalculateDamage(physicalDamage, fireDamage, enemyCharacterDamagingMe);
         }
 
         public virtual void TakePoiseDamage(int damage)

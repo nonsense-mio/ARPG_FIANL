@@ -95,9 +95,8 @@ namespace ARPG
                     Vector3 contactPoint = collision.gameObject.GetComponent<Collider>().ClosestPointOnBounds(transform.position);
                     float directionHitFrom = Vector3.SignedAngle(characterManager.transform.forward, enemyManager.transform.forward, Vector3.up);
 
-                    ChooseWhichDirectionDamageCameFrom(directionHitFrom);
-                    //播放受击特效
-                    //enemyManager.characterEffectsManager.PlayBloodSplatterFX(contactPoint);
+                    currentDamageAnimation = this.SendQuery(new GetHitDirectionQuery(directionHitFrom));
+
                     this.SendEvent(new CharacterDamageEvent { HitPoint = contactPoint });
                     enemyManager.characterEffectsManager.InterrupEffect();
 
@@ -197,33 +196,7 @@ namespace ARPG
             }
         }
 
-        /// <summary>
-        /// 选择受击方向
-        /// </summary>
-        /// <param name="direction"></param> <summary>
-        protected virtual void ChooseWhichDirectionDamageCameFrom(float direction)
-        {
-            if (direction >= 135 && direction <= 180 || direction <= -135 && direction >= -180)
-            {
-                //从后面受到伤害
-                currentDamageAnimation = "Hit Forward";
-            }
-            else if (direction >= -45 && direction <= 45)
-            {
-                //从前面受到伤害
-                currentDamageAnimation = "Hit Backward";
-            }
-            else if (direction > 45 && direction < 135)
-            {
-                //从右侧受到伤害
-                currentDamageAnimation = "Hit Right";
-            }
-            else if (direction < -45 && direction > -135)
-            {
-                //从左侧受到伤害
-                currentDamageAnimation = "Hit Left";
-            }
-        }
+
 
     }
 }

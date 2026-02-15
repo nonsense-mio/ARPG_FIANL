@@ -19,7 +19,6 @@ namespace ARPG
         private Text txtCurrentSouls;
         private Text txtSoulsRequired;
         private int soulsRequiredToLevelUp;
-        private int baseLevelUpSoulCost = 5;
 
         [Header("生命值")]
         private Slider sliderHealth;
@@ -187,90 +186,41 @@ namespace ARPG
             txtCurrentSouls.text = playerModel.CurrentSoulCount.ToString();
         }
 
-        //确认升级
+        //确认升级 (业务逻辑委托给 ConfirmLevelUpCommand)
         public void ConfirmPlayerLevelUpStats()
         {
-            int newHealthLevel = Mathf.RoundToInt(sliderHealth.value);
-            int newStaminaLevel = Mathf.RoundToInt(sliderStamina.value);
-            int newFocusLevel = Mathf.RoundToInt(sliderFocus.value);
-            int newPoiseLevel = Mathf.RoundToInt(sliderPoise.value);
-            int newStrengthLevel = Mathf.RoundToInt(sliderStrength.value);
-            int newDexterityLevel = Mathf.RoundToInt(sliderDexterity.value);
-            int newIntelligenceLevel = Mathf.RoundToInt(sliderIntelligence.value);
-            int newFaithLevel = Mathf.RoundToInt(sliderFaith.value);
-            int newSoulCount = playerModel.CurrentSoulCount - soulsRequiredToLevelUp;
-
-            // 1) 写入 PlayerModel (驱动 GamePanel 响应式更新)
-            playerModel.PlayerLevel.Value = projectedPlayerLevel;
-            playerModel.HealthLevel.Value = newHealthLevel;
-            playerModel.StaminaLevel.Value = newStaminaLevel;
-            playerModel.FocusLevel.Value = newFocusLevel;
-            playerModel.PoiseLevel.Value = newPoiseLevel;
-            playerModel.StrengthLevel.Value = newStrengthLevel;
-            playerModel.DexterityLevel.Value = newDexterityLevel;
-            playerModel.IntelligenceLevel.Value = newIntelligenceLevel;
-            playerModel.FaithLevel.Value = newFaithLevel;
-            playerModel.CurrentSoulCount.Value = newSoulCount;
-
-            // 2) 写入 PlayerStatsManager (运行时逻辑)
-            var pm = PlayerManager.localPlayer;
-            if (pm != null)
-            {
-                var stats = pm.playerStatsManager;
-                stats.playerLevel = projectedPlayerLevel;
-                stats.healthLevel = newHealthLevel;
-                stats.staminaLevel = newStaminaLevel;
-                stats.focusLevel = newFocusLevel;
-                stats.poiseLevel = newPoiseLevel;
-                stats.strengthLevel = newStrengthLevel;
-                stats.dexterityLevel = newDexterityLevel;
-                stats.intelligenceLevel = newIntelligenceLevel;
-                stats.faithLevel = newFaithLevel;
-                stats.currentSoulCount = newSoulCount;
-
-                // 重新计算 max 值
-                stats.SetMaxHealthFromHealthLevel();
-                stats.SetMaxStaminaFromStaminaLevel();
-                stats.SetMaxFocusPointsFromFocusLevel();
-
-                // 同步 max 值到 Model (GamePanel 自动更新)
-                playerModel.MaxHP.Value = stats.maxHealth;
-                playerModel.MaxStamina.Value = (int)stats.maxStamina;
-                playerModel.MaxFocus.Value = (int)stats.maxFocus;
-            }
+            this.SendCommand(new ConfirmLevelUpCommand(
+                projectedPlayerLevel, soulsRequiredToLevelUp,
+                Mathf.RoundToInt(sliderHealth.value),
+                Mathf.RoundToInt(sliderStamina.value),
+                Mathf.RoundToInt(sliderFocus.value),
+                Mathf.RoundToInt(sliderPoise.value),
+                Mathf.RoundToInt(sliderStrength.value),
+                Mathf.RoundToInt(sliderDexterity.value),
+                Mathf.RoundToInt(sliderIntelligence.value),
+                Mathf.RoundToInt(sliderFaith.value)));
 
             this.GetSystem<IUISystem>().HidePanel<LevelUpPanel>();
             this.GetSystem<IUISystem>().ShowPanel<DialoguePanel>();
         }
 
-        //计算升级所需魂数
-        private void CalculateSoulCostToLevelUp()
-        {
-            for (int i = 0; i < projectedPlayerLevel; i++)
-            {
-                soulsRequiredToLevelUp += Mathf.RoundToInt((projectedPlayerLevel - currentPlayerLevel) * baseLevelUpSoulCost * 1.1f);
-            }
-        }
-
-        //更新目标等级
+        //更新目标等级 (计算逻辑委托给 GetLevelUpCostQuery)
         private void UpdateProjectedPlayerLevel()
         {
-            soulsRequiredToLevelUp = 0;
+            var result = this.SendQuery(new GetLevelUpCostQuery(
+                Mathf.RoundToInt(sliderHealth.value) - playerModel.HealthLevel,
+                Mathf.RoundToInt(sliderStamina.value) - playerModel.StaminaLevel,
+                Mathf.RoundToInt(sliderFocus.value) - playerModel.FocusLevel,
+                Mathf.RoundToInt(sliderPoise.value) - playerModel.PoiseLevel,
+                Mathf.RoundToInt(sliderStrength.value) - playerModel.StrengthLevel,
+                Mathf.RoundToInt(sliderDexterity.value) - playerModel.DexterityLevel,
+                Mathf.RoundToInt(sliderIntelligence.value) - playerModel.IntelligenceLevel,
+                Mathf.RoundToInt(sliderFaith.value) - playerModel.FaithLevel));
 
-            projectedPlayerLevel = currentPlayerLevel;
-            projectedPlayerLevel += Mathf.RoundToInt(sliderHealth.value - playerModel.HealthLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderStamina.value - playerModel.StaminaLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderFocus.value - playerModel.FocusLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderPoise.value - playerModel.PoiseLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderStrength.value - playerModel.StrengthLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderDexterity.value - playerModel.DexterityLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderIntelligence.value - playerModel.IntelligenceLevel);
-            projectedPlayerLevel += Mathf.RoundToInt(sliderFaith.value - playerModel.FaithLevel);
-
+            projectedPlayerLevel = result.ProjectedLevel;
+            soulsRequiredToLevelUp = result.SoulCost;
             txtProjectedPlayerLevel.text = projectedPlayerLevel.ToString();
-            CalculateSoulCostToLevelUp();
             txtSoulsRequired.text = soulsRequiredToLevelUp.ToString();
-            //检查是否有足够的魂进行升级
             btnLevUp.interactable = playerModel.CurrentSoulCount >= soulsRequiredToLevelUp;
         }
 

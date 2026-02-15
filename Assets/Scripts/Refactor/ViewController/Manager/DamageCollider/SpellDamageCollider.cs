@@ -49,7 +49,7 @@ namespace ARPG
                 hitCharacter.characterStatsManager.totalPoiseDefense -= poiseBreak;
 
                 float directionHitFrom = Vector3.SignedAngle(characterManager.transform.forward, hitCharacter.transform.forward, Vector3.up);
-                ChooseWhichDirectionDamageCameFrom(directionHitFrom);
+                currentDamageAnimation = this.SendQuery(new GetHitDirectionQuery(directionHitFrom));
 
                 hitCharacter.characterEffectsManager.InterrupEffect();
 
