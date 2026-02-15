@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
+using Framework;
 using UnityEngine;
 namespace ARPG
 {
@@ -16,28 +14,15 @@ namespace ARPG
         //根据攻击类型消耗体力
         public override void DrainStaminaBasedOnAttackType()
         {
-            if (player.isUsingRightHand)
-            {
-                if (currentAttackType == E_AttackType.LightAttack)
-                {
-                    player.playerStatsManager.DeductStamina(player.playerInventoryManager.rightWeapon.baseStamina * player.playerInventoryManager.rightWeapon.lightAttackStaminaMultiplier);
-                }
-                else if (currentAttackType == E_AttackType.HeavyAttack)
-                {
-                    player.playerStatsManager.DeductStamina(player.playerInventoryManager.rightWeapon.baseStamina * player.playerInventoryManager.rightWeapon.heavyAttackStaminaMultiplier);
-                }
-            }
-            else if (player.isUsingLeftHand)
-            {
-                if (currentAttackType == E_AttackType.LightAttack)
-                {
-                    player.playerStatsManager.DeductStamina(player.playerInventoryManager.leftWeapon.baseStamina * player.playerInventoryManager.leftWeapon.lightAttackStaminaMultiplier);
-                }
-                else if (currentAttackType == E_AttackType.HeavyAttack)
-                {
-                    player.playerStatsManager.DeductStamina(player.playerInventoryManager.leftWeapon.baseStamina * player.playerInventoryManager.leftWeapon.heavyAttackStaminaMultiplier);
-                }
-            }
+            WeaponItem_SO weapon = player.isUsingRightHand
+                ? player.playerInventoryManager.rightWeapon
+                : player.playerInventoryManager.leftWeapon;
+            if (weapon == null) return;
+
+            float cost = this.SendQuery(new GetAttackStaminaCostQuery(
+                weapon.baseStamina, weapon.lightAttackStaminaMultiplier,
+                weapon.heavyAttackStaminaMultiplier, currentAttackType));
+            player.playerStatsManager.DeductStamina(cost);
         }
 
 

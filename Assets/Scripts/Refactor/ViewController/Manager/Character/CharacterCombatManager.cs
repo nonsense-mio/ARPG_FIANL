@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Framework;
 using UnityEngine;
 
 namespace ARPG
 {
-    public class CharacterCombatManager : MonoBehaviour
+    public class CharacterCombatManager : ARPGController
     {
         CharacterManager character;
         [Header("Combat Transform")]
@@ -197,7 +198,9 @@ namespace ARPG
 
                     character.characterAnimatorManager.PlayTargetAnimation("Back Stab", true);
 
-                    float criticalDamage = character.characterInventoryManager.rightWeapon.criticalDamageMultiplier * (character.characterInventoryManager.rightWeapon.physicalDamage + character.characterInventoryManager.rightWeapon.fireDamage);
+                    var weapon = character.characterInventoryManager.rightWeapon;
+                    int criticalDamage = this.SendQuery(new GetCriticalDamageQuery(
+                        weapon.criticalDamageMultiplier, weapon.physicalDamage, weapon.fireDamage));
                     enemyCharacter.characterCombatManager.pendingCriticalDamage = criticalDamage;
                     enemyCharacter.characterCombatManager.GetBackStabbed(character);
                 }
@@ -218,7 +221,9 @@ namespace ARPG
 
                     character.characterAnimatorManager.PlayTargetAnimation("Riposte", true);
 
-                    float criticalDamage = character.characterInventoryManager.rightWeapon.criticalDamageMultiplier * (character.characterInventoryManager.rightWeapon.physicalDamage + character.characterInventoryManager.rightWeapon.fireDamage);
+                    var weapon = character.characterInventoryManager.rightWeapon;
+                    int criticalDamage = this.SendQuery(new GetCriticalDamageQuery(
+                        weapon.criticalDamageMultiplier, weapon.physicalDamage, weapon.fireDamage));
                     enemyCharacter.characterCombatManager.pendingCriticalDamage = criticalDamage;
                     enemyCharacter.characterCombatManager.GetRiposted(character);
                 }

@@ -55,24 +55,16 @@ namespace ARPG
 
         public override void Interact(PlayerManager playerManager)
         {
-            var playerModel = this.GetModel<IPlayerModel>();
-
             if (!hasBeenActived)
             {
-                // 首次点燃篝火
+                // 首次点燃篝火 (视觉效果 + SceneStateModel更新)
                 ActivateBonfire(playerManager);
             }
 
-            // 设置为当前复活点
-            SetAsRespawnPoint(playerModel);
-
             base.Interact(playerManager);
 
-            // 回复玩家状态
-            playerManager.playerStatsManager.FullPlayerStats();
-
-            // 保存游戏
-            this.SendCommand(new SaveGameCommand());
+            // 设置复活点 + 回复状态 + 保存
+            this.SendCommand(new RestAtBonfireCommand(bonfireID, GetTeleportPosition()));
         }
 
         private void ActivateBonfire(PlayerManager playerManager)
@@ -93,19 +85,6 @@ namespace ARPG
             // 更新 SceneStateModel 篝火状态
             var sceneStateModel = this.GetModel<ISceneStateModel>();
             sceneStateModel.SetBonfireActivated(bonfireID, true);
-        }
-
-        private void SetAsRespawnPoint(IPlayerModel playerModel)
-        {
-            // 设置当前篝火为复活点
-            playerModel.LastRestedBonfireID.Value = bonfireID;
-
-            // 保存传送点坐标
-            Vector3 respawnPos = bonfireTeleportPoint != null ? bonfireTeleportPoint.position : transform.position;
-
-            playerModel.RespawnX.Value = respawnPos.x;
-            playerModel.RespawnY.Value = respawnPos.y;
-            playerModel.RespawnZ.Value = respawnPos.z;
         }
 
         /// <summary>
