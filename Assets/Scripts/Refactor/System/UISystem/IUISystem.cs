@@ -25,7 +25,7 @@ namespace ARPG
         /// <summary>
         /// 显示面板
         /// </summary>
-        void ShowPanel<T>(E_UILayer layer = E_UILayer.Middle, UnityAction<T> callBack = null, bool isSync = false) where T : BasePanel;
+        void ShowPanel<T>(E_UILayer layer = E_UILayer.Middle, UnityAction<T> callBack = null) where T : BasePanel;
 
         /// <summary>
         /// 隐藏面板

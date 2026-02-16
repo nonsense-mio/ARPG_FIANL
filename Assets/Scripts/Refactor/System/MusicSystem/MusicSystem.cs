@@ -20,7 +20,7 @@ namespace ARPG
         private bool isClearing;
 
         private IPoolSystem poolSystem;
-        private IAssetSystem assetSystem;
+        private IAssetLoader assetLoader;
 
         private const string SoundObjPoolPath = "Sound/soundObj";
         private const string MusicBundleName = "music";
@@ -29,7 +29,7 @@ namespace ARPG
         protected override void OnInit()
         {
             poolSystem = this.GetSystem<IPoolSystem>();
-            assetSystem = this.GetUtility<IAssetSystem>();
+            assetLoader = this.GetUtility<IAssetLoader>();
 
             // 创建 BGM AudioSource (DontDestroyOnLoad)
             var bgmObj = new GameObject("[MusicSystem] BGM");
@@ -82,7 +82,7 @@ namespace ARPG
         #region BGM
         public void PlayBGM(string name)
         {
-            assetSystem.LoadAssetAsync<AudioClip>(MusicBundleName, name, (clip) =>
+            assetLoader.LoadAsync<AudioClip>($"{MusicBundleName}/{name}", (clip) =>
             {
                 bgmSource.clip = clip;
                 bgmSource.volume = bgmVolume;
@@ -122,7 +122,7 @@ namespace ARPG
             if (!soundEnabled)
                 return;
 
-            assetSystem.LoadAssetAsync<AudioClip>(SoundBundleName, name, (clip) =>
+            assetLoader.LoadAsync<AudioClip>($"{SoundBundleName}/{name}", (clip) =>
             {
                 AudioSource source = poolSystem.Spawn(SoundObjPoolPath).GetComponent<AudioSource>();
                 source.Stop();
@@ -136,7 +136,7 @@ namespace ARPG
                     activeSounds.Add(source);
 
                 callBack?.Invoke(source);
-            }, isSync);
+            });
         }
 
         public void StopSound(AudioSource source)

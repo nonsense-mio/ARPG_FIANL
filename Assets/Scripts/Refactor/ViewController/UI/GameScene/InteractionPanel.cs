@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using ARPG;
 using Framework;
-using UnityEngine;
 using UnityEngine.UI;
 
 namespace ARPG

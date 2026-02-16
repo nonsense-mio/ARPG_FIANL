@@ -16,7 +16,7 @@ public class ItemDataBase : ScriptableObject
         {
             if (_instance == null)
             {
-                _instance = GameArchitecture.Interface.GetUtility<IResourceSystem>().Load<ItemDataBase>("Data/ItemDataBase");
+                _instance = GameArchitecture.Interface.GetUtility<IResourceLoader>().Load<ItemDataBase>("Data/ItemDataBase");
                 if (_instance == null)
                 {
                     Debug.LogError("ItemDataBase not found in Resources/Data/ItemDataBase!");

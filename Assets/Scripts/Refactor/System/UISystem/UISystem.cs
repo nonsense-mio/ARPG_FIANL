@@ -42,19 +42,19 @@ namespace ARPG
 
         private Dictionary<string, BasePanelInfo> panelDic = new Dictionary<string, BasePanelInfo>();
 
-        private IAssetSystem assetSystem;
+        private IAssetLoader assetLoader;
 
         protected override void OnInit()
         {
-            var resourceSystem = this.GetUtility<IResourceSystem>();
-            assetSystem = this.GetUtility<IAssetSystem>();
+            var resourceLoader = this.GetUtility<IResourceLoader>();
+            assetLoader = this.GetUtility<IAssetLoader>();
 
             //动态创建UICamera
-            uiCamera = GameObject.Instantiate(resourceSystem.Load<GameObject>("UI/UICamera")).GetComponent<Camera>();
+            uiCamera = GameObject.Instantiate(resourceLoader.Load<GameObject>("UI/UICamera")).GetComponent<Camera>();
             GameObject.DontDestroyOnLoad(uiCamera.gameObject);
 
             //动态创建Canvas
-            uiCanvas = GameObject.Instantiate(resourceSystem.Load<GameObject>("UI/Canvas")).GetComponent<Canvas>();
+            uiCanvas = GameObject.Instantiate(resourceLoader.Load<GameObject>("UI/Canvas")).GetComponent<Canvas>();
             uiCanvas.worldCamera = uiCamera;
             GameObject.DontDestroyOnLoad(uiCanvas.gameObject);
 
@@ -65,7 +65,7 @@ namespace ARPG
             systemLayer = uiCanvas.transform.Find("System");
 
             //动态创建EventSystem
-            uiEventSystem = GameObject.Instantiate(resourceSystem.Load<GameObject>("UI/EventSystem")).GetComponent<EventSystem>();
+            uiEventSystem = GameObject.Instantiate(resourceLoader.Load<GameObject>("UI/EventSystem")).GetComponent<EventSystem>();
             GameObject.DontDestroyOnLoad(uiEventSystem.gameObject);
         }
 
@@ -86,7 +86,7 @@ namespace ARPG
             }
         }
 
-        public void ShowPanel<T>(E_UILayer layer = E_UILayer.Middle, UnityAction<T> callBack = null, bool isSync = false) where T : BasePanel
+        public void ShowPanel<T>(E_UILayer layer = E_UILayer.Middle, UnityAction<T> callBack = null) where T : BasePanel
         {
             string panelName = typeof(T).Name;
             if (panelDic.ContainsKey(panelName))
@@ -112,7 +112,7 @@ namespace ARPG
             //不存在面板 先将信息存入字典
             panelDic.Add(panelName, new PanelInfo<T>(callBack));
             //加载面板
-            assetSystem.LoadAssetAsync<GameObject>("ui", panelName, (res) =>
+            assetLoader.LoadAsync<GameObject>($"ui/{panelName}", (res) =>
             {
                 PanelInfo<T> panelInfo = panelDic[panelName] as PanelInfo<T>;
                 //异步加载结束前就想要隐藏
@@ -134,7 +134,7 @@ namespace ARPG
                 panel.ShowMe();
                 panelInfo.panel = panel;
 
-            }, isSync);
+            });
         }
 
         public void HidePanel<T>(bool isDestroy = false) where T : BasePanel

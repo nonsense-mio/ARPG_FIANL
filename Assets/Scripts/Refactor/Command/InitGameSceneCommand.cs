@@ -9,35 +9,27 @@ namespace ARPG
     {
         protected override void OnExecute()
         {
-            var assetSystem = this.GetUtility<IAssetSystem>();
+            var assetLoader = this.GetUtility<IAssetLoader>();
             var musicSystem = this.GetSystem<IMusicSystem>();
             var uiSystem = this.GetSystem<IUISystem>();
             var saveSystem = this.GetSystem<ISaveSystem>();
 
-            LoadNPC(assetSystem);
+            LoadNPC(assetLoader);
 
             musicSystem.PlayBGM("GameScene1");
 
-            GameObject cameraObj = null;
-            assetSystem.LoadAssetAsync<GameObject>("character", "PlayerCamera", (obj) =>
-            {
-                cameraObj = GameObject.Instantiate(obj);
-            }, true);
+            GameObject cameraObj = GameObject.Instantiate(assetLoader.LoadSync<GameObject>("character/PlayerCamera"));
             CameraMgr cameraMgr = cameraObj.GetComponent<CameraMgr>();
 
-            PlayerManager player = null;
-            assetSystem.LoadAssetAsync<GameObject>("character", "Player", (obj) =>
-            {
-                GameObject playerObj = GameObject.Instantiate(obj);
-                player = playerObj.GetComponent<PlayerManager>();
-                player.playerSaveManager.SyncFromModel();
+            GameObject playerObj = GameObject.Instantiate(assetLoader.LoadSync<GameObject>("character/Player"));
+            PlayerManager player = playerObj.GetComponent<PlayerManager>();
+            player.playerSaveManager.SyncFromModel();
 
-                var allTasks = CollectAllTasksFromScene();
-                var taskSystem = this.GetSystem<ITaskSystem>();
-                taskSystem.RebuildFromModel(allTasks);
+            var allTasks = CollectAllTasksFromScene();
+            var taskSystem = this.GetSystem<ITaskSystem>();
+            taskSystem.RebuildFromModel(allTasks);
 
-                this.SendEvent(new GameDataLoadedEvent());
-            }, true);
+            this.SendEvent(new GameDataLoadedEvent());
 
             cameraMgr.targetTransform = player.transform;
             cameraMgr.targetTransformWhileAiming = player.targetTransformWhileAiming;
@@ -50,22 +42,15 @@ namespace ARPG
             saveSystem.StartPlayTimer();
         }
 
-        private static void LoadNPC(IAssetSystem assetSystem)
+        private static void LoadNPC(IAssetLoader assetLoader)
         {
-            assetSystem.LoadAssetAsync<GameObject>("character", "CiriPos", (obj) =>
-            {
-                assetSystem.LoadAssetAsync<GameObject>("character", "Ciri", (prefab) =>
-                {
-                    GameObject.Instantiate(prefab, obj.transform.position, obj.transform.rotation);
-                }, true);
-            }, true);
-            assetSystem.LoadAssetAsync<GameObject>("character", "GeraltPos", (obj) =>
-            {
-                assetSystem.LoadAssetAsync<GameObject>("character", "Geralt", (prefab) =>
-                {
-                    GameObject.Instantiate(prefab, obj.transform.position, obj.transform.rotation);
-                }, true);
-            }, true);
+            var ciriPos = assetLoader.LoadSync<GameObject>("character/CiriPos");
+            var ciri = assetLoader.LoadSync<GameObject>("character/Ciri");
+            GameObject.Instantiate(ciri, ciriPos.transform.position, ciriPos.transform.rotation);
+
+            var geraltPos = assetLoader.LoadSync<GameObject>("character/GeraltPos");
+            var geralt = assetLoader.LoadSync<GameObject>("character/Geralt");
+            GameObject.Instantiate(geralt, geraltPos.transform.position, geraltPos.transform.rotation);
         }
 
         private static List<TaskData_SO> CollectAllTasksFromScene()
