@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace ARPG
@@ -35,7 +34,7 @@ namespace ARPG
         public void Init(PlayerManager playerManager)
         {
             player = playerManager;
-            helmetModelChanger = GetComponentInChildren<HelmetModelChanger>();    
+            helmetModelChanger = GetComponentInChildren<HelmetModelChanger>();
             torsoModelChanger = GetComponentInChildren<TorsoModelChanger>();
             hipModelChanger = GetComponentInChildren<HipModelChanger>();
             leftLegModelChanger = GetComponentInChildren<LeftLegModelChanger>();
@@ -47,92 +46,87 @@ namespace ARPG
             leftHandModelChanger = GetComponentInChildren<LeftHandModelChanger>();
             rightHandModelChanger = GetComponentInChildren<RightHandModelChanger>();
         }
+
         private void Start()
         {
-           EquipAllEquipmentModels();
+            EquipAllEquipmentModels();
         }
+
         /// <summary>
-        /// 在开始时装备所有装备模型
+        /// 卸载 changers → 根据装备是否存在加载对应模型 → 设置防御值
+        /// nakedToggle: 头盔专用，无装备时显示裸头模型
+        /// nakedModelNames 中的 null 项表示该 changer 无裸装模型
         /// </summary>
+        private void EquipSlot(
+            ModelChanger[] changers,
+            EqiupmentItem_SO equipment,
+            string[] equippedModelNames,
+            string[] nakedModelNames,
+            Action<float> setDefense,
+            GameObject nakedToggle = null)
+        {
+            foreach (var changer in changers)
+                changer.UnEqiupmentAllChildrenModels();
+
+            if (equipment != null)
+            {
+                if (nakedToggle != null) nakedToggle.SetActive(false);
+                for (int i = 0; i < changers.Length; i++)
+                    changers[i].EqiupmentModelByName(equippedModelNames[i]);
+                setDefense(equipment.physicalDefense);
+            }
+            else
+            {
+                if (nakedToggle != null) nakedToggle.SetActive(true);
+                for (int i = 0; i < changers.Length; i++)
+                    if (nakedModelNames[i] != null)
+                        changers[i].EqiupmentModelByName(nakedModelNames[i]);
+                setDefense(0);
+            }
+        }
+
         public void EquipAllEquipmentModels()
         {
-            //头盔装备
-            helmetModelChanger.UnEqiupmentAllChildrenModels();
-            if(player.playerInventoryManager.currentHelmet != null)
-            {
-                nakedHeadModel.SetActive(false);
-                helmetModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentHelmet.helmetModelName);
-                player.playerStatsManager.physicalDamageAbsorptionHead = player.playerInventoryManager.currentHelmet.physicalDefense;
-                Debug.Log("Head Absorption: " + player.playerStatsManager.physicalDamageAbsorptionHead + "%");
-            }
-            else
-            {
-                nakedHeadModel.SetActive(true);
-                player.playerStatsManager.physicalDamageAbsorptionHead = 0;
-            }
-            //躯干装备
-            torsoModelChanger.UnEqiupmentAllChildrenModels();
-            upperLeftArmModelChanger.UnEqiupmentAllChildrenModels();
-            upperRightArmModelChanger.UnEqiupmentAllChildrenModels();
-            if(player.playerInventoryManager.currentBody != null)
-            {
-                torsoModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentBody.torsoModelName);
-                upperLeftArmModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentBody.upperLeftArmModelName);
-                upperRightArmModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentBody.upperRightArmModelName);
-                player.playerStatsManager.physicalDamageAbsorptionBody = player.playerInventoryManager.currentBody.physicalDefense;
-                Debug.Log("Body Absorption: " + player.playerStatsManager.physicalDamageAbsorptionBody + "%");
-            }
-            else
-            {
-                torsoModelChanger.EqiupmentModelByName(nakedTorsoModel);
-                upperLeftArmModelChanger.EqiupmentModelByName(nakedUpperLeftArmModel);
-                upperRightArmModelChanger.EqiupmentModelByName(nakedUpperRightArmModel);
-                player.playerStatsManager.physicalDamageAbsorptionBody = 0;
-            }
-            //手部装备
-            lowerLeftArmModelChanger.UnEqiupmentAllChildrenModels();
-            lowerRightArmModelChanger.UnEqiupmentAllChildrenModels();
-            leftHandModelChanger.UnEqiupmentAllChildrenModels();
-            rightHandModelChanger.UnEqiupmentAllChildrenModels();
-            if(player.playerInventoryManager.currentHands != null)
-            {
-                lowerLeftArmModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentHands.lowerLeftArmModelName);
-                lowerRightArmModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentHands.lowerRightArmModelName);
-                leftHandModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentHands.leftHandModelName);
-                rightHandModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentHands.rightHandModelName);
-                player.playerStatsManager.physicalDamageAbsorptionHands = player.playerInventoryManager.currentHands.physicalDefense;
-                Debug.Log("Hand Absorption: " + player.playerStatsManager.physicalDamageAbsorptionHands + "%");
-            }
-            else
-            {
-                lowerLeftArmModelChanger.EqiupmentModelByName(nakedLowerLeftArmModel);
-                lowerRightArmModelChanger.EqiupmentModelByName(nakedLowerRightArmModel);
-                leftHandModelChanger.EqiupmentModelByName(nakedLeftHandModel);
-                rightHandModelChanger.EqiupmentModelByName(nakedRightHandModel);
-                player.playerStatsManager.physicalDamageAbsorptionHands = 0;
-            }
-            //腿部装备
-            hipModelChanger.UnEqiupmentAllChildrenModels();
-            leftLegModelChanger.UnEqiupmentAllChildrenModels();
-            rightLegModelChanger.UnEqiupmentAllChildrenModels();
-            if(player.playerInventoryManager.currentLegs != null)
-            {
-                hipModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentLegs.hipModelName);
-                leftLegModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentLegs.leftLegModelName);
-                rightLegModelChanger.EqiupmentModelByName(player.playerInventoryManager.currentLegs.rightLegModelName);
-                player.playerStatsManager.physicalDamageAbsorptionLegs = player.playerInventoryManager.currentLegs.physicalDefense;
-                Debug.Log("Leg Absorption: " + player.playerStatsManager.physicalDamageAbsorptionLegs + "%");
-            }
-            else
-            {
-                hipModelChanger.EqiupmentModelByName(nakedHipModel);
-                leftLegModelChanger.EqiupmentModelByName(nakedLeftLegModel);
-                rightLegModelChanger.EqiupmentModelByName(nakedRightLegModel);
-                player.playerStatsManager.physicalDamageAbsorptionLegs = 0;
-            }
+            var inv = player.playerInventoryManager;
+            var stats = player.playerStatsManager;
 
+            // 头盔
+            var helmet = inv.currentHelmet;
+            EquipSlot(
+                new ModelChanger[] { helmetModelChanger },
+                helmet,
+                helmet != null ? new[] { helmet.helmetModelName } : null,
+                new string[] { null },
+                val => stats.physicalDamageAbsorptionHead = val,
+                nakedHeadModel);
+
+            // 躯干
+            var body = inv.currentBody;
+            EquipSlot(
+                new ModelChanger[] { torsoModelChanger, upperLeftArmModelChanger, upperRightArmModelChanger },
+                body,
+                body != null ? new[] { body.torsoModelName, body.upperLeftArmModelName, body.upperRightArmModelName } : null,
+                new[] { nakedTorsoModel, nakedUpperLeftArmModel, nakedUpperRightArmModel },
+                val => stats.physicalDamageAbsorptionBody = val);
+
+            // 手部
+            var hands = inv.currentHands;
+            EquipSlot(
+                new ModelChanger[] { lowerLeftArmModelChanger, lowerRightArmModelChanger, leftHandModelChanger, rightHandModelChanger },
+                hands,
+                hands != null ? new[] { hands.lowerLeftArmModelName, hands.lowerRightArmModelName, hands.leftHandModelName, hands.rightHandModelName } : null,
+                new[] { nakedLowerLeftArmModel, nakedLowerRightArmModel, nakedLeftHandModel, nakedRightHandModel },
+                val => stats.physicalDamageAbsorptionHands = val);
+
+            // 腿部
+            var legs = inv.currentLegs;
+            EquipSlot(
+                new ModelChanger[] { hipModelChanger, leftLegModelChanger, rightLegModelChanger },
+                legs,
+                legs != null ? new[] { legs.hipModelName, legs.leftLegModelName, legs.rightLegModelName } : null,
+                new[] { nakedHipModel, nakedLeftLegModel, nakedRightLegModel },
+                val => stats.physicalDamageAbsorptionLegs = val);
         }
-
     }
 }
 

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using ARPG;
 using UnityEngine;
 
@@ -17,7 +16,6 @@ public class ItemDataBase : ScriptableObject
         {
             if (_instance == null)
             {
-                // 从Resources/Data目录加载
                 _instance = GameArchitecture.Interface.GetUtility<IResourceSystem>().Load<ItemDataBase>("Data/ItemDataBase");
                 if (_instance == null)
                 {
@@ -45,64 +43,56 @@ public class ItemDataBase : ScriptableObject
 
     #endregion
 
+    #region Dictionary 缓存
+
+    private Dictionary<int, Item_SO> _itemCache;
+
+    private void EnsureCacheBuilt()
+    {
+        if (_itemCache != null) return;
+        _itemCache = new Dictionary<int, Item_SO>();
+        CacheList(weaponItems);
+        CacheList(helmetItems);
+        CacheList(bodyItems);
+        CacheList(legItems);
+        CacheList(handItems);
+        CacheList(consumableItems);
+        CacheList(spellItems);
+    }
+
+    private void CacheList<T>(List<T> list) where T : Item_SO
+    {
+        foreach (var item in list)
+            if (item != null) _itemCache[item.itemID] = item;
+    }
+
+    #endregion
+
     #region 通过ID获取物品的方法
 
-    public WeaponItem_SO GetWeaponByID(int id)
+    /// <summary>
+    /// 泛型查找 — O(1) Dictionary 查询，按类型过滤
+    /// </summary>
+    public T GetItemByID<T>(int id) where T : Item_SO
     {
         if (id < 0) return null;
-        return weaponItems.FirstOrDefault(item => item != null && item.itemID == id);
-    }
-
-    public HelmetEquipment GetHelmetByID(int id)
-    {
-        if (id < 0) return null;
-        return helmetItems.FirstOrDefault(item => item != null && item.itemID == id);
-    }
-
-    public BodyEquipment GetBodyByID(int id)
-    {
-        if (id < 0) return null;
-        return bodyItems.FirstOrDefault(item => item != null && item.itemID == id);
-    }
-
-    public LegEquipment GetLegByID(int id)
-    {
-        if (id < 0) return null;
-        return legItems.FirstOrDefault(item => item != null && item.itemID == id);
-    }
-
-    public HandEquipment GetHandByID(int id)
-    {
-        if (id < 0) return null;
-        return handItems.FirstOrDefault(item => item != null && item.itemID == id);
-    }
-
-    public ConsumableItem_SO GetConsumableByID(int id)
-    {
-        if (id < 0) return null;
-        return consumableItems.FirstOrDefault(item => item != null && item.itemID == id);
-    }
-
-    public SpellItem GetSpellByID(int id)
-    {
-        if (id < 0) return null;
-        return spellItems.FirstOrDefault(item => item != null && item.itemID == id);
+        EnsureCacheBuilt();
+        return _itemCache.TryGetValue(id, out var item) ? item as T : null;
     }
 
     /// <summary>
-    /// 根据 ID 范围自动查找对应类型的 Item_SO
+    /// 非泛型查找 — 根据 ID 直接返回 Item_SO
     /// </summary>
-    public Item_SO GetItemByID(int id)
-    {
-        if (id >= 1000 && id < 2000) return GetWeaponByID(id);
-        if (id >= 2000 && id < 3000) return GetHelmetByID(id);
-        if (id >= 3000 && id < 4000) return GetBodyByID(id);
-        if (id >= 4000 && id < 5000) return GetLegByID(id);
-        if (id >= 5000 && id < 6000) return GetHandByID(id);
-        if (id >= 6000 && id < 7000) return GetConsumableByID(id);
-        if (id >= 7000 && id < 8000) return GetSpellByID(id);
-        return null;
-    }
+    public Item_SO GetItemByID(int id) => GetItemByID<Item_SO>(id);
+
+    // 便捷类型方法 (向后兼容)
+    public WeaponItem_SO GetWeaponByID(int id) => GetItemByID<WeaponItem_SO>(id);
+    public HelmetEquipment GetHelmetByID(int id) => GetItemByID<HelmetEquipment>(id);
+    public BodyEquipment GetBodyByID(int id) => GetItemByID<BodyEquipment>(id);
+    public LegEquipment GetLegByID(int id) => GetItemByID<LegEquipment>(id);
+    public HandEquipment GetHandByID(int id) => GetItemByID<HandEquipment>(id);
+    public ConsumableItem_SO GetConsumableByID(int id) => GetItemByID<ConsumableItem_SO>(id);
+    public SpellItem GetSpellByID(int id) => GetItemByID<SpellItem>(id);
 
     #endregion
 }
