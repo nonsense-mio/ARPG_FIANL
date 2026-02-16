@@ -16,7 +16,7 @@ namespace ARPG
         protected override void OnInit()
         {
             // Model 初始化时不需要特别操作
-            // 数据通过 ImportFromTaskData 加载
+            // 数据通过 LoadData 加载
         }
 
         #region 任务操作
@@ -93,7 +93,7 @@ namespace ARPG
         #endregion
 
         #region 数据导入导出
-        public void ImportFromTaskData(TaskData data)
+        public void LoadData(TaskData data)
         {
             if (data == null)
             {
@@ -131,7 +131,7 @@ namespace ARPG
             }
         }
 
-        public void ExportToTaskData(TaskData data)
+        public void SaveData(TaskData data)
         {
             if (data == null) return;
 

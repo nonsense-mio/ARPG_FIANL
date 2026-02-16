@@ -1,23 +1,23 @@
 using System.Collections.Generic;
-using ARPG;
 using Framework;
 using UnityEngine;
 
 namespace ARPG
 {
+    /// <summary>
+    /// 背包物品分类
+    /// </summary>
+    public enum InventoryCategory
+    {
+        All, Weapon, Helmet, Body, Leg, Hand, Consumable, Spell
+    }
+
     public class BagPanel : BasePanel
     {
         public RectTransform content;
         CustomSV<Item_SO, BagItem> sv;
 
-        private bool pendingInitAllInventory;
-        private bool pendingInitWeaponInventory;
-        private bool pendingInitHelmetInventory;
-        private bool pendingInitBodyInventory;
-        private bool pendingInitLegInventory;
-        private bool pendingInitHandInventory;
-        private bool pendingInitConsumableInventory;
-        private bool pendingInitSpellInventory;
+        private InventoryCategory? pendingCategory;
 
         //用于存储外部传入的"选择物品后要做什么"的回调
         private System.Action<Item_SO> onEquipCallback;
@@ -65,7 +65,7 @@ namespace ARPG
             //关闭面板时，必须清空回调，防止状态污染
             onEquipCallback = null;
             // 避免下次 ShowMe 意外触发旧请求
-            pendingInitAllInventory = false;
+            pendingCategory = null;
         }
 
         #region 初始化背包相关
@@ -85,34 +85,24 @@ namespace ARPG
             return items;
         }
 
-        private void InitWeaponInventory()
+        /// <summary>
+        /// 根据分类获取对应的 ID 列表
+        /// </summary>
+        private BindableList<int> GetIDsForCategory(InventoryCategory category)
         {
-            sv.InitInfos(ConvertIDsToItems(inventoryModel.WeaponIDs));
+            switch (category)
+            {
+                case InventoryCategory.Weapon:     return inventoryModel.WeaponIDs;
+                case InventoryCategory.Helmet:     return inventoryModel.HelmetIDs;
+                case InventoryCategory.Body:       return inventoryModel.BodyIDs;
+                case InventoryCategory.Leg:        return inventoryModel.LegIDs;
+                case InventoryCategory.Hand:       return inventoryModel.HandIDs;
+                case InventoryCategory.Consumable: return inventoryModel.ConsumableIDs;
+                case InventoryCategory.Spell:      return inventoryModel.SpellIDs;
+                default:                           return null;
+            }
         }
-        private void InitHelmetInventory()
-        {
-            sv.InitInfos(ConvertIDsToItems(inventoryModel.HelmetIDs));
-        }
-        private void InitBodyInventory()
-        {
-            sv.InitInfos(ConvertIDsToItems(inventoryModel.BodyIDs));
-        }
-        private void InitLegInventory()
-        {
-            sv.InitInfos(ConvertIDsToItems(inventoryModel.LegIDs));
-        }
-        private void InitHandInventory()
-        {
-            sv.InitInfos(ConvertIDsToItems(inventoryModel.HandIDs));
-        }
-        private void InitConsumableInventory()
-        {
-            sv.InitInfos(ConvertIDsToItems(inventoryModel.ConsumableIDs));
-        }
-        private void InitSpellInventory()
-        {
-            sv.InitInfos(ConvertIDsToItems(inventoryModel.SpellIDs));
-        }
+
         private void InitAllInventory()
         {
             var all = new List<Item_SO>();
@@ -127,82 +117,31 @@ namespace ARPG
         }
 
         /// <summary>
-        /// 外部调用：请求在面板完成 ShowMe 后初始化背包显示
+        /// 外部调用：请求在面板完成 ShowMe 后初始化指定分类的背包显示
         /// </summary>
-        public void RequestInitAllInventory()
+        public void RequestInitInventory(InventoryCategory category)
         {
-            pendingInitAllInventory = true;
+            pendingCategory = category;
         }
-        public void RequestInitWeaponInventory()
-        {
-            pendingInitWeaponInventory = true;
-        }
-        public void RequestInitHelmetInventory()
-        {
-            pendingInitHelmetInventory = true;
-        }
-        public void RequestInitBodyInventory()
-        {
-            pendingInitBodyInventory = true;
-        }
-        public void RequestInitLegInventory()
-        {
-            pendingInitLegInventory = true;
-        }
-        public void RequestInitHandInventory()
-        {
-            pendingInitHandInventory = true;
-        }
-        public void RequestInitConsumableInventory()
-        {
-            pendingInitConsumableInventory = true;
-        }
-        public void RequestInitSpellInventory()
-        {
-            pendingInitSpellInventory = true;
-        }
-        // 处理延迟初始化请求
+
+        /// <summary>
+        /// 向后兼容：请求初始化全部背包
+        /// </summary>
+        public void RequestInitAllInventory() => RequestInitInventory(InventoryCategory.All);
+
         private void HandleRequestInits()
         {
-            if (pendingInitAllInventory)
+            if (pendingCategory == null) return;
+            var cat = pendingCategory.Value;
+            pendingCategory = null;
+
+            if (cat == InventoryCategory.All)
             {
-                pendingInitAllInventory = false;
                 InitAllInventory();
             }
-            if (pendingInitWeaponInventory)
+            else
             {
-                pendingInitWeaponInventory = false;
-                InitWeaponInventory();
-            }
-            if (pendingInitHelmetInventory)
-            {
-                pendingInitHelmetInventory = false;
-                InitHelmetInventory();
-            }
-            if (pendingInitBodyInventory)
-            {
-                pendingInitBodyInventory = false;
-                InitBodyInventory();
-            }
-            if (pendingInitLegInventory)
-            {
-                pendingInitLegInventory = false;
-                InitLegInventory();
-            }
-            if (pendingInitHandInventory)
-            {
-                pendingInitHandInventory = false;
-                InitHandInventory();
-            }
-            if (pendingInitConsumableInventory)
-            {
-                pendingInitConsumableInventory = false;
-                InitConsumableInventory();
-            }
-            if (pendingInitSpellInventory)
-            {
-                pendingInitSpellInventory = false;
-                InitSpellInventory();
+                sv.InitInfos(ConvertIDsToItems(GetIDsForCategory(cat)));
             }
         }
 

@@ -46,14 +46,14 @@ namespace ARPG
 
         #region 数据导入导出 (与存档系统集成)
         /// <summary>
-        /// 从 SceneStateData 导入数据 (存档加载时调用)
+        /// 从 SceneStateData 加载数据 (存档加载时调用)
         /// </summary>
-        void ImportFromSceneStateData(SceneStateData data);
+        void LoadData(SceneStateData data);
 
         /// <summary>
-        /// 导出到 SceneStateData (存档保存时调用)
+        /// 保存数据到 SceneStateData (存档保存时调用)
         /// </summary>
-        void ExportToSceneStateData(SceneStateData data);
+        void SaveData(SceneStateData data);
         #endregion
     }
 }

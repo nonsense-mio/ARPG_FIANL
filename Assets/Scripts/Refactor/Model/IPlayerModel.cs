@@ -50,14 +50,14 @@ namespace ARPG
 
         #region 数据导入导出 (与存档系统集成)
         /// <summary>
-        /// 从 PlayerData 导入数据 (存档加载时调用)
+        /// 从 PlayerData 加载数据 (存档加载时调用)
         /// </summary>
-        void ImportFromPlayerData(PlayerData data);
+        void LoadData(PlayerData data);
 
         /// <summary>
-        /// 导出到 PlayerData (存档保存时调用)
+        /// 保存数据到 PlayerData (存档保存时调用)
         /// </summary>
-        void ExportToPlayerData(PlayerData data);
+        void SaveData(PlayerData data);
         #endregion
     }
 }

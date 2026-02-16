@@ -89,14 +89,14 @@ namespace ARPG
 
         #region 存档集成
         /// <summary>
-        /// 从 PlayerInventoryData 导入数据 (存档加载时调用)
+        /// 从 PlayerInventoryData 加载数据 (存档加载时调用)
         /// </summary>
-        void ImportFromInventoryData(PlayerInventoryData data);
+        void LoadData(PlayerInventoryData data);
 
         /// <summary>
-        /// 导出到 PlayerInventoryData (存档保存时调用)
+        /// 保存数据到 PlayerInventoryData (存档保存时调用)
         /// </summary>
-        void ExportToInventoryData(PlayerInventoryData data);
+        void SaveData(PlayerInventoryData data);
         #endregion
     }
 }

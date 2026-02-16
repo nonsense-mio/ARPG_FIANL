@@ -142,7 +142,7 @@ namespace ARPG
         }
 
         #region 存档集成
-        public void ImportFromInventoryData(PlayerInventoryData data)
+        public void LoadData(PlayerInventoryData data)
         {
             if (data == null) return;
 
@@ -174,7 +174,7 @@ namespace ARPG
             CurrentSpellIndex.Value = data.currentSpellIndex;
         }
 
-        public void ExportToInventoryData(PlayerInventoryData data)
+        public void SaveData(PlayerInventoryData data)
         {
             if (data == null) return;
 

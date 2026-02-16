@@ -16,7 +16,7 @@ namespace ARPG
         public WeaponItem_SO rightWeapon;
         //玩家当前左手持有的武器
         public WeaponItem_SO leftWeapon;
-        
+
         public RangedAmmoItem_SO currentAmmo;
         [Header("当前装备")]
         public HelmetEquipment currentHelmet;
@@ -31,14 +31,17 @@ namespace ARPG
         public ConsumableItem_SO[] consumableSlots = new ConsumableItem_SO[1];
         public SpellItem[] spellSlots = new SpellItem[1];
         //左右手当前武器索引
-        public int currentRightWeaponIndex = -1;
-        public int currentLeftWeaponIndex = -1;
-        public int currentConsumableIndex = -1;
-        public int currentSpellIndex = -1;
+        public int currentRightWeaponIndex = 0;
+        public int currentLeftWeaponIndex = 0;
+        public int currentConsumableIndex = 0;
+        public int currentSpellIndex = 0;
         public virtual void Init(CharacterManager characterMgr)
         {
             character = characterMgr;
-            
+            currentRightWeaponIndex = 0;
+            currentLeftWeaponIndex = 0;
+            currentConsumableIndex = 0;
+            currentSpellIndex = 0;
         }
         private void Start()
         {

@@ -43,11 +43,11 @@ namespace ARPG
             SlotInfo.lastUsedSlot = slotIndex;
             CurrentPlayTime = 0f;
 
-            // 创建默认数据 → 直接 Import 到 Model 层
-            this.GetModel<IPlayerModel>().ImportFromPlayerData(new PlayerData { playerName = playerName });
-            this.GetModel<IInventoryModel>().ImportFromInventoryData(new PlayerInventoryData());
-            this.GetModel<ITaskModel>().ImportFromTaskData(new TaskData());
-            this.GetModel<ISceneStateModel>().ImportFromSceneStateData(new SceneStateData());
+            // 创建默认数据 → 直接加载到 Model 层
+            this.GetModel<IPlayerModel>().LoadData(new PlayerData { playerName = playerName });
+            this.GetModel<IInventoryModel>().LoadData(new PlayerInventoryData());
+            this.GetModel<ITaskModel>().LoadData(new TaskData());
+            this.GetModel<ISceneStateModel>().LoadData(new SceneStateData());
 
             SaveCurrentGame();
         }
@@ -66,15 +66,15 @@ namespace ARPG
             CurrentSlotIndex = slotIndex;
             SlotInfo.lastUsedSlot = slotIndex;
 
-            // 从文件加载 transient data → 直接 Import 到 Model 层
+            // 从文件加载 transient data → 直接加载到 Model 层
             string suffix = $"_{slotIndex}";
-            this.GetModel<IPlayerModel>().ImportFromPlayerData(
+            this.GetModel<IPlayerModel>().LoadData(
                 storage.LoadData<PlayerData>(PLAYER_DATA_FILE + suffix));
-            this.GetModel<IInventoryModel>().ImportFromInventoryData(
+            this.GetModel<IInventoryModel>().LoadData(
                 storage.LoadData<PlayerInventoryData>(INVENTORY_DATA_FILE + suffix));
-            this.GetModel<ITaskModel>().ImportFromTaskData(
+            this.GetModel<ITaskModel>().LoadData(
                 storage.LoadData<TaskData>(TASK_DATA_FILE + suffix));
-            this.GetModel<ISceneStateModel>().ImportFromSceneStateData(
+            this.GetModel<ISceneStateModel>().LoadData(
                 storage.LoadData<SceneStateData>(SCENE_STATE_FILE + suffix));
 
             // 恢复游戏时长
@@ -97,10 +97,10 @@ namespace ARPG
 
             // 导出所有 Model → transient data objects
             var playerData = new PlayerData();
-            this.GetModel<IPlayerModel>().ExportToPlayerData(playerData);
+            this.GetModel<IPlayerModel>().SaveData(playerData);
 
             var inventoryData = new PlayerInventoryData();
-            this.GetModel<IInventoryModel>().ExportToInventoryData(inventoryData);
+            this.GetModel<IInventoryModel>().SaveData(inventoryData);
 
             // 同步 TaskSystem 运行时状态到 TaskModel
             var taskSystem = this.GetSystem<ITaskSystem>();
@@ -113,10 +113,10 @@ namespace ARPG
 
             // 导出 TaskModel
             var taskData = new TaskData();
-            taskModel.ExportToTaskData(taskData);
+            taskModel.SaveData(taskData);
 
             var sceneStateData = new SceneStateData();
-            this.GetModel<ISceneStateModel>().ExportToSceneStateData(sceneStateData);
+            this.GetModel<ISceneStateModel>().SaveData(sceneStateData);
 
             // 更新槽位元数据（用于UI显示）
             SaveSlotData slot = SlotInfo.GetSlot(CurrentSlotIndex);

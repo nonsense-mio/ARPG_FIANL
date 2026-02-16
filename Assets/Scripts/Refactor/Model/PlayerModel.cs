@@ -49,11 +49,11 @@ namespace ARPG
         protected override void OnInit()
         {
             // Model 初始化时不需要特别操作
-            // 数据通过 ImportFromPlayerData 加载
+            // 数据通过 LoadData 加载
         }
 
         #region 数据导入导出
-        public void ImportFromPlayerData(PlayerData data)
+        public void LoadData(PlayerData data)
         {
             if (data == null) return;
 
@@ -84,7 +84,7 @@ namespace ARPG
             LastRestedBonfireID.Value = data.lastRestedBonfireID ?? "";
         }
 
-        public void ExportToPlayerData(PlayerData data)
+        public void SaveData(PlayerData data)
         {
             if (data == null) return;
 

@@ -17,6 +17,40 @@ namespace ARPG
         private IInventoryModel inventoryModel;
         private IPoolSystem poolSystem;
 
+        #region 槽位绑定描述
+
+        /// <summary>
+        /// 描述一组装备槽的绑定规则：索引范围、背包分类、类型校验
+        /// </summary>
+        private struct SlotBinding
+        {
+            public int startIndex, endIndex;
+            public InventoryCategory category;
+            public Func<Item_SO, bool> typeCheck;
+            public string warningMsg;
+        }
+
+        private static readonly SlotBinding[] slotBindings = new SlotBinding[]
+        {
+            new SlotBinding { startIndex = 0,  endIndex = 8,  category = InventoryCategory.Weapon,     typeCheck = i => i is WeaponItem_SO,    warningMsg = "选中的不是武器！" },
+            new SlotBinding { startIndex = 8,  endIndex = 9,  category = InventoryCategory.Helmet,     typeCheck = i => i is HelmetEquipment,   warningMsg = "选中的不是头盔！" },
+            new SlotBinding { startIndex = 9,  endIndex = 10, category = InventoryCategory.Body,       typeCheck = i => i is BodyEquipment,     warningMsg = "选中的不是盔甲！" },
+            new SlotBinding { startIndex = 10, endIndex = 11, category = InventoryCategory.Leg,        typeCheck = i => i is LegEquipment,      warningMsg = "选中的不是腿甲！" },
+            new SlotBinding { startIndex = 11, endIndex = 12, category = InventoryCategory.Hand,       typeCheck = i => i is HandEquipment,     warningMsg = "选中的不是手甲！" },
+            new SlotBinding { startIndex = 12, endIndex = 16, category = InventoryCategory.Consumable, typeCheck = i => i is ConsumableItem_SO, warningMsg = "选中的不是消耗品！" },
+            new SlotBinding { startIndex = 16, endIndex = 20, category = InventoryCategory.Spell,      typeCheck = i => i is SpellItem,         warningMsg = "选中的不是法术！" },
+        };
+
+        private static SlotBinding FindBinding(int index)
+        {
+            foreach (var b in slotBindings)
+                if (index >= b.startIndex && index < b.endIndex)
+                    return b;
+            return slotBindings[0];
+        }
+
+        #endregion
+
         protected override void Awake()
         {
             base.Awake();
@@ -35,38 +69,26 @@ namespace ARPG
             LoadItemImage();
         }
 
+        #region ShowMe / HideMe
+
+        private void SpawnSlots(Transform parent, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                GameObject obj = poolSystem.Spawn("UI/btnBagItem");
+                obj.transform.SetParent(parent, false);
+                obj.transform.localScale = Vector3.one;
+                obj.transform.localPosition = Vector3.zero;
+                obj.transform.localRotation = Quaternion.identity;
+                equipSlotList.Add(obj.GetComponent<BagItem>());
+            }
+        }
+
         public override void ShowMe()
         {
-            for (int i = 0; i < 8; i++)
-            {
-                GameObject obj = poolSystem.Spawn("UI/btnBagItem");
-                obj.transform.SetParent(weaponGroup.transform, false);
-                obj.transform.localScale = Vector3.one;
-                obj.transform.localPosition = Vector3.zero;
-                obj.transform.localRotation = Quaternion.identity;
-                BagItem bagItem = obj.GetComponent<BagItem>();
-                equipSlotList.Add(bagItem);
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                GameObject obj = poolSystem.Spawn("UI/btnBagItem");
-                obj.transform.SetParent(armorGroup.transform, false);
-                obj.transform.localScale = Vector3.one;
-                obj.transform.localPosition = Vector3.zero;
-                obj.transform.localRotation = Quaternion.identity;
-                BagItem bagItem = obj.GetComponent<BagItem>();
-                equipSlotList.Add(bagItem);
-            }
-            for (int i = 0; i < 8; i++)
-            {
-                GameObject obj = poolSystem.Spawn("UI/btnBagItem");
-                obj.transform.SetParent(scGroup.transform, false);
-                obj.transform.localScale = Vector3.one;
-                obj.transform.localPosition = Vector3.zero;
-                obj.transform.localRotation = Quaternion.identity;
-                BagItem bagItem = obj.GetComponent<BagItem>();
-                equipSlotList.Add(bagItem);
-            }
+            SpawnSlots(weaponGroup.transform, 8);  // 右手武器 0-3, 左手武器 4-7
+            SpawnSlots(armorGroup.transform, 4);    // 头/身/腿/手 8-11
+            SpawnSlots(scGroup.transform, 8);       // 消耗品 12-15, 法术 16-19
             equipSlotList[0].btnSlot.Select();
             LoadItemImage();
         }
@@ -81,6 +103,8 @@ namespace ARPG
             }
             equipSlotList.Clear();
         }
+
+        #endregion
 
         //打开背包并选择
         private void OpenBagAndSelect(Action<BagPanel> initBag)
@@ -115,147 +139,26 @@ namespace ARPG
                 }
             }
 
-            //为每个装备槽绑定点击事件
+            // 为每个装备槽绑定点击事件 (数据驱动)
             for (int i = 0; i < equipSlotList.Count; i++)
             {
                 int index = i;
-                #region 左右手武器装备槽
-                // 右手武器 0-3 / 左手武器 4-7
-                if (index < 8)
+                var binding = FindBinding(index);
+
+                equipSlotList[index].btnSlot.onClick.AddListener(() =>
                 {
-                    equipSlotList[index].btnSlot.onClick.AddListener(() =>
+                    OpenBagAndSelect(bagPanel =>
                     {
-                        OpenBagAndSelect((bagPanel) =>
+                        bagPanel.RequestInitInventory(binding.category);
+                        bagPanel.SetSelectCallback(selectedItem =>
                         {
-                            bagPanel.RequestInitWeaponInventory();
-                            bagPanel.SetSelectCallback((selectedItem) =>
-                            {
-                                if (selectedItem is WeaponItem_SO)
-                                    this.SendCommand(new ChangeEquipItemCommand(index, selectedItem));
-                                else
-                                    Debug.LogWarning("选中的不是武器！");
-                            });
+                            if (binding.typeCheck(selectedItem))
+                                this.SendCommand(new ChangeEquipItemCommand(index, selectedItem));
+                            else
+                                Debug.LogWarning(binding.warningMsg);
                         });
                     });
-                    continue;
-                }
-                #endregion
-                #region 防具装备槽
-                // 头/身/腿/手 8-11
-                if (index >= 8 && index < 12)
-                {
-                    if (index == 8) // helmet
-                    {
-                        equipSlotList[index].btnSlot.onClick.AddListener(() =>
-                        {
-                            OpenBagAndSelect((bagPanel) =>
-                            {
-                                bagPanel.RequestInitHelmetInventory();
-                                bagPanel.SetSelectCallback((selectedItem) =>
-                                {
-                                    if (selectedItem is HelmetEquipment)
-                                        this.SendCommand(new ChangeEquipItemCommand(8, selectedItem));
-                                    else
-                                        Debug.LogWarning("选中的不是头盔！");
-                                });
-                            });
-                        });
-                    }
-                    else if (index == 9) // body
-                    {
-                        equipSlotList[index].btnSlot.onClick.AddListener(() =>
-                        {
-                            OpenBagAndSelect((bagPanel) =>
-                            {
-                                bagPanel.RequestInitBodyInventory();
-                                bagPanel.SetSelectCallback((selectedItem) =>
-                                {
-                                    if (selectedItem is BodyEquipment)
-                                        this.SendCommand(new ChangeEquipItemCommand(9, selectedItem));
-                                    else
-                                        Debug.LogWarning("选中的不是盔甲！");
-                                });
-                            });
-                        });
-                    }
-                    else if (index == 10) // legs
-                    {
-                        equipSlotList[index].btnSlot.onClick.AddListener(() =>
-                        {
-                            OpenBagAndSelect((bagPanel) =>
-                            {
-                                bagPanel.RequestInitLegInventory();
-                                bagPanel.SetSelectCallback((selectedItem) =>
-                                {
-                                    if (selectedItem is LegEquipment)
-                                        this.SendCommand(new ChangeEquipItemCommand(10, selectedItem));
-                                    else
-                                        Debug.LogWarning("选中的不是腿甲！");
-                                });
-                            });
-                        });
-                    }
-                    else if (index == 11) // hands
-                    {
-                        equipSlotList[index].btnSlot.onClick.AddListener(() =>
-                        {
-                            OpenBagAndSelect((bagPanel) =>
-                            {
-                                bagPanel.RequestInitHandInventory();
-                                bagPanel.SetSelectCallback((selectedItem) =>
-                                {
-                                    if (selectedItem is HandEquipment)
-                                        this.SendCommand(new ChangeEquipItemCommand(11, selectedItem));
-                                    else
-                                        Debug.LogWarning("选中的不是手甲！");
-                                });
-                            });
-                        });
-                    }
-                    continue;
-                }
-                #endregion
-                #region 消耗品装备槽
-                // 消耗品 12-15
-                if (index >= 12 && index < 16)
-                {
-                    equipSlotList[index].btnSlot.onClick.AddListener(() =>
-                    {
-                        OpenBagAndSelect((bagPanel) =>
-                        {
-                            bagPanel.RequestInitConsumableInventory();
-                            bagPanel.SetSelectCallback((selectedItem) =>
-                            {
-                                if (selectedItem is ConsumableItem_SO)
-                                    this.SendCommand(new ChangeEquipItemCommand(index, selectedItem));
-                                else
-                                    Debug.LogWarning("选中的不是消耗品！");
-                            });
-                        });
-                    });
-                    continue;
-                }
-                #endregion
-                #region 法术装备槽
-                // 法术 16+
-                if (index >= 16)
-                {
-                    equipSlotList[index].btnSlot.onClick.AddListener(() =>
-                    {
-                        OpenBagAndSelect((bagPanel) =>
-                        {
-                            bagPanel.RequestInitSpellInventory();
-                            bagPanel.SetSelectCallback((selectedItem) =>
-                            {
-                                if (selectedItem is SpellItem)
-                                    this.SendCommand(new ChangeEquipItemCommand(index, selectedItem));
-                                else
-                                    Debug.LogWarning("选中的不是法术！");
-                            });
-                        });
-                    });
-                }
-                #endregion
+                });
             }
         }
     }

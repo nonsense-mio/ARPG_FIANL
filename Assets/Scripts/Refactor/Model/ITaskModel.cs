@@ -76,14 +76,14 @@ namespace ARPG
 
         #region 数据导入导出 (与存档系统集成)
         /// <summary>
-        /// 从 TaskData 导入数据 (存档加载时调用)
+        /// 从 TaskData 加载数据 (存档加载时调用)
         /// </summary>
-        void ImportFromTaskData(TaskData data);
+        void LoadData(TaskData data);
 
         /// <summary>
-        /// 导出到 TaskData (存档保存时调用)
+        /// 保存数据到 TaskData (存档保存时调用)
         /// </summary>
-        void ExportToTaskData(TaskData data);
+        void SaveData(TaskData data);
         #endregion
     }
 }
