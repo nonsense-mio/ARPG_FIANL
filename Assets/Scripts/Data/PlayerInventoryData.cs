@@ -109,22 +109,22 @@ public class PlayerInventoryData
     /// <summary>
     /// 当前右手武器索引
     /// </summary>
-    public int currentRightWeaponIndex = -1;
+    public int currentRightWeaponIndex = 0;
 
     /// <summary>
     /// 当前左手武器索引
     /// </summary>
-    public int currentLeftWeaponIndex = -1;
+    public int currentLeftWeaponIndex = 0;
 
     /// <summary>
     /// 当前消耗品索引
     /// </summary>
-    public int currentConsumableIndex = -1;
+    public int currentConsumableIndex = 0;
 
     /// <summary>
     /// 当前法术索引
     /// </summary>
-    public int currentSpellIndex = -1;
+    public int currentSpellIndex = 0;
 
     #endregion
 

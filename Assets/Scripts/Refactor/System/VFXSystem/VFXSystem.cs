@@ -39,6 +39,7 @@ namespace ARPG
             GameObject fx = poolSystem.Spawn(HealFXPath);
             fx.transform.SetParent(player.transform);
             fx.transform.localPosition = Vector3.zero;
+            fx.transform.localRotation = Quaternion.Euler(-90,0,0);
         }
 
         private void OnCharacterDamage(Vector3 hitPoint)

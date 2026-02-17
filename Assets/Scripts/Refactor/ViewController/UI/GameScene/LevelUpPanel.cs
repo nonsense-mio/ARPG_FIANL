@@ -1,11 +1,12 @@
 using ARPG;
 using Framework;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ARPG
 {
-    public class LevelUpPanel : BasePanel
+    public class LevelUpPanel : BasePanel, IPointerClickHandler
     {
         private Button btnLevUp;
         [Header("玩家等级")]
@@ -267,6 +268,12 @@ namespace ARPG
         {
             txtProjectedFaithLevel.text = sliderFaith.value.ToString();
             UpdateProjectedPlayerLevel();
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (EventSystem.current.currentSelectedGameObject == null)
+                sliderHealth.Select();
         }
     }
 }

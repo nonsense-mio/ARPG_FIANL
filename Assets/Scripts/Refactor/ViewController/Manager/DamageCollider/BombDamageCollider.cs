@@ -60,14 +60,16 @@ namespace ARPG
             //从对象池中取出爆炸特效 发布事件
             this.SendEvent(new BombHitEvent { BombTransform = this.transform });
         }
-        public void OnSpawn() { }
+        public void OnSpawn()
+        {
+            hasCollided = false;
+        }
 
         //重置炸弹信息
         public void OnRecycle()
         {
             bombRigidbody.velocity = Vector3.zero;
             bombRigidbody.angularVelocity = Vector3.zero;
-            hasCollided = false;
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
         }

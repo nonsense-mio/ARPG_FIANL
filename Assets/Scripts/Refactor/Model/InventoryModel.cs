@@ -35,10 +35,10 @@ namespace ARPG
         #endregion
 
         #region 当前索引
-        public BindableProperty<int> CurrentRightWeaponIndex { get; } = new BindableProperty<int>(-1);
-        public BindableProperty<int> CurrentLeftWeaponIndex { get; } = new BindableProperty<int>(-1);
-        public BindableProperty<int> CurrentConsumableIndex { get; } = new BindableProperty<int>(-1);
-        public BindableProperty<int> CurrentSpellIndex { get; } = new BindableProperty<int>(-1);
+        public BindableProperty<int> CurrentRightWeaponIndex { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> CurrentLeftWeaponIndex { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> CurrentConsumableIndex { get; } = new BindableProperty<int>(0);
+        public BindableProperty<int> CurrentSpellIndex { get; } = new BindableProperty<int>(0);
         #endregion
 
         protected override void OnInit()
