@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1089442035838498348}
   - component: {fileID: 5611344490887968576}
   - component: {fileID: 8004124266100502020}
-  - component: {fileID: -2467364536861804986}
   - component: {fileID: -3668136932131631388}
   m_Layer: 0
   m_Name: PhaseShift
@@ -4834,19 +4833,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &-2467364536861804986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1087034665551826729}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83190554c1befa54a9c7a89cd3260f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxNum: 5
 --- !u!114 &-3668136932131631388
 MonoBehaviour:
   m_ObjectHideFlags: 0

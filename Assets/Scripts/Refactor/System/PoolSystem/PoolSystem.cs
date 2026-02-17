@@ -44,24 +44,22 @@ namespace ARPG
 
         #region GameObject 池 实现
 
-        // 预热对象池，提前创建一定数量的对象
-        public void WarmupPool(string prefabPath, int count)
+        // 预热对象池，提前创建一定数量的对象并设置最大容量
+        public void WarmupPool(string prefabPath, int count, int maxCapacity)
         {
-            // 加载预制体
             GameObject prefab = GetOrLoadPrefab(prefabPath);
             if (prefab == null)
             {
                 Debug.LogError($"无法加载预制体: {prefabPath}");
                 return;
             }
-            // 获取或创建对象池容器
-            PoolContainer container = GetOrCreateContainer(prefabPath);
 
-            // 预热指定数量的对象
+            PoolContainer container = GetOrCreateContainer(prefabPath);
+            container.SetMaxCapacity(maxCapacity);
+
             for (int i = 0; i < count; i++)
             {
                 GameObject obj = GameObject.Instantiate(prefab);
-                //游戏对象名即为对象池字典键名
                 obj.name = prefabPath;
                 container.PrewarmObject(obj);
             }

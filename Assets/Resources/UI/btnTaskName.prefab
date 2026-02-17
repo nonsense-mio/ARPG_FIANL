@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2286153828143634162}
   - component: {fileID: 5333044081759902636}
   - component: {fileID: 5269040236792563349}
-  - component: {fileID: 1855667940427068933}
   m_Layer: 5
   m_Name: btnTaskName
   m_TagString: Untagged
@@ -139,19 +138,6 @@ MonoBehaviour:
   txtTaskName: {fileID: 8557589259673495259}
   currentData: {fileID: 0}
   txtTaskContent: 
---- !u!114 &1855667940427068933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3256228113248056778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83190554c1befa54a9c7a89cd3260f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxNum: 10
 --- !u!1 &9178288942103268661
 GameObject:
   m_ObjectHideFlags: 0

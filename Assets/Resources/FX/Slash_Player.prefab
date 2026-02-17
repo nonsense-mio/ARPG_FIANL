@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1231740799838009829}
   - component: {fileID: 7047409975252356364}
   - component: {fileID: 1916197004396048450}
-  - component: {fileID: -9174110905387624306}
   m_Layer: 0
   m_Name: Slash_Player
   m_TagString: Untagged
@@ -4904,19 +4903,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDestory: 2
---- !u!114 &-9174110905387624306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 158789456559184324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83190554c1befa54a9c7a89cd3260f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxNum: 10
 --- !u!1 &8111811156769411746
 GameObject:
   m_ObjectHideFlags: 0

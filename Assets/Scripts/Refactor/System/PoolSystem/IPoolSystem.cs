@@ -23,7 +23,7 @@ namespace ARPG
         /// <summary>
         /// 预热对象池，提前创建一定数量的对象
         /// </summary>
-        void WarmupPool(string prefabPath, int count);
+        void WarmupPool(string prefabPath, int count, int maxCapacity);
 
         /// <summary>
         /// 清空指定的 GameObject 池

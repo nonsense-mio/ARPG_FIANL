@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2446827813383553115}
   - component: {fileID: 6200555571879578561}
   - component: {fileID: 5262158477527922466}
-  - component: {fileID: 5344389557280219641}
   m_Layer: 0
   m_Name: WeaponPickUp
   m_TagString: Interactable
@@ -49,8 +48,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   radius: 0.6
   interactionPrompt: "\u4EA4\u4E92"
-  interactableText: "\u6361\u8D77\u7269\u54C1"
-  weapon: {fileID: 11400000, guid: 06b7dcc5fe0f9144d9c9d049a15b504f, type: 2}
+  soundEffectName: interact
+  animationName: Pick Up Item
+  item: {fileID: 0}
 --- !u!135 &5262158477527922466
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -72,19 +72,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5344389557280219641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1864382999843890123}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83190554c1befa54a9c7a89cd3260f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxNum: 10
 --- !u!1 &5721488051805212194
 GameObject:
   m_ObjectHideFlags: 0

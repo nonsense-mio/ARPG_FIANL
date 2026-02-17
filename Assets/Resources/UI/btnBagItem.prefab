@@ -164,7 +164,6 @@ GameObject:
   - component: {fileID: 8405572409406421477}
   - component: {fileID: 8031868486139733619}
   - component: {fileID: 8560362896517895390}
-  - component: {fileID: -5218278567402411435}
   m_Layer: 5
   m_Name: btnBagItem
   m_TagString: Untagged
@@ -289,16 +288,3 @@ MonoBehaviour:
   btnSlot: {fileID: 8031868486139733619}
   bkImage: {fileID: 2465722020422567805}
   iconImage: {fileID: 8906724236503703805}
---- !u!114 &-5218278567402411435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8107911617854280871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83190554c1befa54a9c7a89cd3260f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxNum: 50

@@ -41,7 +41,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8170741511427805649}
-  - component: {fileID: 5197214918777716431}
   m_Layer: 0
   m_Name: Arrow_Loaded_Model 2
   m_TagString: Untagged
@@ -65,19 +64,6 @@ Transform:
   - {fileID: 6175978751436527437}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5197214918777716431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7542858164570004519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83190554c1befa54a9c7a89cd3260f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxNum: 10
 --- !u!1 &9027172619742915948
 GameObject:
   m_ObjectHideFlags: 0

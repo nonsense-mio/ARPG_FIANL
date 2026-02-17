@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 2539332147194451532}
   - component: {fileID: 672142261813786426}
   - component: {fileID: 685033060041784762}
-  - component: {fileID: 6755023875332321175}
   - component: {fileID: 286498681612649817}
   m_Layer: 11
   m_Name: Arrow_Live_Model
@@ -151,19 +150,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDestory: 10
---- !u!114 &6755023875332321175
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5666386230035920796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83190554c1befa54a9c7a89cd3260f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxNum: 20
 --- !u!114 &286498681612649817
 MonoBehaviour:
   m_ObjectHideFlags: 0

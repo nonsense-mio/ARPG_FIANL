@@ -42,7 +42,6 @@ GameObject:
   m_Component:
   - component: {fileID: 784801264612063436}
   - component: {fileID: 2539870806488349669}
-  - component: {fileID: 4968992137979610910}
   m_Layer: 0
   m_Name: Potion_Red
   m_TagString: Untagged
@@ -79,19 +78,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToDestory: 2
---- !u!114 &4968992137979610910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4960941215740249895}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83190554c1befa54a9c7a89cd3260f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxNum: 2
 --- !u!1 &7096788911840267777
 GameObject:
   m_ObjectHideFlags: 0

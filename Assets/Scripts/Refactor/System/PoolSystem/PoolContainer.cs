@@ -44,12 +44,18 @@ namespace ARPG
         }
 
         /// <summary>
+        /// 设置最大容量 (0=无限制)
+        /// </summary>
+        public void SetMaxCapacity(int max)
+        {
+            maxCapacity = max;
+        }
+
+        /// <summary>
         /// 预热对象(将对象放入可用队列)
         /// </summary>
         public void PrewarmObject(GameObject obj)
         {
-            var poolObj = obj.GetComponent<PoolObj>();
-            maxCapacity = poolObj.maxNum;
             obj.SetActive(false);
 
             if (containerRoot != null)

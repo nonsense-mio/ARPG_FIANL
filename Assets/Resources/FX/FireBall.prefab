@@ -14543,7 +14543,6 @@ GameObject:
   - component: {fileID: 5657661137306787856}
   - component: {fileID: 1089368691851328712}
   - component: {fileID: 2961720032610653651}
-  - component: {fileID: -7243160846915898410}
   - component: {fileID: 3552257822967760676}
   m_Layer: 11
   m_Name: FireBall
@@ -19450,19 +19449,6 @@ MonoBehaviour:
   guardBreakModifier: 1
   impactParticles: {fileID: 1582275357731197809, guid: dc3b3bbce03994646b86561a2ba15684, type: 3}
   fireballFXName: FX/FireBallImpact
---- !u!114 &-7243160846915898410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5212674803331259590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83190554c1befa54a9c7a89cd3260f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxNum: 10
 --- !u!114 &3552257822967760676
 MonoBehaviour:
   m_ObjectHideFlags: 0
