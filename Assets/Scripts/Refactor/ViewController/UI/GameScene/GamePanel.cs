@@ -8,6 +8,8 @@ namespace ARPG
 {
     public class GamePanel : BasePanel
     {
+        public override E_UICanvas CanvasType => E_UICanvas.Dynamic;
+
         private Slider sliderHealth;
         private Slider sliderStamina;
         private Slider sliderFocus;

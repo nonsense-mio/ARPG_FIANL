@@ -8,6 +8,8 @@ namespace ARPG
 {
     public class TipPanel : BasePanel
     {
+        public override E_UICanvas CanvasType => E_UICanvas.Overlay;
+
         UnityAction sureCallBack;
 
         private void Start()

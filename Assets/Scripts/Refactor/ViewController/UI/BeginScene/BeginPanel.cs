@@ -5,6 +5,8 @@ namespace ARPG
 {
     public class BeginPanel : BasePanel
     {
+        public override E_UICanvas CanvasType => E_UICanvas.Static;
+
 
         private void Start()
         {

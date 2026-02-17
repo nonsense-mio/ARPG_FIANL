@@ -12,4 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18a5d11f1bf915749b2960d0c7e32278, type: 3}
   m_Name: PoolWarmupConfig
   m_EditorClassIdentifier: 
-  entries: []
+  entries:
+  - prefabPath: FX/Blood
+    warmupCount: 5
+    maxCapacity: 10
+  - prefabPath: FX/Slash
+    warmupCount: 5
+    maxCapacity: 10
+  - prefabPath: FX/Slash_Player
+    warmupCount: 5
+    maxCapacity: 10
+  - prefabPath: FX/Recover
+    warmupCount: 2
+    maxCapacity: 5
+  - prefabPath: FX/FireBallImpact
+    warmupCount: 2
+    maxCapacity: 5
+  - prefabPath: FX/BombFX
+    warmupCount: 2
+    maxCapacity: 5
+  - prefabPath: Projectiles/Arrow_Live_Model
+    warmupCount: 3
+    maxCapacity: 10
+  - prefabPath: Projectiles/FireBomb_Live
+    warmupCount: 2
+    maxCapacity: 5
+  - prefabPath: Sound/soundObj
+    warmupCount: 8
+    maxCapacity: 20

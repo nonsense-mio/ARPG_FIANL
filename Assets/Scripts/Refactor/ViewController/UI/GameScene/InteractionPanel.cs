@@ -6,6 +6,8 @@ namespace ARPG
 {
     public class InteractionPanel : BasePanel
     {
+        public override E_UICanvas CanvasType => E_UICanvas.Dynamic;
+
         private Image imgSelectWindow;
         private Slider sliderBossHP;
         private Text txtBossName;

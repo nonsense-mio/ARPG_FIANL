@@ -12,6 +12,12 @@ namespace ARPG
     public abstract class BasePanel : ARPGController
     {
         /// <summary>
+        /// 面板所属的 Canvas 分组，子类可 override 指定
+        /// 默认 Common (中频交互菜单)
+        /// </summary>
+        public virtual E_UICanvas CanvasType => E_UICanvas.Common;
+
+        /// <summary>
         /// 用于存储所有要用到的UI控件、用里氏替换原则 父类装子类
         /// </summary>
         protected Dictionary<string, UIBehaviour> controlDic = new Dictionary<string, UIBehaviour>();

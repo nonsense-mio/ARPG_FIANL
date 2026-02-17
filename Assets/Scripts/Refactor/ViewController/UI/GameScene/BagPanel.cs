@@ -28,6 +28,12 @@ namespace ARPG
         {
             base.Awake();
             inventoryModel = this.GetModel<IInventoryModel>();
+
+            sv = new CustomSV<Item_SO, BagItem>();
+            sv.InitItemResName("UI/btnBagItem");
+            sv.InitItemSizeAndNum(138, 130, 4);
+            sv.InitContentAndSVH(content, 1000);
+            sv.AddListener(OnItemClick);
         }
 
         // 提供给外部设置回调的方法
@@ -44,18 +50,6 @@ namespace ARPG
 
         public override void ShowMe()
         {
-            sv = new CustomSV<Item_SO, BagItem>();
-            //初始化预设体资源路径
-            sv.InitItemResName("UI/btnBagItem");
-            //初始化格子间隔大小以及一行的格子个数
-            sv.InitItemSizeAndNum(138, 130, 4);
-            //初始化content以及可视范围
-            sv.InitContentAndSVH(content, 1000);
-
-            // 注册点击事件
-            sv.AddListener(OnItemClick);
-
-            //处理初始化哪个面板的方法
             HandleRequestInits();
         }
 
