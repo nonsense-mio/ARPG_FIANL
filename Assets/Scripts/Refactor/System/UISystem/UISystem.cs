@@ -105,6 +105,7 @@ namespace ARPG
                 {
                     if (!panelInfo.panel.gameObject.activeSelf)
                         panelInfo.panel.gameObject.SetActive(true);
+                    panelInfo.panel.transform.SetAsLastSibling();
                     callBack?.Invoke(panelInfo.panel);
                     panelInfo.panel.ShowMe();
                 }

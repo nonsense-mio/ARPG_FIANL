@@ -17,6 +17,7 @@ namespace ARPG
             ui.HidePanel<GamePanel>(true);
             ui.HidePanel<TaskPanel>(true);
             ui.HidePanel<DialoguePanel>(true);
+            ui.HidePanel<LevelUpPanel>(true);
 
             this.SendCommand(new SaveGameCommand());
             this.SendCommand(new ClearGameInfoCommand());
