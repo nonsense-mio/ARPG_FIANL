@@ -15,7 +15,7 @@ namespace ARPG
     public class SceneSystem : AbstractSystem, ISceneSystem
     {
         private const float FadeOutDuration = 0.3f;
-        private const float FadeInDuration = 1f;
+        private const float FadeInDuration = 0.5f;
 
         private ITickSystem tickSystem;
         private CanvasGroup fadeCanvasGroup;

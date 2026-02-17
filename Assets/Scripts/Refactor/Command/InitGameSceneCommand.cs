@@ -39,7 +39,9 @@ namespace ARPG
             cameraMgr.targetTransformWhileAiming = player.targetTransformWhileAiming;
             cameraMgr.inputMgr = player.inputMgr;
             cameraMgr.playerManager = player;
-            //显示面板
+            //面板管理
+            uiSystem.HidePanel<BeginPanel>(true);
+            uiSystem.HidePanel<SavePanel>(true);
             uiSystem.ShowPanel<GamePanel>();
             uiSystem.ShowPanel<InteractionPanel>();
             //开始计时

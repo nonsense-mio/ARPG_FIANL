@@ -40,8 +40,8 @@ namespace ARPG
         private Canvas staticCanvas;
         private Canvas overlayCanvas;
 
-        // 每个 Canvas 的层级引用: canvasLayers[canvasType][(int)layer]
-        private Dictionary<E_UICanvas, Transform[]> canvasLayers = new Dictionary<E_UICanvas, Transform[]>();
+        // 每个 Canvas 的根 Transform: canvasLayers[canvasType]
+        private Dictionary<E_UICanvas, Transform> canvasLayers = new Dictionary<E_UICanvas, Transform>();
 
         private Dictionary<string, BasePanelInfo> panelDic = new Dictionary<string, BasePanelInfo>();
 
@@ -56,7 +56,7 @@ namespace ARPG
             uiCamera = GameObject.Instantiate(resourceLoader.Load<GameObject>("UI/UICamera")).GetComponent<Camera>();
             GameObject.DontDestroyOnLoad(uiCamera.gameObject);
 
-            //加载 UIRoot (内含 4 个 Canvas 子物体，每个 Canvas 下有 Bottom/Middle/Top/System)
+            //加载 UIRoot (内含 4 个 Canvas 子物体: DynamicCanvas, CommonCanvas, StaticCanvas, OverlayCanvas)
             uiRoot = GameObject.Instantiate(resourceLoader.Load<GameObject>("UI/UIRoot"));
             GameObject.DontDestroyOnLoad(uiRoot);
 
@@ -84,28 +84,10 @@ namespace ARPG
 
         private void InitCanvasLayers(E_UICanvas type, Canvas canvas)
         {
-            canvasLayers[type] = new Transform[]
-            {
-                canvas.transform.Find("Bottom"),
-                canvas.transform.Find("Middle"),
-                canvas.transform.Find("Top"),
-                canvas.transform.Find("System")
-            };
+            canvasLayers[type] = canvas.transform;
         }
 
-        public Transform GetLayerFather(E_UILayer layer)
-        {
-            return GetLayerFather(E_UICanvas.Common, layer);
-        }
-
-        private Transform GetLayerFather(E_UICanvas canvasType, E_UILayer layer)
-        {
-            if (canvasLayers.TryGetValue(canvasType, out var layers))
-                return layers[(int)layer] ?? layers[(int)E_UILayer.Middle];
-            return canvasLayers[E_UICanvas.Common][(int)E_UILayer.Middle];
-        }
-
-        public void ShowPanel<T>(E_UILayer layer = E_UILayer.Middle, UnityAction<T> callBack = null) where T : BasePanel
+        public void ShowPanel<T>(UnityAction<T> callBack = null) where T : BasePanel
         {
             string panelName = typeof(T).Name;
             if (panelDic.ContainsKey(panelName))
@@ -140,12 +122,12 @@ namespace ARPG
                     panelDic.Remove(panelName);
                     return;
                 }
-                //先实例化获取面板组件，再根据 CanvasType 路由到对应 Canvas 的层级
+                //实例化面板并根据 CanvasType 路由到对应 Canvas
                 GameObject panelObj = GameObject.Instantiate(res);
                 T panel = panelObj.GetComponent<T>();
 
-                Transform father = GetLayerFather(panel.CanvasType, layer);
-                panelObj.transform.SetParent(father, false);
+                Transform canvasRoot = canvasLayers[panel.CanvasType];
+                panelObj.transform.SetParent(canvasRoot, false);
 
                 panelInfo.callBack?.Invoke(panel);
                 panelInfo.callBack = null;

@@ -115,7 +115,7 @@ namespace ARPG
                 //退出按钮
                 case "btnQuit":
                     {
-                        this.GetSystem<IUISystem>().ShowPanel<TipPanel>(E_UILayer.Top, (tipPanel) =>
+                        this.GetSystem<IUISystem>().ShowPanel<TipPanel>((tipPanel) =>
                         {
                             tipPanel.SetTipInfo("是否返回标题界面？", () =>
                             {

@@ -8,6 +8,7 @@ namespace ARPG
 {
     public class DialoguePanel : BasePanel
     {
+        public override E_UICanvas CanvasType => E_UICanvas.Overlay;
         private Text txtContent;
         public GameObject optionGroup;
         //当前对话数据

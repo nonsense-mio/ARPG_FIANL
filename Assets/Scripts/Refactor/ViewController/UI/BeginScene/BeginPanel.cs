@@ -45,7 +45,7 @@ namespace ARPG
                     //没有存档则提示
                     else
                     {
-                        this.GetSystem<IUISystem>().ShowPanel<TipPanel>(E_UILayer.Top, (panel) =>
+                        this.GetSystem<IUISystem>().ShowPanel<TipPanel>((panel) =>
                         {
                             panel.SetTipInfo("没有可继续的存档");
                         });

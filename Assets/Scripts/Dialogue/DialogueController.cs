@@ -34,7 +34,7 @@ public class DialogueController : Interactable
         }
 
         //打开对话UI
-        UISystem.ShowPanel<DialoguePanel>(E_UILayer.Top,(panel) =>
+        UISystem.ShowPanel<DialoguePanel>((panel) =>
         {
             //初始化对话数据
             panel.InitDialogueData(currentData);

@@ -115,7 +115,7 @@ namespace ARPG
 
         private void DeleteSaveSlot(int slotIndex)
         {
-            this.GetSystem<IUISystem>().ShowPanel<TipPanel>(E_UILayer.Top, (panel) =>
+            this.GetSystem<IUISystem>().ShowPanel<TipPanel>((panel) =>
             {
                 panel.SetTipInfo("确定要删除该存档吗？", () =>
                 {
