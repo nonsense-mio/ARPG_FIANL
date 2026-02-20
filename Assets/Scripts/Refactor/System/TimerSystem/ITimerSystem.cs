@@ -40,6 +40,11 @@ namespace ARPG
         /// 重置计时器（恢复到初始时长，自动恢复运行）
         /// </summary>
         void ResetTimer(int id);
+
+        /// <summary>
+        /// 清空所有计时器（不触发任何回调），用于场景切换时防止过期回调访问已销毁对象
+        /// </summary>
+        void ClearAllTimers();
     }
 
     /// <summary>

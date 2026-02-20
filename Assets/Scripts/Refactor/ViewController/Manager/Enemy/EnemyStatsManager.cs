@@ -167,10 +167,11 @@ namespace ARPG
                 enemy.navmeshAgent.enabled = false;
             }
 
-            // 禁用刚体物理
+            // 禁用刚体物理（先清速度再 kinematic，若已是 kinematic 则跳过清速度）
             if (enemy.enemyRigidbody != null)
             {
-                enemy.enemyRigidbody.velocity = Vector3.zero;
+                if (!enemy.enemyRigidbody.isKinematic)
+                    enemy.enemyRigidbody.velocity = Vector3.zero;
                 enemy.enemyRigidbody.isKinematic = true;
             }
 

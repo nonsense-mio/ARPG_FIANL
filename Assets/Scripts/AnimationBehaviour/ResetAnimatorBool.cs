@@ -32,6 +32,12 @@ namespace ARPG
             character.isUsingLeftHand = false;
             character.isUsingRightHand = false;
             character.isAttacking = false;
+            // 背刺/招架动画结束，恢复物理（在标志位清零前判断）
+            if (character.isBeingBackstabbed || character.isBeingRiposted)
+            {
+                var rb = character.GetComponent<Rigidbody>();
+                if (rb != null) rb.isKinematic = false;
+            }
             character.isBeingBackstabbed = false;
             character.isBeingRiposted = false;
             character.isPerformingBackstab = false;

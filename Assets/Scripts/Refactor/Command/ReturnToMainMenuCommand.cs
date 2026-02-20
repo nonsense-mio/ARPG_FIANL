@@ -21,6 +21,7 @@ namespace ARPG
 
             this.SendCommand(new SaveGameCommand());
             this.SendCommand(new ClearGameInfoCommand());
+            this.GetSystem<ITimerSystem>().ClearAllTimers();
 
             this.GetSystem<ISceneSystem>().LoadSceneAsync("BeginScene", () =>
             {

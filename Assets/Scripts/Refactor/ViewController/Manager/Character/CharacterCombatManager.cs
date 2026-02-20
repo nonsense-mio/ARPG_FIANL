@@ -8,6 +8,7 @@ namespace ARPG
     public class CharacterCombatManager : ARPGController
     {
         CharacterManager character;
+        Rigidbody characterRigidbody;
         [Header("Combat Transform")]
         public Transform backStabReceiverTransform;
         public Transform riposteReceiverTransform;
@@ -43,6 +44,7 @@ namespace ARPG
         public void Init(CharacterManager charMgr)
         {
             character = charMgr;
+            characterRigidbody = charMgr.GetComponent<Rigidbody>();
         }
 
         public virtual void DrainStaminaBasedOnAttackType()
@@ -95,6 +97,8 @@ namespace ARPG
         {
             //设置被背刺状态为true
             character.isBeingBackstabbed = true;
+            // 冻结物理，防止箭矢等外力将目标打飞
+            if (characterRigidbody != null) characterRigidbody.isKinematic = true;
             //锁定位置
             StartCoroutine(ForceMoveWhenBeingBackstabbed(characterPerformingBackstab));
             //播放被背刺动画
@@ -122,6 +126,8 @@ namespace ARPG
         {
             //设置被招架状态为true
             character.isBeingRiposted = true;
+            // 冻结物理，防止箭矢等外力将目标打飞
+            if (characterRigidbody != null) characterRigidbody.isKinematic = true;
             //锁定位置
             StartCoroutine(ForceMoveWhenBeingRiposted(characterPerformingRiposte));
             //播放被招架动画

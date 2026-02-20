@@ -118,5 +118,19 @@ namespace ARPG
             if (scaledTimers.TryGetValue(id, out var t)) t.ResetTimer();
             else if (realTimers.TryGetValue(id, out t)) t.ResetTimer();
         }
+
+        public void ClearAllTimers()
+        {
+            foreach (var t in scaledTimers.Values)
+                poolSystem.Recycle(t);
+            scaledTimers.Clear();
+
+            foreach (var t in realTimers.Values)
+                poolSystem.Recycle(t);
+            realTimers.Clear();
+
+            pendingRemove.Clear();
+            iteratingSnapshot.Clear();
+        }
     }
 }

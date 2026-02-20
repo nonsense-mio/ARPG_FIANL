@@ -71,6 +71,10 @@ namespace ARPG
                 }
                 charactersDamaged.Add(enemyManager);
 
+                // 被背刺/招架中的目标受到物理保护，跳过所有伤害和效果
+                if (enemyManager.isBeingBackstabbed || enemyManager.isBeingRiposted)
+                    return;
+
 
 
                 CheckForParry(enemyManager);
