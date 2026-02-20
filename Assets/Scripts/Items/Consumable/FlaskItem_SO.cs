@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ARPG
 {
-    [CreateAssetMenu(menuName ="Items/Consumbales/Flask")]
+    [CreateAssetMenu(menuName = "Items/Consumbales/Flask")]
     public class FlaskItem_SO : ConsumableItem_SO
     {
         [Header("烧瓶种类")]
@@ -26,16 +26,13 @@ namespace ARPG
             flask.transform.localPosition = Vector3.zero;
             flask.transform.localRotation = Quaternion.identity;
             //如果是解毒烧瓶
-            if(detoxFlask)
+            if (detoxFlask)
             {
-                player.playerEffectsManager.poisonBuildUp = 0;
-                player.playerEffectsManager.poisonAmount = player.playerEffectsManager.defaultPoisonAmount;
-                player.playerEffectsManager.isPoisoned = false;
-                if(player.playerEffectsManager.currentPoisonParticleFX != null)
-                {   //回收中毒特效
-                    GameArchitecture.Interface.GetSystem<IPoolSystem>().Recycle(player.playerEffectsManager.currentPoisonParticleFX);
-                    player.playerEffectsManager.currentPoisonParticleFX = null;
-                }
+                GameArchitecture.Interface.GetSystem<ITimerSystem>().CreateTimer(false, 2, () =>
+                {
+                    player.playerEffectsManager.CurePoison();
+                });
+                
             }
             //playerEffectsManager.currentParticleFX = recoveryFX;
             player.playerEffectsManager.amountToBeHealed = healthRecoverAmount;

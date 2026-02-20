@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Framework;
@@ -53,31 +52,24 @@ namespace ARPG
             //宝箱打开
             animator.Play("Open Chest");
             playerManager.OpenChestInteraction(playerStandingPostion);
-            //开启协程 生成宝箱里的物品
-            StartCoroutine(SpawnItemInChest());
+            //延迟生成宝箱里的物品（等待开箱动画）
+            this.GetSystem<ITimerSystem>().CreateTimer(false, 1f, () =>
+            {
+                for (int i = 0; i < itemsInChest.Count; i++)
+                {
+                    GameObject obj = this.GetSystem<IPoolSystem>().Spawn(itemSpawnerName);
+                    obj.transform.position = transform.position;
+                    ItemPickUp itemPickUp = obj.GetComponent<ItemPickUp>();
+                    if (itemPickUp != null)
+                        itemPickUp.item = itemsInChest[i];
+                }
+                Destroy(this);
+            });
 
             // 更新 SceneStateModel 宝箱状态
             var sceneStateModel = this.GetModel<ISceneStateModel>();
             sceneStateModel.SetChestOpened(chestID, true);
             hasOpened = true;
-        }
-
-        private IEnumerator SpawnItemInChest()
-        {
-            yield return new WaitForSeconds(1f);
-
-            for (int i = 0; i < itemsInChest.Count; i++)
-            {
-                GameObject obj = this.GetSystem<IPoolSystem>().Spawn(itemSpawnerName);
-                obj.transform.position = transform.position;
-                ItemPickUp itemPickUp = obj.GetComponent<ItemPickUp>();
-                if (itemPickUp != null)
-                {
-                    itemPickUp.item = itemsInChest[i];
-                }
-            }
-
-            Destroy(this);
         }
 
     }

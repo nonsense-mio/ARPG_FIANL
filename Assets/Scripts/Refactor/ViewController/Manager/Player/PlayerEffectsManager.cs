@@ -7,8 +7,7 @@ namespace ARPG
     public class PlayerEffectsManager : CharacterEffectsManager
     {
         PlayerManager player;
-        //PoisonBuildUpBar poisonBuildUpBar;
-        //PoisonAmountBar poisonAmountBar;
+        private IPlayerModel playerModel;
         public GameObject instantiatedFXModel;
         public int amountToBeHealed;
         public int focusTobeAdded;
@@ -16,8 +15,7 @@ namespace ARPG
         {
             base.Init(characterMgr);
             player = characterMgr as PlayerManager;
-            //poisonBuildUpBar = FindObjectOfType<PoisonBuildUpBar>();
-            //poisonAmountBar = FindObjectOfType<PoisonAmountBar>();
+            playerModel = this.GetModel<IPlayerModel>();
         }
         /// <summary>
         /// 喝药瓶时调用的方法
@@ -33,31 +31,23 @@ namespace ARPG
 
         protected override void HandlePoisonBuildUp()
         {
-            if (poisonBuildUp <= 0)
-            {
-                //poisonBuildUpBar.gameObject.SetActive(false);
-            }
-            else
-            {
-                //poisonBuildUpBar.gameObject.SetActive(true);
-            }
             base.HandlePoisonBuildUp();
-            //poisonBuildUpBar.SetPoisonBuildUpAmount(Mathf.RoundToInt(poisonBuildUp));
+            if (playerModel != null)
+                playerModel.PoisonBuildUp.Value = Mathf.RoundToInt(poisonBuildUp);
         }
 
-        
         protected override void HandleIsPoisonedEffect()
         {
-            if (!isPoisoned)
-            {
-                //poisonAmountBar.gameObject.SetActive(false);
-            }
-            else
-            {
-                //poisonAmountBar.gameObject.SetActive(true);
-            }
             base.HandleIsPoisonedEffect();
-            //poisonAmountBar.SetPoisonAmount(Mathf.RoundToInt(poisonAmount));
+            if (playerModel != null)
+                playerModel.PoisonAmount.Value = Mathf.RoundToInt(poisonAmount);
+        }
+
+        protected override void OnPoisonEnd()
+        {
+            base.OnPoisonEnd();
+            if (playerModel != null)
+                playerModel.PoisonAmount.Value = (int)defaultPoisonAmount;
         }
     }
 

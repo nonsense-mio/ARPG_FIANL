@@ -6,7 +6,7 @@ namespace ARPG
 {
     public class PoisonSurface : MonoBehaviour
     {
-        public float poisonBuildUpAmount =7;
+        public float poisonBuildUpAmount =20;
         public List<CharacterEffectsManager> charactersInsidePoisonSurfaceList = new List<CharacterEffectsManager>();
 
         private void OnTriggerEnter(Collider other)

@@ -92,6 +92,7 @@ namespace ARPG
             playerLocomotionManager.HandleRollingAndSprinting();
             playerLocomotionManager.HandleJumping();
             playerStatsManager.RegenerateStamina();
+            playerEffectsManager.HandleAllEffects();
             playerLocomotionManager.HandleGroundedMovement();
             playerLocomotionManager.HandleRotation();
 

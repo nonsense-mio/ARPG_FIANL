@@ -13,22 +13,20 @@ namespace ARPG
         [Header("Current Range FX")]
         public GameObject instantiateFX;
         [Header("Poison")]
-        private string posionFX = "FX/Poison";
         public GameObject currentPoisonParticleFX;
-        public Transform buildUpTransform;
         public bool isPoisoned;
         public float poisonBuildUp = 0;
         public float poisonAmount = 100;
         public float defaultPoisonAmount = 100;
         public float poisonTimer = 2f;//这个变量代表每隔多少秒扣一次毒伤
         public int poiseDamage = 1;
-        float timer;
+        protected int _poisonDamageTimerId = -1;
 
         public virtual void Init(CharacterManager characterMgr)
         {
             character = characterMgr;
         }
-  
+
         /// <summary>
         /// 处理所有状态效果
         /// </summary>
@@ -52,47 +50,40 @@ namespace ARPG
             {
                 isPoisoned = true;
                 poisonBuildUp = 0;
-                if (buildUpTransform != null)
-                {
-                    //生成毒特效
-                    currentPoisonParticleFX = this.GetSystem<IPoolSystem>().Spawn(posionFX);
-                    currentPoisonParticleFX.transform.position = buildUpTransform.position;
-                }
-                else
-                {
-                    currentPoisonParticleFX = this.GetSystem<IPoolSystem>().Spawn(posionFX);
-                    currentPoisonParticleFX.transform.position = character.transform.position;
-                }
-                currentPoisonParticleFX.transform.localScale = Vector3.one * 0.5f;
+                _poisonDamageTimerId = this.GetSystem<ITimerSystem>().CreateTimer(
+                    false, defaultPoisonAmount, OnPoisonEnd,
+                    poisonTimer, () =>
+                    {
+                        character.characterStatsManager.TakePoiseDamage(poiseDamage);
+                        this.SendEvent(new PlayerPosionEvent { Character = character });
+                    });
             }
         }
+
         protected virtual void HandleIsPoisonedEffect()
         {
             if (!isPoisoned)
                 return;
-            //中毒状态 每秒扣血
-            if (poisonAmount > 0)
-            {
-                timer += Time.deltaTime;
-                if (timer >= poisonTimer)
-                {
-                    character.characterStatsManager.TakePoiseDamage(poiseDamage);
-                    timer = 0;
-                }
-                poisonAmount -= Time.deltaTime;
-            }
-            //中毒结束
-            else
-            {
-                isPoisoned = false;
-                poisonAmount = defaultPoisonAmount;
-                //移除毒特效
-                if (currentPoisonParticleFX != null)
-                {
-                    this.GetSystem<IPoolSystem>().Recycle(currentPoisonParticleFX);
-                    currentPoisonParticleFX = null;
-                }
-            }
+            poisonAmount -= Time.deltaTime;
+        }
+
+        protected virtual void OnPoisonEnd()
+        {
+            isPoisoned = false;
+            poisonAmount = defaultPoisonAmount;
+            _poisonDamageTimerId = -1;
+        }
+
+        /// <summary>
+        /// 主动解毒（供解毒道具/技能调用）
+        /// </summary>
+        public void CurePoison()
+        {
+            poisonBuildUp = 0;
+            if (!isPoisoned) return;
+            if (_poisonDamageTimerId != -1)
+                this.GetSystem<ITimerSystem>().RemoveTimer(_poisonDamageTimerId);
+            OnPoisonEnd();
         }
 
         //打断效果
@@ -122,4 +113,3 @@ namespace ARPG
 
     }
 }
-

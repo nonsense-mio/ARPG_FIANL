@@ -18,4 +18,9 @@ namespace ARPG
         public CharacterManager Character;
         public SpellItem Spell;
     }
+
+    public struct PlayerPosionEvent
+    {
+        public CharacterManager Character;
+    }
 }

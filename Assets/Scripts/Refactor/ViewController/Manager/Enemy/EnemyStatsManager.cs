@@ -1,4 +1,3 @@
-using System.Collections;
 using ARPG;
 using Framework;
 using UnityEngine;
@@ -153,23 +152,9 @@ namespace ARPG
             // 如果正在被背刺/招架，延迟执行死亡流程
             if (enemy.isBeingBackstabbed || enemy.isBeingRiposted)
             {
-                StartCoroutine(WaitForCriticalThenDisable());
+                this.GetSystem<ITimerSystem>().CreateTimer(false, 2f, ExecuteDisableOnDeath);
                 return;
             }
-
-            ExecuteDisableOnDeath();
-        }
-
-        private IEnumerator WaitForCriticalThenDisable()
-        {
-            // 等待背刺/招架状态结束
-            // while (enemy.isBeingBackstabbed || enemy.isBeingRiposted)
-            // {
-            //     yield return null;
-            // }
-
-            // 额外等待一小段时间确保动画完成
-            yield return new WaitForSeconds(2f);
 
             ExecuteDisableOnDeath();
         }
@@ -186,7 +171,7 @@ namespace ARPG
             if (enemy.enemyRigidbody != null)
             {
                 enemy.enemyRigidbody.velocity = Vector3.zero;
-                enemy.enemyRigidbody.isKinematic = true;    
+                enemy.enemyRigidbody.isKinematic = true;
             }
 
             // 禁用碰撞器
@@ -215,13 +200,7 @@ namespace ARPG
             // 禁用敌人的 Update 逻辑
             enemy.enabled = false;
 
-            StartCoroutine(DestroyAfterDelay(10f));
-        }
-
-        private IEnumerator DestroyAfterDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            Destroy(enemy.gameObject);
+            this.GetSystem<ITimerSystem>().CreateTimer(false, 10f, () => Destroy(enemy.gameObject));
         }
 
     }

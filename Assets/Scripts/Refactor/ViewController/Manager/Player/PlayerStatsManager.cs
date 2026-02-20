@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using Framework;
 
@@ -230,12 +229,8 @@ namespace ARPG
         {
             base.HandleDeath();
             playerModel.CurrentHP.Value = 0;
-            StartCoroutine(RespawnAfterDelay(3f));
-        }
-        private IEnumerator RespawnAfterDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            this.SendCommand(new RespawnPlayerCommand());
+            this.GetSystem<ITimerSystem>().CreateTimer(false, 3f,
+                () => this.SendCommand(new RespawnPlayerCommand()));
         }
     }
 }

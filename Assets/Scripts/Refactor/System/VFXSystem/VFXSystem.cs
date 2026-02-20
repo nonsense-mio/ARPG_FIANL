@@ -32,6 +32,15 @@ namespace ARPG
             this.RegisterEvent<PlayerDrinkPotionEvent>(e => OnPlayerHeal(e.Player));
             this.RegisterEvent<PlayerCastSpellEvent>(e => CastSpellFX(e.Character, e.Spell));
             this.RegisterEvent<PlayerWarmUpSpellEvent>(e => WarmUpSpellFX(e.Character, e.Spell));
+            this.RegisterEvent<PlayerPosionEvent>(e => OnPoison(e.Character));
+        }
+
+        private void OnPoison(CharacterManager player)
+        {
+            GameObject posion = poolSystem.Spawn("FX/Poison");
+            posion.transform.SetParent(player.transform);
+            posion.transform.localPosition = player.lockOnTransform.localPosition;
+            posion.transform.localRotation = Quaternion.identity;
         }
 
         private void OnPlayerHeal(PlayerManager player)
