@@ -30,6 +30,7 @@ namespace ARPG
         public override void SuccessfullyCastSpell(CharacterManager character)
         {
             base.SuccessfullyCastSpell(character);
+            
         }
     }
 }

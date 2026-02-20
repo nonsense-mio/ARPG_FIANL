@@ -108,32 +108,7 @@ namespace ARPG
                 fx.transform.localPosition = Vector3.zero;
                 fx.transform.localScale = Vector3.one * 0.5f;
             }
-            else if (spell is ProjectileSpell)
-            {
-                ProjectileSpell ps = spell as ProjectileSpell;
-                GameObject fx = poolSystem.Spawn(spell.spellCastFXName);
-                PlayerManager player = character as PlayerManager;
-                if (character.isUsingRightHand)
-                    fx.transform.position = character.characterWeaponSlotManager.rightHandSlot.transform.position;
-                else
-                    fx.transform.position = character.characterWeaponSlotManager.leftHandSlot.transform.position;
-
-                fx.transform.rotation = player.cameraMgr.cameraPivotTransform.rotation;
-                fx.transform.rotation = Quaternion.Euler(player.cameraMgr.cameraPivotTransform.eulerAngles.x, player.cameraMgr.cameraPivotTransform.eulerAngles.y, 0);
-
-                SpellDamageCollider damageCollider = fx.GetComponent<SpellDamageCollider>();
-                damageCollider.teamIDNumber = player.playerStatsManager.teamIDNumber;
-                damageCollider.characterManager = player;
-
-                Rigidbody rb = fx.GetComponent<Rigidbody>();
-
-                SpellDamageCollider spellDamageCollider = fx.GetComponent<SpellDamageCollider>();
-                spellDamageCollider.fireDamage = (int)ps.baseDamage;
-                spellDamageCollider.teamIDNumber = player.playerStatsManager.teamIDNumber;
-
-                rb.AddForce(fx.transform.forward * ps.projectileForwardVelocity);
-                rb.AddForce(fx.transform.up * ps.projectileUpWardVelocity);
-            }
+            // ProjectileSpell 弹道逻辑已移至 SpellSystem
         }
 
         private void FireBallHitFX(Vector3 hitPoint)

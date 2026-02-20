@@ -15,71 +15,68 @@ namespace ARPG
 
         protected override void Awake()
         {
-            //base.Awake();
+            base.Awake();  // 设置 isTrigger = true，与基类设计一致
             rb = GetComponent<Rigidbody>();
         }
 
-
-        protected void OnCollisionEnter(Collision other)
+        protected override void OnTriggerEnter(Collider other)
         {
-            // 先检查同队伍，完全忽略
+            // 友军：穿透，不爆炸
             CharacterManager hitCharacter = other.gameObject.GetComponentInParent<CharacterManager>();
             if (hitCharacter != null && hitCharacter.characterStatsManager.teamIDNumber == teamIDNumber)
-            {
-                return;  // 同队伍，完全忽略，火球继续飞
-            }
+                return;
 
-            // 获取碰撞点 - 无论碰到什么都能获取
-            Vector3 hitPoint = other.contacts.Length > 0  ? other.contacts[0].point : transform.position;
+            Vector3 hitPoint = other.ClosestPointOnBounds(transform.position);
 
-            // 处理角色伤害
             if (hitCharacter != null)
             {
-                EnemyManager ai = hitCharacter as EnemyManager;
+                // 每次检测前重置，防止对象池中的残留状态影响判断
+                hasBeenParried = false;
+                shieldHasBeenHit = false;
 
+                EnemyManager ai = hitCharacter as EnemyManager;
                 CheckForParry(hitCharacter);
                 CheckForBlock(hitCharacter);
 
-                if (hasBeenParried)
-                    return;
-                if (shieldHasBeenHit)
-                    return;
-
-                hitCharacter.characterStatsManager.poiseResetTimer = hitCharacter.characterStatsManager.totalPoiseResetTime;
-                hitCharacter.characterStatsManager.totalPoiseDefense -= poiseBreak;
-
-                float directionHitFrom = Vector3.SignedAngle(characterManager.transform.forward, hitCharacter.transform.forward, Vector3.up);
-                currentDamageAnimation = this.SendQuery(new GetHitDirectionQuery(directionHitFrom));
-
-                hitCharacter.characterEffectsManager.InterrupEffect();
-
-                if (hitCharacter.characterStatsManager.totalPoiseDefense > poiseBreak)
+                // 格挡/招架时跳过伤害（CheckForBlock 内已处理格挡穿透伤害）
+                if (!hasBeenParried && !shieldHasBeenHit)
                 {
-                    hitCharacter.characterStatsManager.TakeDamageNoAnimation(0, fireDamage, characterManager);
-                }
-                else
-                {
-                    hitCharacter.characterStatsManager.TakeDamage(0, fireDamage, currentDamageAnimation, characterManager);
-                }
+                    hitCharacter.characterStatsManager.poiseResetTimer = hitCharacter.characterStatsManager.totalPoiseResetTime;
+                    hitCharacter.characterStatsManager.totalPoiseDefense -= poiseBreak;
 
-                if (ai != null)
-                    ai.currentTarget = characterManager;
+                    float directionHitFrom = Vector3.SignedAngle(characterManager.transform.forward, hitCharacter.transform.forward, Vector3.up);
+                    currentDamageAnimation = this.SendQuery(new GetHitDirectionQuery(directionHitFrom));
+                    hitCharacter.characterEffectsManager.InterrupEffect();
+
+                    if (hitCharacter.characterStatsManager.totalPoiseDefense > poiseBreak)
+                        hitCharacter.characterStatsManager.TakeDamageNoAnimation(0, fireDamage, characterManager);
+                    else
+                        hitCharacter.characterStatsManager.TakeDamage(0, fireDamage, currentDamageAnimation, characterManager);
+
+                    if (ai != null)
+                        ai.currentTarget = characterManager;
+                }
             }
 
-            // 碰撞后生成特效并回收
+            // 无论格挡/招架与否，火球接触实体后都爆炸并回收
             if (!hasCollided)
             {
                 hasCollided = true;
                 this.SendEvent(new FireBallHitEvent { HitPoint = hitPoint });
-                this.GetSystem<IPoolSystem>().Recycle(this.gameObject);
+                this.GetSystem<IPoolSystem>().Recycle(gameObject);
             }
         }
 
-        public void OnSpawn() { }
+        public void OnSpawn()
+        {
+            hasCollided = false;
+            hasBeenParried = false;
+            shieldHasBeenHit = false;
+        }
 
         public void OnRecycle()
         {
-            hasCollided = false;
+            
 
             // 重置刚体物理状态
             if (rb != null)
