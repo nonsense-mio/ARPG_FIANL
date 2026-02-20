@@ -40,6 +40,12 @@ namespace ARPG
         public float lockedPivotPosition = 2.25f;
         public float unlockedPivotPosition = 1.65f;
 
+        // 锁定视角近距离保护
+        public float minimumHorizontalDistance = 2f;    // 近距离时水平距离底线，防止仰角过大
+        public float maximumLockedVerticalAngle = 30f;  // 锁定时最大俯角（向下看）
+        public float minimumLockedVerticalAngle = -30f; // 锁定时最大仰角（向上看）
+        public float lockedPivotRotationSpeed = 5f;     // pivot旋转平滑速度
+
         public CharacterManager currentLockOnTarget;
 
         List<CharacterManager> availableTargetList = new List<CharacterManager>();
@@ -116,14 +122,28 @@ namespace ARPG
 
             //调整摄像机枢轴的垂直旋转
             dir = currentLockOnTarget.transform.position - cameraPivotTransform.position;
-            dir.Normalize();
 
-            targetRotation = Quaternion.LookRotation(dir);
-            Vector3 eulerAngle = targetRotation.eulerAngles;
-            //将水平旋转角度置0
-            eulerAngle.y = 0;
-            //把旋转后的角度赋值给摄像机枢轴
-            cameraPivotTransform.localEulerAngles = eulerAngle;
+            // 分离水平（XZ）和垂直（Y）分量
+            Vector3 flatDir = new(dir.x, 0, dir.z);
+            float horizontalDist = flatDir.magnitude;
+            float verticalDiff = dir.y;
+
+            // 关键修复：使用水平距离底线，防止近距离时仰角趋近于90°
+            float effectiveHorizontalDist = Mathf.Max(horizontalDist, minimumHorizontalDistance);
+
+            // 用 Atan2 计算俯仰角（Unity X正=俯，X负=仰，故取负号）
+            float pitchAngle = -Mathf.Atan2(verticalDiff, effectiveHorizontalDist) * Mathf.Rad2Deg;
+
+            // 硬角度限制（双重保险）
+            pitchAngle = Mathf.Clamp(pitchAngle, minimumLockedVerticalAngle, maximumLockedVerticalAngle);
+
+            // 平滑过渡，防止角度跳变
+            Quaternion targetPivotRotation = Quaternion.Euler(pitchAngle, 0, 0);
+            cameraPivotTransform.localRotation = Quaternion.Slerp(
+                cameraPivotTransform.localRotation,
+                targetPivotRotation,
+                Time.deltaTime * lockedPivotRotationSpeed
+            );
         }
 
         //瞄准时摄像机的旋转方法

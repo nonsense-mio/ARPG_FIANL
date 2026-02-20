@@ -179,14 +179,21 @@ namespace ARPG
         protected virtual void DamageBasedOnAttackType(CharacterManager enemyManager)
         {
             var inv = characterManager.characterInventoryManager;
+
+            // 防御性处理：武器槽为空时（裸手/未配置）使用 1f 作为修改器，避免 NullReferenceException
+            float rightLightMod = inv.rightWeapon != null ? inv.rightWeapon.lightAttackDamageModifier : 1f;
+            float rightHeavyMod = inv.rightWeapon != null ? inv.rightWeapon.heavyAttackDamageModifier : 1f;
+            float leftLightMod  = inv.leftWeapon  != null ? inv.leftWeapon.lightAttackDamageModifier  : 1f;
+            float leftHeavyMod  = inv.leftWeapon  != null ? inv.leftWeapon.heavyAttackDamageModifier  : 1f;
+
             int finalPhysicalDamage = this.SendQuery(new CalculateAttackTypeDamageQuery(
                 physicalDamage,
                 characterManager.characterCombatManager.currentAttackType,
                 characterManager.isUsingRightHand,
-                inv.rightWeapon.lightAttackDamageModifier,
-                inv.rightWeapon.heavyAttackDamageModifier,
-                inv.leftWeapon.lightAttackDamageModifier,
-                inv.leftWeapon.heavyAttackDamageModifier));
+                rightLightMod,
+                rightHeavyMod,
+                leftLightMod,
+                leftHeavyMod));
 
             //根据敌人破防情况决定受击动画播放与否
             if (enemyManager.characterStatsManager.totalPoiseDefense > poiseBreak)

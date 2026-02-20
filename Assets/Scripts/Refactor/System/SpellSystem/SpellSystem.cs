@@ -29,13 +29,20 @@ namespace ARPG
                 : character.characterWeaponSlotManager.leftHandSlot.transform;
 
             projectile.transform.position = handSlot.position;
+
+            // 锁定目标时直接瞄准目标中心点（lockOnTransform），避免近距离时因摄像机角度偏差导致火球打地
             if (player.cameraMgr.currentLockOnTarget != null)
             {
-                projectile.transform.rotation = Quaternion.LookRotation(player.cameraMgr.currentLockOnTarget.lockOnTransform.transform.position - player.lockOnTransform.transform.position);
+                Vector3 aimTarget = player.cameraMgr.currentLockOnTarget.lockOnTransform.position;
+                Vector3 aimDir = (aimTarget - handSlot.position).normalized;
+                projectile.transform.rotation = Quaternion.LookRotation(aimDir);
             }
             else
             {
-                projectile.transform.rotation = Quaternion.Euler(player.cameraMgr.cameraPivotTransform.eulerAngles.x, player.lockOnTransform.eulerAngles.y, 0);
+                projectile.transform.rotation = Quaternion.Euler(
+                    player.cameraMgr.cameraTransform.eulerAngles.x,
+                    player.cameraMgr.cameraTransform.eulerAngles.y,
+                    0);
             }
 
             SpellDamageCollider damageCollider = projectile.GetComponent<SpellDamageCollider>();
@@ -45,7 +52,9 @@ namespace ARPG
 
             Rigidbody rb = projectile.GetComponent<Rigidbody>();
             rb.AddForce(projectile.transform.forward * ps.projectileForwardVelocity);
-            rb.AddForce(projectile.transform.up * ps.projectileUpWardVelocity);
+            // 非锁定模式需向上弧线力补偿摄像机平视偏差；锁定模式已直接瞄准目标，无需叠加
+            if (player.cameraMgr.currentLockOnTarget == null)
+                rb.AddForce(projectile.transform.up * ps.projectileUpWardVelocity);
         }
     }
 }

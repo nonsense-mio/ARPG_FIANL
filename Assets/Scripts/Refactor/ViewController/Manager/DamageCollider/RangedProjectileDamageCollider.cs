@@ -37,9 +37,11 @@ namespace ARPG
             hasAlreadyPenetratedASurface = false;
             penetratedProjectile = null;
             arrowCapsuleCollider.enabled = true;
+
+            arrowRigidbody.isKinematic = false;        // 先切到非 kinematic，才能安全操作 velocity
             arrowRigidbody.velocity = Vector3.zero;
             arrowRigidbody.angularVelocity = Vector3.zero;
-            arrowRigidbody.isKinematic = true;
+            arrowRigidbody.isKinematic = true;         // 再冻结，等待下次从池取出并发射
 
             if (charactersDamaged.Count > 0)
             {

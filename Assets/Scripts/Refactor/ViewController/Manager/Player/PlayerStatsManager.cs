@@ -229,6 +229,7 @@ namespace ARPG
         protected override void HandleDeath()
         {
             base.HandleDeath();
+            playerModel.CurrentHP.Value = 0;
             StartCoroutine(RespawnAfterDelay(3f));
         }
         private IEnumerator RespawnAfterDelay(float delay)

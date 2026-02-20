@@ -81,9 +81,8 @@ namespace ARPG
                 // 7. 开启物理
                 rigidbody.isKinematic = false;
 
-                // 8.改用 velocity 直接赋值
-                // 放弃 AddForce。AddForce 容易受物理步长和刚体状态影响导致爆炸。
-                // 直接设置速度是绝对的，不会产生 NaN。
+                // 8. 改用 velocity 直接赋值（isKinematic=false 之后才能安全操作 velocity）
+                rigidbody.angularVelocity = Vector3.zero; // 清除残余角速度
                 Vector3 forceDir = liveArrow.transform.forward;
                 float speed = player.playerInventoryManager.currentAmmo.forwardVelocity;
                 rigidbody.velocity = forceDir * (speed / rigidbody.mass * Time.fixedDeltaTime);
@@ -117,13 +116,9 @@ namespace ARPG
                 liveArrow.transform.rotation = Quaternion.identity;
                 liveArrow.transform.localScale = Vector3.one;
 
-                // 4.深层重置刚体
-                // 简单的 velocity=0 可能不够，必须重置惯性张量，防止上次碰撞导致的物理计算错误
+                // 4.深层重置刚体（仅重置张量，不在 kinematic 状态操作 velocity）
                 rigidbody.ResetInertiaTensor();
                 rigidbody.ResetCenterOfMass();
-                rigidbody.velocity = Vector3.zero;
-                rigidbody.angularVelocity = Vector3.zero;
-
 
                 if (enemy.currentTarget != null)
                 {
@@ -131,19 +126,16 @@ namespace ARPG
                 }
 
                 // 6. 强制同步物理变换
-                // 告诉物理引擎：“刚体现在就在这个位置，不要管上一帧在哪”
                 Physics.SyncTransforms();
 
                 // 7. 开启物理
                 rigidbody.isKinematic = false;
 
-                // 8. 【核心改动】改用 velocity 直接赋值
-                // 放弃 AddForce。AddForce 容易受物理步长和刚体状态影响导致爆炸。
-                // 直接设置速度是绝对的，不会产生 NaN。
+                // 8. 改用 velocity 直接赋值（isKinematic=false 之后才能安全操作 velocity）
+                rigidbody.velocity = Vector3.zero;        // 清除残余速度
+                rigidbody.angularVelocity = Vector3.zero; // 清除残余角速度
                 Vector3 forceDir = liveArrow.transform.forward;
                 float speed = enemy.characterInventoryManager.currentAmmo.forwardVelocity;
-                // 暂时保留你的逻辑，但改用 velocity (忽略 mass 影响，强制设定速度)
-                // 这样可以 100% 避免 "Floating-point precision" 错误
                 rigidbody.velocity = forceDir * (speed / rigidbody.mass * Time.fixedDeltaTime);
                 // 上面这个公式是模拟 AddForce(ForceMode.Force) 的一帧效果，但更安全
                 // 恢复重力设置
