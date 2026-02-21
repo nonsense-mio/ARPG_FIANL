@@ -25,8 +25,13 @@ namespace ARPG
 
         public PlayerLocomotionManager playerLocomotionManager;
 
-        //检查是否发生过交互    
+        //检查是否发生过交互
         private bool isShowingInteractInfo;
+
+        // isInteracting 安全阀：防止因无效动画名导致 isInteracting 永久卡 true
+        private static readonly int _hashIsInteracting = Animator.StringToHash("isInteracting");
+        private const float MAX_INTERACTING_DURATION = 5f;
+        private float _isInteractingTimer;
 
         protected override void Awake()
         {
@@ -97,8 +102,30 @@ namespace ARPG
             playerLocomotionManager.HandleRotation();
 
 
+            HandleIsInteractingSafetyValve();
+
             //检查可交互的物品
             CheckForInteractableObject();
+        }
+
+        /// <summary>
+        /// isInteracting 安全阀：防止因无效动画名导致 isInteracting 永久卡 true
+        /// </summary>
+        private void HandleIsInteractingSafetyValve()
+        {
+            if (isInteracting)
+            {
+                _isInteractingTimer += Time.deltaTime;
+                if (_isInteractingTimer > MAX_INTERACTING_DURATION)
+                {
+                    animator.SetBool(_hashIsInteracting, false);
+                    _isInteractingTimer = 0;
+                }
+            }
+            else
+            {
+                _isInteractingTimer = 0;
+            }
         }
         protected override void FixedUpdate()
         {

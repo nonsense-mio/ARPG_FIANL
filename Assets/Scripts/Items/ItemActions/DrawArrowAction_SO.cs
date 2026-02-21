@@ -7,7 +7,7 @@ namespace ARPG
     {
         public override void PerformAction(CharacterManager character)
         {
-            if(character.isInteracting || character.isUsingComsumable)
+            if (!character.CanPerformAction())
                 return;
             if(character.isHoldingArrow)
                 return;

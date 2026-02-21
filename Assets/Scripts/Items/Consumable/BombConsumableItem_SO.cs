@@ -20,6 +20,7 @@ namespace ARPG
         {
             if(currentItemAmount > 0)
             {
+                player.isUsingComsumable = true;
                 player.playerWeaponSlotManager.rightHandSlot.UnloadWeapon();
                 player.playerAnimatorManager.PlayTargetAnimation(consumeAnimation, true);
                 GameObject bombModel = GameArchitecture.Interface.GetSystem<IPoolSystem>().Spawn(itemModelName);

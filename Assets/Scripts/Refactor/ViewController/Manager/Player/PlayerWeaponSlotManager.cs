@@ -25,10 +25,15 @@ namespace ARPG
                 if (isLeft)
                 {
                     leftHandSlot.currentWeapon = weaponItem;
+                    if (player.inputMgr.twoHandFlag)
+                    {
+                        // 双手模式：新左手武器显示在背后，左手保持空
+                        backSlot.LoadWeaponModel(weaponItem);
+                        return;
+                    }
                     leftHandSlot.LoadWeaponModel(weaponItem);
                     LoadLeftWeaponDamageCollider();
-                    
-                    //player.playerAnimatorManager.PlayTargetAnimation(weaponItem.offHandIdleAnimation, false,true);
+
                 }
                 else
                 {

@@ -10,7 +10,6 @@ namespace ARPG
         public bool isUnarmed;
         [Header("Animator Override")]
         public AnimatorOverrideController weaponOverrideController;
-        //public string offHandIdleAnimation= "Left_Arm_Idle_01";
         [Header("武器类型")]
         public E_WeaponType weaponType;
 

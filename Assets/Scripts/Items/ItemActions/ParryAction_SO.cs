@@ -8,7 +8,7 @@ namespace ARPG
     {
         public override void PerformAction(CharacterManager character)
         {
-            if(character.isInteracting || character.isUsingComsumable)
+            if (!character.CanPerformAction())
                 return;
             character.characterAnimatorManager.EraseHandIKForWeapon();
             WeaponItem_SO parryingWeapon = character.characterInventoryManager.currentItemBeingUsed as WeaponItem_SO;

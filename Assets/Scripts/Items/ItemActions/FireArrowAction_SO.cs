@@ -10,7 +10,7 @@ namespace ARPG
         public override void PerformAction(CharacterManager character)
         {
             PlayerManager player = character as PlayerManager;
-            if (character.isInteracting || character.isUsingComsumable)
+            if (!character.CanPerformAction())
                 return;
             //发射出去的箭矢生成位置
             ArrowInstantiationLocation arrowInstantiationLocation;

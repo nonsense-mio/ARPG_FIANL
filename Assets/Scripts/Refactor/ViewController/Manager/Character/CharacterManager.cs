@@ -18,46 +18,54 @@ namespace ARPG
         public Transform lockOnTransform;
         public Transform criticalAttackRayCastStartPoint;
 
-        [Header("是否开启动画根运动")]
+        // ── Animator 拥有（每帧从 Animator 读取，C# 不应直接写入） ──
+        [Header("Animator 拥有（每帧读取）")]
         public bool isInteracting;
-        [Header("玩家状态")]
-        public bool isDead;
-
-        [Header("战斗相关bool")]
-        public bool canBeRiposted;
-        public bool canBeParried;
         public bool canDoCombo;
-        public bool canRoll = true;
-        public bool isParrying;
-        public bool isBlocking;
+        public bool canRotate;
         public bool isInvulnerable;
-        public bool isUsingRightHand;
-        public bool isUsingLeftHand;
+        public bool isFiringSpell;
         public bool isHoldingArrow;
-        public bool isAiming;
-        public bool isTwoHandingWeapon;
         public bool isPerformingFullyChargeAttack;
+
+        // ── 代码拥有（每帧写入 Animator，Animator 用于转换条件） ──
+        [Header("代码拥有（每帧写入 Animator）")]
+        public bool isTwoHandingWeapon;
+        public bool isBlocking;
+        public bool isDead;
+        public bool isGrounded;
+
+        // ── 纯代码标志（不与 Animator 同步，由 ResetAnimatorBool 或逻辑重置） ──
+        [Header("战斗标志（纯代码）")]
         public bool isAttacking;
+        public bool isParrying;
+        public bool canBeParried;
+        public bool canBeRiposted;
         public bool isBeingBackstabbed;
         public bool isBeingRiposted;
         public bool isPerformingBackstab;
         public bool isPerformingRiposte;
-
-
-        [Header("运动相关bool")]
-        public bool isRotatingWithRootMotion;
-        public bool canRotate;
-        public bool isSprinting;
-        public bool isGrounded;
-
-        [Header("Spells")]
-        public bool isFiringSpell;
+        public bool isUsingRightHand;
+        public bool isUsingLeftHand;
+        public bool isAiming;
+        public bool canRoll = true;
         public bool isUsingComsumable;
 
+        [Header("运动标志（纯代码）")]
+        public bool isRotatingWithRootMotion;
+        public bool isSprinting;
 
-        //
-        //backstab  riposte 
+
+        //backstab  riposte
         public int pendingCriticalDamage;
+
+        /// <summary>
+        /// 通用动作守卫：未死亡、未处于交互动画中、未使用消耗品、未在释放法术
+        /// </summary>
+        public bool CanPerformAction()
+        {
+            return !isDead && !isInteracting && !isUsingComsumable && !isFiringSpell;
+        }
         protected virtual void Awake()
         {
             characterController = GetComponent<CharacterController>();

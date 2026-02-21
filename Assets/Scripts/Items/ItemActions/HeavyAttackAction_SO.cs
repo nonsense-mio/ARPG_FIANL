@@ -33,7 +33,7 @@ namespace ARPG
             //如果不能连击 就进行普通攻击
             else
             {
-                if (character.canDoCombo || character.isInteracting)
+                if (character.isInteracting)
                     return;
                 HandleHeavyAttack(character);
             }

@@ -8,6 +8,7 @@ namespace ARPG
         {
             var player = PlayerManager.localPlayer;
             if (player == null) return;
+            if (player.isUsingComsumable) return;
 
             var consumable = player.playerInventoryManager.currentConsumable;
             if (consumable != null)
