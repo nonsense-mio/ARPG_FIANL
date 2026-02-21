@@ -40,18 +40,28 @@ namespace ARPG
         /// </summary>
         protected virtual bool CanPerformBlock(EnemyManager enemy) => true;
 
-        public override State Tick(EnemyManager enemy)
+        public override void OnExit(EnemyManager enemy)
+        {
+            hasPerformedDodge = false;
+            hasRandomDodgeDirection = false;
+            hasAmmoLoaded = false;
+            hasPerformedParry = false;
+            randomDestinationSet = false;
+            willPerformBlock = false;
+            willPerformDodge = false;
+            willPerformParry = false;
+        }
+
+        public override State OnUpdate(EnemyManager enemy)
         {
             if (enemy.currentTarget == null)
             {
-                ResetStateFlags();
                 State fallback = GetFallbackState();
                 return fallback != null ? fallback : (State)this;
             }
 
             if (ShouldExitToFallback(enemy))
             {
-                ResetStateFlags();
                 return GetFallbackState();
             }
 
@@ -117,7 +127,6 @@ namespace ARPG
             BaseAttackState attackState = GetAttackState();
             if (enemy.currentRecoveryTime <= 0 && attackState.currentAttack != null)
             {
-                ResetStateFlags();
                 return attackState;
             }
             else
@@ -142,7 +151,6 @@ namespace ARPG
 
             if (enemy.distanceFromTarget > enemy.maximumAggroRadius)
             {
-                ResetStateFlags();
                 return GetPursueState();
             }
 
@@ -169,7 +177,6 @@ namespace ARPG
 
             if (enemy.currentRecoveryTime <= 0 && hasAmmoLoaded)
             {
-                ResetStateFlags();
                 return GetAttackState();
             }
 
@@ -295,18 +302,6 @@ namespace ARPG
             willPerformParry = Random.Range(0, 100) <= enemy.parryLikelyHood;
         }
         #endregion
-
-        private void ResetStateFlags()
-        {
-            hasPerformedDodge = false;
-            hasRandomDodgeDirection = false;
-            hasAmmoLoaded = false;
-            hasPerformedParry = false;
-            randomDestinationSet = false;
-            willPerformBlock = false;
-            willPerformDodge = false;
-            willPerformParry = false;
-        }
 
         #region AI Actions
         private void BlockUsingOffHand(EnemyManager enemy)

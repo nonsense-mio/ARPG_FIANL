@@ -183,7 +183,7 @@ namespace ARPG
             }
 
             // 禁用 AI 状态机
-            enemy.currentState = null;
+            enemy.stateMachine.Stop(enemy);
 
             // 禁用血条 UI
             if (enemyHealthBar != null)

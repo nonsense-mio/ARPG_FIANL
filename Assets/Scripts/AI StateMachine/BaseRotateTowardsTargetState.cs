@@ -10,7 +10,7 @@ namespace ARPG
     {
         protected abstract State GetCombatStanceState();
 
-        public override State Tick(EnemyManager enemy)
+        public override State OnUpdate(EnemyManager enemy)
         {
             enemy.animator.SetFloat("Vertical", 0);
             enemy.animator.SetFloat("Horizontal", 0);

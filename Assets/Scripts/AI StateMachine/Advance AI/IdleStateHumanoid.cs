@@ -13,7 +13,7 @@ namespace ARPG
             pursueTargetState = GetComponent<PursueTargetStateHumanoid>();
         }
 
-        public override State Tick(EnemyManager enemy)
+        public override State OnUpdate(EnemyManager enemy)
         {
             enemy.TryDetectTarget();
 

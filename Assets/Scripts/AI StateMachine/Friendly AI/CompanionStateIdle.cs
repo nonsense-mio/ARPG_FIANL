@@ -16,7 +16,7 @@ namespace ARPG
             pursueTargetState = GetComponent<CompanionStatePursueTarget>();
         }
 
-        public override State Tick(EnemyManager enemy)
+        public override State OnUpdate(EnemyManager enemy)
         {
             enemy.enemyEffectsManager.InterrupEffect();
             enemy.animator.SetFloat("Vertical", 0, 0.1f, Time.deltaTime);

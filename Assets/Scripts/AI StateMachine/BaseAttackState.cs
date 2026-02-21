@@ -17,7 +17,13 @@ namespace ARPG
         bool willDoComboOnNext = false;
         public bool hasPerformedAttack = false;
 
-        public override State Tick(EnemyManager enemy)
+        public override void OnExit(EnemyManager enemy)
+        {
+            willDoComboOnNext = false;
+            hasPerformedAttack = false;
+        }
+
+        public override State OnUpdate(EnemyManager enemy)
         {
             if (enemy.currentTarget == null)
             {
@@ -38,7 +44,6 @@ namespace ARPG
         {
             if (enemy == null || enemy.currentTarget == null || enemy.currentTarget.isDead)
             {
-                ResetStateFlags();
                 if (enemy != null) enemy.currentTarget = null;
                 return GetCombatStanceState();
             }
@@ -47,13 +52,11 @@ namespace ARPG
 
             if (enemy.distanceFromTarget > enemy.maximumAggroRadius)
             {
-                ResetStateFlags();
                 return GetPursueState();
             }
 
             if (currentAttack == null)
             {
-                ResetStateFlags();
                 return GetCombatStanceState();
             }
 
@@ -83,7 +86,6 @@ namespace ARPG
                 currentAttack = null;
             }
 
-            ResetStateFlags();
             return GetRotateTowardsState();
         }
         #endregion
@@ -98,20 +100,17 @@ namespace ARPG
 
             if (!enemy.isHoldingArrow)
             {
-                ResetStateFlags();
                 return GetCombatStanceState();
             }
 
             if (enemy.currentTarget != null && enemy.currentTarget.isDead)
             {
-                ResetStateFlags();
                 enemy.currentTarget = null;
                 return this;
             }
 
             if (enemy.distanceFromTarget > enemy.maximumAggroRadius)
             {
-                ResetStateFlags();
                 return GetPursueState();
             }
 
@@ -120,7 +119,6 @@ namespace ARPG
                 FireAmmo(enemy);
             }
 
-            ResetStateFlags();
             return GetRotateTowardsState();
         }
         #endregion
@@ -178,12 +176,6 @@ namespace ARPG
                     currentAttack = null;
                 }
             }
-        }
-
-        private void ResetStateFlags()
-        {
-            willDoComboOnNext = false;
-            hasPerformedAttack = false;
         }
 
         private void FireAmmo(EnemyManager enemy)

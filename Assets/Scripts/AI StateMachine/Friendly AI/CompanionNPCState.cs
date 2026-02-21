@@ -22,7 +22,7 @@ namespace ARPG
             idleState = GetComponent<CompanionStateIdle>();
         }
 
-        public override State Tick(EnemyManager enemy)
+        public override State OnUpdate(EnemyManager enemy)
         {
             // 如果不是NPC，则设置同伴并切换到跟随状态
             if (!enemy.isNPC)

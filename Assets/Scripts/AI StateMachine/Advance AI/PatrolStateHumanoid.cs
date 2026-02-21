@@ -26,7 +26,7 @@ namespace ARPG
             pursueTargetState = GetComponent<PursueTargetStateHumanoid>();
         }
 
-        public override State Tick(EnemyManager enemy)
+        public override State OnUpdate(EnemyManager enemy)
         {
             //巡逻时检测目标
             SearchForTargetWhilePatrol(enemy);

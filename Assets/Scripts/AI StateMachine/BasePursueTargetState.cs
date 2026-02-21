@@ -18,7 +18,7 @@ namespace ARPG
         /// </summary>
         protected virtual State GetEarlyExitState(EnemyManager enemy) => null;
 
-        public override State Tick(EnemyManager enemy)
+        public override State OnUpdate(EnemyManager enemy)
         {
             State earlyExit = GetEarlyExitState(enemy);
             if (earlyExit != null) return earlyExit;

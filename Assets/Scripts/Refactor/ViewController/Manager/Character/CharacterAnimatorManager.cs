@@ -27,6 +27,12 @@ namespace ARPG
         /// <param name="isInteracting">播放动画的bool值</param>
         public void PlayTargetAnimation(string targetAnim, bool isInteracting, bool canRotate = false, bool mirrorAnim = false,bool canRoll = false)
         {
+            // 防护：空动画名会导致 CrossFade 不播放任何动画，isInteracting 永远无法被动画事件重置
+            if (string.IsNullOrEmpty(targetAnim))
+            {
+                character.animator.SetBool("isInteracting", false);
+                return;
+            }
             //应用根运动
             character.animator.applyRootMotion = isInteracting;
             character.animator.SetBool("canRotate", canRotate);
@@ -38,7 +44,12 @@ namespace ARPG
 
         public void PlayTargetAnimationWithRootRotation(string targetAnim, bool isInteracting)
         {
-
+            // 防护：空动画名会导致 CrossFade 不播放任何动画，isInteracting 永远无法被动画事件重置
+            if (string.IsNullOrEmpty(targetAnim))
+            {
+                character.animator.SetBool("isInteracting", false);
+                return;
+            }
             character.animator.applyRootMotion = isInteracting;
             character.animator.SetBool("isRotatingWithRootMotion", true);
             character.animator.SetBool("isInteracting", isInteracting);

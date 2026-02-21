@@ -14,7 +14,7 @@ namespace ARPG
             companionNPCState = GetComponent<CompanionNPCState>();
         }
 
-        public override State Tick(EnemyManager enemy)
+        public override State OnUpdate(EnemyManager enemy)
         {
             enemy.enemyEffectsManager.InterrupEffect();
             if (enemy.isNPC)

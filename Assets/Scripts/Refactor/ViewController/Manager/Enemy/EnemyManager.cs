@@ -4,6 +4,7 @@ using ARPG;
 using Framework;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 namespace ARPG
 {
@@ -18,7 +19,16 @@ namespace ARPG
         public EnemyWeaponSlotManager enemyWeaponSlotManager;
         public EnemyLocomotionManager enemyLocomotionManager;
 
-        public State currentState;
+        [Header("状态机")]
+        [FormerlySerializedAs("currentState")]
+        [SerializeField] State initialState;
+        public StateMachineController stateMachine = new StateMachineController();
+
+        /// <summary>
+        /// 兼容属性：外部读取当前状态
+        /// </summary>
+        public State currentState => stateMachine.CurrentState;
+
         public CharacterManager currentTarget;
         public NavMeshAgent navmeshAgent;
         public Rigidbody enemyRigidbody;
@@ -82,6 +92,11 @@ namespace ARPG
         private int _hashIsBlocking;
         private int _hashIsTwoHandingWeapon;
         private int _hashIsGrounded;
+
+        // isInteracting 安全阀：防止因无效动画导致永久卡死
+        private const float MAX_INTERACTING_DURATION = 5f;
+        private float _isInteractingTimer;
+
         protected override void Awake()
         {
             base.Awake();
@@ -129,12 +144,15 @@ namespace ARPG
         private void Start()
         {
             enemyRigidbody.isKinematic = false;
+            stateMachine.Initialize(initialState, this);
         }
 
         private void Update()
         {
             HandleRecoveryTimer();
             HandleStateMachine();
+            HandleIsInteractingSafetyValve();
+
             isRotatingWithRootMotion = animator.GetBool(_hashIsRotatingWithRootMotion);
             isInteracting            = animator.GetBool(_hashIsInteracting);
             isPhaseShifting          = animator.GetBool(_hashIsPhaseShifting);
@@ -170,29 +188,31 @@ namespace ARPG
             navmeshAgent.transform.localRotation = Quaternion.identity;
         }
 
-        /// <summary>
-        /// 处理状态机
-        /// </summary>
         private void HandleStateMachine()
         {
             if (isDead)
                 return;
-            if (currentState != null)
+            stateMachine.Update(this);
+        }
+
+        /// <summary>
+        /// isInteracting 安全阀：防止因无效动画名导致 isInteracting 永久卡 true
+        /// </summary>
+        private void HandleIsInteractingSafetyValve()
+        {
+            if (isInteracting)
             {
-                State nextState = currentState.Tick(this);
-                if (nextState != null)
+                _isInteractingTimer += Time.deltaTime;
+                if (_isInteractingTimer > MAX_INTERACTING_DURATION)
                 {
-                    SwitchToNextState(nextState);
+                    animator.SetBool(_hashIsInteracting, false);
+                    _isInteractingTimer = 0;
                 }
             }
-        }
-        /// <summary>
-        /// 切换状态
-        /// </summary>
-        /// <param name="state"></param>
-        private void SwitchToNextState(State state)
-        {
-            currentState = state;
+            else
+            {
+                _isInteractingTimer = 0;
+            }
         }
 
         /// <summary>
@@ -247,6 +267,3 @@ namespace ARPG
 
     }
 }
-
-
-

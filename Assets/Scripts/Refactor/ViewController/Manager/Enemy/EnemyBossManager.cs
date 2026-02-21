@@ -64,7 +64,7 @@ namespace ARPG
             // 清理恢复时间，便于动画结束后正常挑选新攻击
             enemy.currentRecoveryTime = 0;
             // 切回战斗姿态状态，由状态机重新选择二阶段攻击
-            enemy.currentState = bossCombatStanceState;
+            enemy.stateMachine.ForceTransitionTo(bossCombatStanceState, enemy);
         }
     }
 
