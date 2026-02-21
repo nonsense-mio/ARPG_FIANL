@@ -25,7 +25,7 @@ namespace ARPG
             poolSystem = this.GetSystem<IPoolSystem>();
 
             this.RegisterEvent<BombHitEvent>(e => BombHitFX(e.BombTransform));
-            this.RegisterEvent<SlashEvent>(e => OnSlash(e.Character));
+            this.RegisterEvent<SlashEvent>(e => OnSlash(e.Character, e.AttackAnimation));
             this.RegisterEvent<FireBallHitEvent>(e => FireBallHitFX(e.HitPoint));
             this.RegisterEvent<CharacterDamageEvent>(e => OnCharacterDamage(e.HitPoint));
             this.RegisterEvent<BossPhaseShiftEvent>(e => OnBossPhaseShift(e.Boss));
@@ -59,7 +59,7 @@ namespace ARPG
             blood.transform.localScale = Vector3.one * 0.5f;
         }
 
-        private void OnSlash(CharacterManager character)
+        private void OnSlash(CharacterManager character, string attackAnim)
         {
             string currentSlashPath = SlashFXPath;
             if (character is EnemyManager)
@@ -74,9 +74,28 @@ namespace ARPG
                 currentSlashPath = SlashFXPath;
             }
             GameObject slash = poolSystem.Spawn(currentSlashPath);
-            slash.transform.position = character.transform.position + character.transform.up * 1.0f;
-            slash.transform.rotation = character.transform.rotation;
+            slash.transform.SetParent(character.transform);
+            slash.transform.SetLocalPositionAndRotation(Vector3.up * 1.0f, GetSlashRotation(attackAnim));
             slash.transform.localScale = Vector3.one * 0.5f;
+        }
+
+        private Quaternion GetSlashRotation(string attackAnim)
+        {
+            if (string.IsNullOrEmpty(attackAnim)) return Quaternion.identity;
+
+            if (attackAnim.Contains("Heavy") || attackAnim.Contains("Jumping") || attackAnim.Contains("Charging"))
+                return Quaternion.Euler(0, 0, 90);   // 竖劈
+
+            if (attackAnim.Contains("Running"))
+                return Quaternion.Euler(0, 0, 45);   // 斜向前刺
+
+            if (attackAnim.EndsWith("_02"))
+                return Quaternion.Euler(0, 0, 180);  // 轻击第2刀，反向水平
+
+            if (attackAnim.EndsWith("_03"))
+                return Quaternion.Euler(0, 0, -30);  // 轻击第3刀，斜向
+
+            return Quaternion.identity;              // 默认水平（轻击第1刀）
         }
 
         private void OnBossPhaseShift(EnemyManager boss)

@@ -6,6 +6,7 @@ namespace ARPG
     public struct SlashEvent
     {
         public CharacterManager Character;
+        public string AttackAnimation;
     }
 
     public struct CharacterDamageEvent

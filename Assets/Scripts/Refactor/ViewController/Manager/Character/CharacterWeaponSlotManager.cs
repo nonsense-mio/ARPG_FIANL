@@ -173,7 +173,11 @@ namespace ARPG
                 leftHandDamageCollider.EnableDamageCollider();
             }
             //触发挥砍事件
-            this.SendEvent(new SlashEvent { Character = character });
+            this.SendEvent(new SlashEvent
+            {
+                Character = character,
+                AttackAnimation = character.characterCombatManager.lastAttack
+            });
         }
  
         /// <summary>
