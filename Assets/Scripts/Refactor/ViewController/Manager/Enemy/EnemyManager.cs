@@ -61,10 +61,27 @@ namespace ARPG
         public bool isNPC;
         public Transform posNPC;//NPC对话位置
 
+        [Header("AI 检测图层")]
+        public LayerMask detectionLayer;
+        public LayerMask layersThatBlockLineOfSight;
+
         [Header("AI 目标相关")]
         public float distanceFromTarget;// 与目标的距离
         public Vector3 targetDirection;// 目标方向向量
         public float viewableAngle;// 目标与正前方的夹角
+
+        // Animator 参数 Hash 缓存
+        private int _hashIsRotatingWithRootMotion;
+        private int _hashIsInteracting;
+        public int _hashIsPhaseShifting;
+        public int _hashIsInvulnerable;
+        private int _hashIsHoldingArrow;
+        private int _hashCanDoCombo;
+        private int _hashCanRotate;
+        private int _hashIsDead;
+        private int _hashIsBlocking;
+        private int _hashIsTwoHandingWeapon;
+        private int _hashIsGrounded;
         protected override void Awake()
         {
             base.Awake();
@@ -87,6 +104,17 @@ namespace ARPG
             enemyWeaponSlotManager.Init(this);
             enemyLocomotionManager.Init(this);
 
+            _hashIsRotatingWithRootMotion = Animator.StringToHash("isRotatingWithRootMotion");
+            _hashIsInteracting            = Animator.StringToHash("isInteracting");
+            _hashIsPhaseShifting          = Animator.StringToHash("isPhaseShifting");
+            _hashIsInvulnerable           = Animator.StringToHash("isInvulnerable");
+            _hashIsHoldingArrow           = Animator.StringToHash("isHoldingArrow");
+            _hashCanDoCombo               = Animator.StringToHash("canDoCombo");
+            _hashCanRotate                = Animator.StringToHash("canRotate");
+            _hashIsDead                   = Animator.StringToHash("isDead");
+            _hashIsBlocking               = Animator.StringToHash("isBlocking");
+            _hashIsTwoHandingWeapon       = Animator.StringToHash("isTwoHandingWeapon");
+            _hashIsGrounded               = Animator.StringToHash("isGrounded");
         }
         private void IsNPCChanged(bool val)
         {
@@ -107,17 +135,17 @@ namespace ARPG
         {
             HandleRecoveryTimer();
             HandleStateMachine();
-            isRotatingWithRootMotion = animator.GetBool("isRotatingWithRootMotion");
-            isInteracting = animator.GetBool("isInteracting");
-            isPhaseShifting = animator.GetBool("isPhaseShifting");
-            isInvulnerable = animator.GetBool("isInvulnerable");
-            isHoldingArrow = animator.GetBool("isHoldingArrow");
-            canDoCombo = animator.GetBool("canDoCombo");
-            canRotate = animator.GetBool("canRotate");
-            animator.SetBool("isDead", isDead);
-            animator.SetBool("isBlocking", isBlocking);
-            animator.SetBool("isTwoHandingWeapon", isTwoHandingWeapon);
-            animator.SetBool("isGrounded", isGrounded);
+            isRotatingWithRootMotion = animator.GetBool(_hashIsRotatingWithRootMotion);
+            isInteracting            = animator.GetBool(_hashIsInteracting);
+            isPhaseShifting          = animator.GetBool(_hashIsPhaseShifting);
+            isInvulnerable           = animator.GetBool(_hashIsInvulnerable);
+            isHoldingArrow           = animator.GetBool(_hashIsHoldingArrow);
+            canDoCombo               = animator.GetBool(_hashCanDoCombo);
+            canRotate                = animator.GetBool(_hashCanRotate);
+            animator.SetBool(_hashIsDead, isDead);
+            animator.SetBool(_hashIsBlocking, isBlocking);
+            animator.SetBool(_hashIsTwoHandingWeapon, isTwoHandingWeapon);
+            animator.SetBool(_hashIsGrounded, isGrounded);
             if (currentTarget != null && !isDead)
             {
                 distanceFromTarget = Vector3.Distance(currentTarget.transform.position, transform.position);
@@ -165,6 +193,37 @@ namespace ARPG
         private void SwitchToNextState(State state)
         {
             currentState = state;
+        }
+
+        /// <summary>
+        /// 球形检测范围内寻找有效目标（排除队友、死亡目标、视线遮挡）
+        /// 找到目标后设置 currentTarget 并返回 true。
+        /// </summary>
+        public bool TryDetectTarget()
+        {
+            Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRadius, detectionLayer);
+
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                CharacterManager targetCharacter = colliders[i].transform.GetComponent<CharacterManager>();
+
+                if (targetCharacter == null) continue;
+                if (targetCharacter.characterStatsManager.teamIDNumber == enemyStatsManager.teamIDNumber) continue;
+                if (targetCharacter.isDead) continue;
+
+                Vector3 targetDir = targetCharacter.transform.position - transform.position;
+                float angle = Vector3.Angle(targetDir, transform.forward);
+
+                if (angle > minimumDetectionAngle && angle < maximumDetectionAngle && targetDir != Vector3.zero)
+                {
+                    if (!Physics.Linecast(lockOnTransform.position, targetCharacter.lockOnTransform.position, layersThatBlockLineOfSight))
+                    {
+                        currentTarget = targetCharacter;
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         /// <summary>

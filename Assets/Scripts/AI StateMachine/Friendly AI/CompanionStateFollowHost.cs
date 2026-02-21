@@ -62,7 +62,7 @@ namespace ARPG
             //设置寻路目标
             enemy.navmeshAgent.SetDestination(enemy.companion.transform.position);
             enemy.enemyRigidbody.velocity = targetVelocity;
-            enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, enemy.navmeshAgent.transform.rotation, enemy.rotationSpeed / Time.deltaTime);
+            enemy.transform.rotation = Quaternion.Slerp(enemy.transform.rotation, enemy.navmeshAgent.transform.rotation, enemy.rotationSpeed * Time.deltaTime);
 
         }
     }

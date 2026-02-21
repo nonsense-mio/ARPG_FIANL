@@ -49,8 +49,8 @@ namespace ARPG
         /// </summary> <summary>
         public void ShiftToSecondPhase()
         {
-            enemy.animator.SetBool("isInvulnerable", true);
-            enemy.animator.SetBool("isPhaseShifting", true);
+            enemy.animator.SetBool(enemy._hashIsInvulnerable, true);
+            enemy.animator.SetBool(enemy._hashIsPhaseShifting, true);
             enemy.enemyAnimatorManager.PlayTargetAnimation("Phase Shift", true);
             if (bossCombatStanceState != null)
                 bossCombatStanceState.hasPhaseShifted = true;
@@ -59,7 +59,7 @@ namespace ARPG
             if (bossCombatStanceState != null && bossCombatStanceState.attackState != null)
             {
                 bossCombatStanceState.attackState.currentAttack = null;
-                bossCombatStanceState.attackState.hasperformedAttack = false;
+                bossCombatStanceState.attackState.hasPerformedAttack = false;
             }
             // 清理恢复时间，便于动画结束后正常挑选新攻击
             enemy.currentRecoveryTime = 0;

@@ -2105,8 +2105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b19f9bd97079664ab287916f8864c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 0}
   animator: {fileID: 0}
+  characterController: {fileID: 0}
   characterStatsManager: {fileID: 0}
   characterCombatManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
@@ -2141,6 +2141,7 @@ MonoBehaviour:
   isSprinting: 0
   isGrounded: 1
   isFiringSpell: 0
+  isUsingComsumable: 0
   pendingCriticalDamage: 0
   enemyBossManager: {fileID: 0}
   enemyStatsManager: {fileID: 0}
@@ -2154,7 +2155,7 @@ MonoBehaviour:
   navmeshAgent: {fileID: 8478832479828418590}
   enemyRigidbody: {fileID: 0}
   isPerformingAction: 0
-  rotationSpeed: 15
+  rotationSpeed: 200
   maximumAggroRadius: 5
   detectionRadius: 20
   maximumDetectionAngle: 50
@@ -2179,9 +2180,19 @@ MonoBehaviour:
   returnDistanceFromCompanion: 2
   distanceFromCompanion: 0
   companion: {fileID: 0}
+  isNPC: 0
+  posNPC: {fileID: 0}
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  layersThatBlockLineOfSight:
+    serializedVersion: 2
+    m_Bits: 64
   distanceFromTarget: 0
   targetDirection: {x: 0, y: 0, z: 0}
   viewableAngle: 0
+  _hashIsPhaseShifting: 0
+  _hashIsInvulnerable: 0
 --- !u!114 &9074458879053972960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2290,7 +2301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   instantiateFX: {fileID: 0}
   currentPoisonParticleFX: {fileID: 0}
-  buildUpTransform: {fileID: 0}
   isPoisoned: 0
   poisonBuildUp: 0
   poisonAmount: 100
@@ -4117,12 +4127,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pursueTargetState: {fileID: 0}
-  detectionLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  layersThanBlockLineOfSight:
-    serializedVersion: 2
-    m_Bits: 65
   patorlCompleted: 0
   repeatPatrol: 1
   endOfPatrolResetTime: 5
@@ -4147,12 +4151,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pursueTargetState: {fileID: 0}
-  detectionLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  layersThanBlockLineOfSight:
-    serializedVersion: 2
-    m_Bits: 65
 --- !u!114 &8205269103214435297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4177,11 +4175,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b093149bf4099a94f8c3dd7271881bbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hasPhaseShifted: 0
-  attackState: {fileID: 0}
   enemyAttacks:
   - {fileID: 11400000, guid: bea24601418898b468ae1b8800e3c0e1, type: 2}
   - {fileID: 11400000, guid: a282f5965395f154e9885edd182fa300, type: 2}
+  hasPhaseShifted: 0
+  attackState: {fileID: 0}
 --- !u!114 &1151097522269740436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4195,7 +4193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentAttack: {fileID: 0}
-  hasperformedAttack: 0
+  hasPerformedAttack: 0
 --- !u!114 &8124086271800465883
 MonoBehaviour:
   m_ObjectHideFlags: 0
