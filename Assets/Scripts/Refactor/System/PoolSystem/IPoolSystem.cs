@@ -16,6 +16,12 @@ namespace ARPG
         GameObject Spawn(string prefabPath);
 
         /// <summary>
+        /// 从对象池获取 GameObject，激活前先设置到指定位置和朝向
+        /// 推荐用于含 CharacterController 的对象，确保 CC 在正确位置完成初始化
+        /// </summary>
+        GameObject Spawn(string prefabPath, Vector3 position, Quaternion rotation);
+
+        /// <summary>
         /// 将 GameObject 回收到池中
         /// </summary>
         void Recycle(GameObject obj);

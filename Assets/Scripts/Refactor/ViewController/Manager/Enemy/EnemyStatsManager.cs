@@ -201,7 +201,7 @@ namespace ARPG
             // 禁用敌人的 Update 逻辑
             enemy.enabled = false;
 
-            this.GetSystem<ITimerSystem>().CreateTimer(false, 10f, () => Destroy(enemy.gameObject));
+            this.GetSystem<ITimerSystem>().CreateTimer(false, 10f, () => this.GetSystem<IPoolSystem>().Recycle(enemy.gameObject));
         }
 
     }

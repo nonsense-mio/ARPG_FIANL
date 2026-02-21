@@ -65,28 +65,31 @@ namespace ARPG
             }
         }
 
-        // 从对象池获取对象
+        // 从对象池获取对象（无位置参数版本，生成在原点）
         public GameObject Spawn(string prefabPath)
         {
-            // 如果对象池容器不存在
+            return Spawn(prefabPath, Vector3.zero, Quaternion.identity);
+        }
+
+        // 从对象池获取对象（带位置参数版本）
+        // 关键顺序：先脱离 container → 设置目标位置 → 再激活
+        // 确保 CharacterController 等组件在 OnEnable 时处于正确的世界坐标
+        public GameObject Spawn(string prefabPath, Vector3 position, Quaternion rotation)
+        {
             if (!poolContainers.ContainsKey(prefabPath))
             {
-                // 获取对象池 对象的缓存
                 GameObject prefab = GetOrLoadPrefab(prefabPath);
                 if (prefab == null)
                 {
                     Debug.LogError($"无法加载预制体: {prefabPath}");
                     return null;
                 }
-
-                //创建对象池容器
                 GetOrCreateContainer(prefabPath);
             }
 
             PoolContainer container = poolContainers[prefabPath];
             GameObject obj = container.Spawn();
 
-            // 如果池中没有可用对象,创建新的
             if (obj == null)
             {
                 GameObject prefab = GetOrLoadPrefab(prefabPath);
@@ -96,24 +99,21 @@ namespace ARPG
                     return null;
                 }
                 obj = GameObject.Instantiate(prefab);
-                obj.name = prefabPath;//游戏对象名即为对象池字典键名
-                                      //添加到容器的活动对象中
+                obj.SetActive(false); // 立即停用，确保和回收对象走同一路径（先设位置再激活）
+                obj.name = prefabPath;
                 container.RegisterNewObject(obj);
             }
-            else
-            {
-                // 从池中取出的对象：自动重置 Transform
-                obj.transform.localPosition = Vector3.zero;
-                obj.transform.localRotation = Quaternion.identity;
-                obj.transform.localScale = Vector3.one;
-            }
-            //激活对象并移除父节点
-            obj.SetActive(true);
+
             if (enableHierarchy)
             {
                 obj.transform.SetParent(null, false);
             }
-            // 通知对象被生成，对象可以监听这个来初始化自己
+            obj.transform.localPosition = position;
+            obj.transform.localRotation = rotation;
+            obj.transform.localScale = Vector3.one;
+
+            obj.SetActive(true);
+
             var poolable = obj.GetComponent<IPoolable>();
             poolable?.OnSpawn();
 
