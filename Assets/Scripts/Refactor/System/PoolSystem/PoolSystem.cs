@@ -123,7 +123,7 @@ namespace ARPG
         // 将对象回收到池中
         public void Recycle(GameObject obj)
         {
-            if (obj == null) return;
+            if (obj == null || !obj.activeSelf) return;
             string prefabPath = obj.name;
             if (!poolContainers.ContainsKey(prefabPath))
             {

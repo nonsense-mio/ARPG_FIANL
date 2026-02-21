@@ -30,7 +30,7 @@ namespace ARPG
 
         // isInteracting 安全阀：防止因无效动画名导致 isInteracting 永久卡 true
         private static readonly int _hashIsInteracting = Animator.StringToHash("isInteracting");
-        private const float MAX_INTERACTING_DURATION = 5f;
+        private const float MAX_INTERACTING_DURATION = 8f;
         private float _isInteractingTimer;
 
         protected override void Awake()

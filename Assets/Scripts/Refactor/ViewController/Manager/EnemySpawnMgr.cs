@@ -14,19 +14,18 @@ public class EnemySpawnMgr : ARPGController
     void Start()
     {
         pool = this.GetSystem<IPoolSystem>();
-        
+
         this.RegisterEvent<SpawnEnemyEvent>(_ => SpawnEnemy())
             .UnRegisterWhenGameObjectDestroyed(gameObject);
         this.RegisterEvent<SpawnBossEvent>(_ => SpawnBoss())
             .UnRegisterWhenGameObjectDestroyed(gameObject);
-        
     }
 
     private void SpawnEnemy()
     {
         foreach (var pos in enemyPosList)
         {
-            GameObject enemyObj = pool.Spawn(enemys[Random.Range(0,enemys.Count)], pos.position, Quaternion.identity);
+            GameObject enemyObj = pool.Spawn(enemys[Random.Range(0, enemys.Count)], pos.position, Quaternion.identity);
 
             // 配置巡逻点：将 pos 的子对象填入 PatrolStateHumanoid 列表
             var patrol = enemyObj.GetComponentInChildren<PatrolStateHumanoid>();
@@ -43,6 +42,7 @@ public class EnemySpawnMgr : ARPGController
                 patrol.patorlCompleted = false;
                 patrol.endOfPatrolTimer = 0;
             }
+
         }
     }
 

@@ -76,7 +76,7 @@ namespace ARPG
         /// <summary>
         /// 清空所有输入状态，防止恢复输入后执行残留输入
         /// </summary>
-        private void ClearAllInputs()
+        public void ClearAllInputs()
         {
             // 清空移动输入
             movementInput = Vector2.zero;
