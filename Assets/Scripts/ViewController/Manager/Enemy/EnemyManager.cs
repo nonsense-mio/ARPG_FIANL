@@ -8,7 +8,7 @@ using UnityEngine.Serialization;
 
 namespace ARPG
 {
-    public class EnemyManager : CharacterManager
+    public class EnemyManager : CharacterManager, IPoolable
     {
 
         public EnemyBossManager enemyBossManager;
@@ -263,6 +263,67 @@ namespace ARPG
                 }
             }
         }
+
+        #region IPoolable
+
+        /// <summary>
+        /// 回收入池前：销毁武器模型，防止脏武器随池对象跨场景/跨复用残留
+        /// </summary>
+        public void OnRecycle()
+        {
+            enemyWeaponSlotManager.UnloadAllWeaponModels();
+        }
+
+        /// <summary>
+        /// 从池中取出后：完整重初始化，等效于首次 Awake+Start 的效果
+        /// </summary>
+        public void OnSpawn()
+        {
+            // 重置代码拥有的战斗/AI 标志位
+            isDead = false;
+            isAttacking = false;
+            isParrying = false;
+            isBeingBackstabbed = false;
+            isBeingRiposted = false;
+            isPerformingAction = false;
+            currentRecoveryTime = 0f;
+            currentTarget = null;
+
+            // Animator 驱动的参数：重置 isInteracting 防止安全阀延迟触发
+            animator.SetBool(_hashIsInteracting, false);
+
+            // 重新启用 EnemyManager 脚本（ExecuteDisableOnDeath 中被 disabled）
+            enabled = true;
+
+            // 重置 Rigidbody 物理（Start 中设为 false，ExecuteDisableOnDeath 改为 kinematic）
+            if (enemyRigidbody != null)
+                enemyRigidbody.isKinematic = false;
+
+            // 重新启用碰撞器（ExecuteDisableOnDeath 中全部 disabled）
+            foreach (var col in GetComponentsInChildren<Collider>())
+                col.enabled = true;
+
+            // 重新启用 UI（血条、锁定点）
+            if (enemyStatsManager.enemyHealthBar != null)
+            {
+                enemyStatsManager.enemyHealthBar.gameObject.SetActive(true);
+                enemyStatsManager.enemyHealthBar.SetMaxHealth(enemyStatsManager.maxHealth);
+            }
+                
+            if (lockOnTransform != null)
+                lockOnTransform.gameObject.SetActive(true);
+
+            // 重置血量与消融效果（Init 内部已含 dissolve reset）
+            enemyStatsManager.Init(this);
+
+            // 重新加载武器模型（OnRecycle 中已销毁，此处重建）
+            enemyWeaponSlotManager.LoadBothWeaponsOnSlots();
+
+            // 重新初始化状态机（会调用 initialState.OnEnter，重置 NavMesh 等 AI 状态）
+            stateMachine.Initialize(initialState, this);
+        }
+
+        #endregion
 
 
     }

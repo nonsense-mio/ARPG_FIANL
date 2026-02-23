@@ -225,6 +225,11 @@ namespace ARPG
         public void ApplyPendingDamage()
         {
             character.characterStatsManager.TakeDamageNoAnimation(Mathf.RoundToInt(pendingCriticalDamage), 0, character);
+            // 触发命中音效和血液特效（与普通攻击走相同路径）
+            Vector3 hitPoint = character.lockOnTransform != null
+                ? character.lockOnTransform.position
+                : character.transform.position + Vector3.up;
+            this.SendEvent(new CharacterDamageEvent { HitPoint = hitPoint });
         }
 
 

@@ -91,6 +91,9 @@ namespace ARPG
             animator.SetBool("isDead", isDead);
             animator.SetBool("isGrounded", isGrounded);
 
+            // 死亡后停止一切游戏玩法逻辑（Animator 同步保留在上方，保证死亡动画正常触发）
+            if (isDead) return;
+
             inputMgr.TickInput();
 
 
@@ -140,7 +143,9 @@ namespace ARPG
             if (cameraMgr != null)
             {
                 cameraMgr.FollowTarget();
-                cameraMgr.HandleCameraRotation();
+                // 死亡后停止摄像机旋转，保留跟随让镜头继续对准尸体
+                if (!isDead)
+                    cameraMgr.HandleCameraRotation();
             }
 
         }
