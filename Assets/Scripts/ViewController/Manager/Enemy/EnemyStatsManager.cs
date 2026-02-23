@@ -1,3 +1,4 @@
+using System.Collections;
 using ARPG;
 using Framework;
 using UnityEngine;
@@ -10,6 +11,16 @@ namespace ARPG
         public UIEnemyHealthBar enemyHealthBar;
         public bool isBoss;
 
+        [Header("消融设置")]
+        [SerializeField] private float dissolveDelay = 1.5f;    // 死亡动画播放完毕前的等待时间
+        [SerializeField] private float dissolveDuration = 3f;   // 消融持续时间（秒）
+
+        // Shader.PropertyToID 缓存，避免每帧做字符串哈希
+        private static readonly int DissolvePropertyID = Shader.PropertyToID("_Dissolve");
+        // MaterialPropertyBlock：按实例设置属性，不创建新材质，不影响同材质的其他对象
+        // 不能在字段初始化器里 new（Unity 禁止在构造函数中调用原生 API），在 Init() 里延迟创建
+        private MaterialPropertyBlock _mpb;
+
         // 二阶段事件只触发一次（避免重复触发导致动画被反复打断）
         public bool hasPublishedPhaseShift;
 
@@ -20,6 +31,17 @@ namespace ARPG
             maxHealth = SetMaxHealthFromHealthLevel();
             currentHealth = maxHealth;
             hasPublishedPhaseShift = false;
+            
+            
+            _mpb ??= new MaterialPropertyBlock();
+
+            // 对象池复用时重置消融值，确保敌人完整出现
+            foreach (var r in GetComponentsInChildren<Renderer>())
+            {
+                r.GetPropertyBlock(_mpb);
+                _mpb.SetFloat(DissolvePropertyID, 0f);
+                r.SetPropertyBlock(_mpb);
+            }
         }
 
         /// <summary>
@@ -198,10 +220,38 @@ namespace ARPG
                 lockOnTransform.gameObject.SetActive(false);
             }
 
-            // 禁用敌人的 Update 逻辑
+            // 禁用敌人的 Update 逻辑（EnemyStatsManager 自身仍然活跃，协程可继续运行）
             enemy.enabled = false;
 
-            this.GetSystem<ITimerSystem>().CreateTimer(false, 10f, () => this.GetSystem<IPoolSystem>().Recycle(enemy.gameObject));
+            // 启动消融协程：等待死亡动画 → 逐帧推进 _Dissolve → 消融完毕后回收
+            StartCoroutine(DissolveAndRecycle());
+        }
+
+        private IEnumerator DissolveAndRecycle()
+        {
+            // 等待死亡动画播放
+            yield return new WaitForSeconds(dissolveDelay);
+
+            Renderer[] renderers = enemy.GetComponentsInChildren<Renderer>();
+            float elapsed = 0f;
+
+            while (elapsed < dissolveDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.Clamp01(elapsed / dissolveDuration);
+
+                foreach (var r in renderers)
+                {
+                    r.GetPropertyBlock(_mpb);
+                    _mpb.SetFloat(DissolvePropertyID, t);
+                    r.SetPropertyBlock(_mpb);
+                }
+
+                yield return null;
+            }
+
+            // 消融完毕，回收进对象池
+            this.GetSystem<IPoolSystem>().Recycle(enemy.gameObject);
         }
 
     }
