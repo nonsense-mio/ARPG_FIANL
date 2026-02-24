@@ -13,5 +13,11 @@ namespace ARPG
     {
         void LoadAsync<T>(string key, UnityAction<T> callback) where T : Object;
         T LoadSync<T>(string key) where T : Object;
+
+        /// <summary>释放指定 key 对应的一个资源引用（最后一次加载的 handle）</summary>
+        void Unload(string key);
+
+        /// <summary>释放所有已追踪的资源引用，通常在场景切换时调用</summary>
+        void UnloadAll();
     }
 }

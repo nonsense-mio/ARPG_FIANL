@@ -1,10 +1,10 @@
 {
-    "name": "OccaSoftware.Crosshairs.Editor",
+    "name": "YooAsset.RuntimeExtension",
     "rootNamespace": "",
-    "references": [],
-    "includePlatforms": [
-        "Editor"
+    "references": [
+        "GUID:e34a5702dd353724aa315fb8011f08c3"
     ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

@@ -43,5 +43,16 @@ namespace ARPG
             int idx = key.IndexOf('/');
             return (key.Substring(0, idx), key.Substring(idx + 1));
         }
+
+        public void Unload(string key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UnloadAll()
+        {
+            throw new System.NotImplementedException();
+        }
+
     }
 }
