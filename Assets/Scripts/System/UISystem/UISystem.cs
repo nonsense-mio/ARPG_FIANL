@@ -49,15 +49,14 @@ namespace ARPG
 
         protected override void OnInit()
         {
-            var resourceLoader = this.GetUtility<IResourceLoader>();
             assetLoader = this.GetUtility<IAssetLoader>();
 
-            //动态创建UICamera
-            uiCamera = GameObject.Instantiate(resourceLoader.Load<GameObject>("UI/UICamera")).GetComponent<Camera>();
+            //动态创建UICamera (通过 YooAsset 同步加载)
+            uiCamera = GameObject.Instantiate(assetLoader.LoadSync<GameObject>("ui_bootstrap/UICamera")).GetComponent<Camera>();
             GameObject.DontDestroyOnLoad(uiCamera.gameObject);
 
             //加载 UIRoot (内含 4 个 Canvas 子物体: DynamicCanvas, CommonCanvas, StaticCanvas, OverlayCanvas)
-            uiRoot = GameObject.Instantiate(resourceLoader.Load<GameObject>("UI/UIRoot"));
+            uiRoot = GameObject.Instantiate(assetLoader.LoadSync<GameObject>("ui_bootstrap/UIRoot"));
             GameObject.DontDestroyOnLoad(uiRoot);
 
             dynamicCanvas = uiRoot.transform.Find("DynamicCanvas").GetComponent<Canvas>();
@@ -77,8 +76,8 @@ namespace ARPG
             InitCanvasLayers(E_UICanvas.Static, staticCanvas);
             InitCanvasLayers(E_UICanvas.Overlay, overlayCanvas);
 
-            //动态创建EventSystem
-            uiEventSystem = GameObject.Instantiate(resourceLoader.Load<GameObject>("UI/EventSystem")).GetComponent<EventSystem>();
+            //动态创建EventSystem (通过 YooAsset 同步加载)
+            uiEventSystem = GameObject.Instantiate(assetLoader.LoadSync<GameObject>("ui_bootstrap/EventSystem")).GetComponent<EventSystem>();
             GameObject.DontDestroyOnLoad(uiEventSystem.gameObject);
         }
 

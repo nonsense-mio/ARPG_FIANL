@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// 物品数据库 - 存储所有物品的ScriptableObject引用
-/// 通过Resources加载，无需放置在场景中
+/// 通过 YooAsset 加载，无需放置在场景中
 /// </summary>
 [CreateAssetMenu(menuName = "Data/ItemDataBase")]
 public class ItemDataBase : ScriptableObject
@@ -16,10 +16,10 @@ public class ItemDataBase : ScriptableObject
         {
             if (_instance == null)
             {
-                _instance = GameArchitecture.Interface.GetUtility<IResourceLoader>().Load<ItemDataBase>("Data/ItemDataBase");
+                _instance = GameArchitecture.Interface.GetUtility<IAssetLoader>().LoadSync<ItemDataBase>("data/ItemDataBase");
                 if (_instance == null)
                 {
-                    Debug.LogError("ItemDataBase not found in Resources/Data/ItemDataBase!");
+                    Debug.LogError("ItemDataBase not found! Ensure it is configured in YooAsset collector (group_data).");
                 }
             }
             return _instance;

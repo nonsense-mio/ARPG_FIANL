@@ -20,6 +20,9 @@ namespace ARPG
         //是否启用父节点管理功能
         private bool enableHierarchy = true;
 
+        // YooAsset 资源加载器
+        private IAssetLoader assetLoader;
+
         #endregion
 
         #region 泛型池 字段
@@ -34,6 +37,7 @@ namespace ARPG
             poolContainers = new Dictionary<string, PoolContainer>();
             prefabs = new Dictionary<string, GameObject>();
             genericPools = new Dictionary<string, GenericPoolBase>();
+            assetLoader = this.GetUtility<IAssetLoader>();
 
             if (enableHierarchy)
             {
@@ -252,7 +256,7 @@ namespace ARPG
 
         #region 私有辅助
 
-        // 加载或获取缓存的预制体
+        // 加载或获取缓存的预制体 (通过 YooAsset)
         private GameObject GetOrLoadPrefab(string prefabPath)
         {
             if (prefabs.ContainsKey(prefabPath))
@@ -260,7 +264,7 @@ namespace ARPG
                 return prefabs[prefabPath];
             }
 
-            GameObject prefab = Resources.Load<GameObject>(prefabPath);
+            GameObject prefab = assetLoader.LoadSync<GameObject>(prefabPath);
             if (prefab != null)
             {
                 prefabs[prefabPath] = prefab;

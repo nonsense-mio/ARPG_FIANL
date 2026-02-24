@@ -10,7 +10,6 @@ namespace ARPG
             // 注册 Utility
             RegisterUtility<IStorage>(new JsonStorage());
             RegisterUtility<IAssetLoader>(new YooAssetLoader("DefaultPackage"));
-            RegisterUtility<IResourceLoader>(new ResourceLoader());
 
             // 注册 Model
             RegisterModel<IPlayerModel>(new PlayerModel());

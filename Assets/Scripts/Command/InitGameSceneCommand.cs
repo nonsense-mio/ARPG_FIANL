@@ -13,8 +13,8 @@ namespace ARPG
             var uiSystem = this.GetSystem<IUISystem>();
             var saveSystem = this.GetSystem<ISaveSystem>();
 
-            // 预热对象池
-            var warmupConfig = this.GetUtility<IResourceLoader>().Load<PoolWarmupConfig>("PoolWarmupConfig");
+            // 预热对象池 (通过 YooAsset 加载配置)
+            var warmupConfig = assetLoader.LoadSync<PoolWarmupConfig>("data/PoolWarmupConfig");
             if (warmupConfig != null)
                 this.SendCommand(new WarmupPoolsCommand(warmupConfig));
 
