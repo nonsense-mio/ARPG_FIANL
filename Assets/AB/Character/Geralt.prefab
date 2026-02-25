@@ -15316,12 +15316,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dad6a6ae72c934f4db37e3e028d4751b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  layersThatBlockLineOfSight:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &2780033558616121547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15374,7 +15368,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentAttack: {fileID: 0}
-  hasperformedAttack: 0
+  hasPerformedAttack: 0
 --- !u!114 &4270010320396795900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39261,8 +39255,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b19f9bd97079664ab287916f8864c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 0}
   animator: {fileID: 0}
+  characterController: {fileID: 0}
   characterStatsManager: {fileID: 0}
   characterCombatManager: {fileID: 0}
   characterEffectsManager: {fileID: 0}
@@ -39273,31 +39267,31 @@ MonoBehaviour:
   lockOnTransform: {fileID: 8736284885179961597}
   criticalAttackRayCastStartPoint: {fileID: 4237543902160876114}
   isInteracting: 0
-  isDead: 0
-  canBeRiposted: 1
-  canBeParried: 1
   canDoCombo: 0
-  canRoll: 1
-  isParrying: 0
-  isBlocking: 0
+  canRotate: 0
   isInvulnerable: 0
-  isUsingRightHand: 0
-  isUsingLeftHand: 0
+  isFiringSpell: 0
   isHoldingArrow: 0
-  isAiming: 0
-  isTwoHandingWeapon: 0
   isPerformingFullyChargeAttack: 0
+  isTwoHandingWeapon: 0
+  isBlocking: 0
+  isDead: 0
+  isGrounded: 1
   isAttacking: 0
+  isParrying: 0
+  canBeParried: 1
+  canBeRiposted: 1
   isBeingBackstabbed: 0
   isBeingRiposted: 0
   isPerformingBackstab: 0
   isPerformingRiposte: 0
-  isRotatingWithRootMotion: 0
-  canRotate: 0
-  isSprinting: 0
-  isGrounded: 1
-  isFiringSpell: 0
+  isUsingRightHand: 0
+  isUsingLeftHand: 0
+  isAiming: 0
+  canRoll: 1
   isUsingComsumable: 0
+  isRotatingWithRootMotion: 0
+  isSprinting: 0
   pendingCriticalDamage: 0
   enemyBossManager: {fileID: 0}
   enemyStatsManager: {fileID: 0}
@@ -39306,12 +39300,12 @@ MonoBehaviour:
   enemyInventoryManager: {fileID: 0}
   enemyWeaponSlotManager: {fileID: 0}
   enemyLocomotionManager: {fileID: 0}
-  currentState: {fileID: 802858425515621573}
+  initialState: {fileID: 802858425515621573}
   currentTarget: {fileID: 0}
   navmeshAgent: {fileID: 7311841982663834461}
   enemyRigidbody: {fileID: 0}
   isPerformingAction: 0
-  rotationSpeed: 15
+  rotationSpeed: 200
   maximumAggroRadius: 5
   detectionRadius: 20
   maximumDetectionAngle: 50
@@ -39338,9 +39332,17 @@ MonoBehaviour:
   companion: {fileID: 0}
   isNPC: 1
   posNPC: {fileID: 172215096770430952, guid: 2b6eaa7366b2c8247bbea19607eefa29, type: 3}
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  layersThatBlockLineOfSight:
+    serializedVersion: 2
+    m_Bits: 64
   distanceFromTarget: 0
   targetDirection: {x: 0, y: 0, z: 0}
   viewableAngle: 0
+  _hashIsPhaseShifting: 0
+  _hashIsInvulnerable: 0
 --- !u!114 &8956078685205163742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39394,6 +39396,8 @@ MonoBehaviour:
   fireAbsorptionPercentageModifier: 0
   enemyHealthBar: {fileID: 0}
   isBoss: 0
+  dissolveDelay: 1.5
+  dissolveDuration: 3
   hasPublishedPhaseShift: 0
 --- !u!114 &8231772767006221566
 MonoBehaviour:
@@ -39503,7 +39507,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   instantiateFX: {fileID: 0}
   currentPoisonParticleFX: {fileID: 0}
-  buildUpTransform: {fileID: 0}
   isPoisoned: 0
   poisonBuildUp: 0
   poisonAmount: 100

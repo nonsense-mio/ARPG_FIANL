@@ -23,7 +23,7 @@ public class YooAssetDeployTool : EditorWindow
         public string FullPath;
         public string FileName;
         public long   Bytes;
-        public bool   IsManifest; // true=清单文件(内容比对), false=bundle(仅查文件名)
+        public bool   IsManifest; // true=清单文件(.version/.hash/.bytes/.json，内容比对), false=bundle(仅查文件名)
     }
 
     [MenuItem("Tools/AB包资源部署工具")]
@@ -213,7 +213,7 @@ public class YooAssetDeployTool : EditorWindow
             string filePath = kv.Value;
             string ext      = Path.GetExtension(fileName).ToLower();
 
-            bool isManifest = ext == ".version" || ext == ".bytes" || ext == ".json";
+            bool isManifest = ext == ".version" || ext == ".bytes" || ext == ".json" || ext == ".hash";
 
             if (isManifest)
             {

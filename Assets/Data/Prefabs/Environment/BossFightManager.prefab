@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 130891bd398807d4db13e94142271dca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossID: 
   boss: {fileID: 0}
   fogWalls:
   - {fileID: 0}

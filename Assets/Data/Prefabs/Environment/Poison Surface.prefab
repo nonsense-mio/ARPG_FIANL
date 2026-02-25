@@ -118,5 +118,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 684c0dfc77b32424f90c22e7d2c21118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poisonBuildUpAmount: 7
+  poisonBuildUpAmount: 20
   charactersInsidePoisonSurfaceList: []

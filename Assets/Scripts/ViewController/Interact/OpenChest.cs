@@ -57,8 +57,7 @@ namespace ARPG
             {
                 for (int i = 0; i < itemsInChest.Count; i++)
                 {
-                    GameObject obj = this.GetSystem<IPoolSystem>().Spawn(itemSpawnerName);
-                    obj.transform.position = transform.position;
+                    GameObject obj = this.GetSystem<IPoolSystem>().Spawn(itemSpawnerName, transform.position, Quaternion.identity);
                     ItemPickUp itemPickUp = obj.GetComponent<ItemPickUp>();
                     if (itemPickUp != null)
                         itemPickUp.item = itemsInChest[i];
