@@ -187,6 +187,14 @@ namespace ARPG
             }
             activeSounds.Clear();
             isClearing = false;
+
+            bgmSource.Stop();
+            bgmSource.clip = null;
+            if (_currentBgmKey != null)
+            {
+                assetLoader.Unload($"{MusicBundleName}/{_currentBgmKey}");
+                _currentBgmKey = null;
+            }
         }
         #endregion
     }

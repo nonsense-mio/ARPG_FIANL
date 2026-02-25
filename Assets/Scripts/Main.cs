@@ -1,6 +1,7 @@
 using System.Collections;
 using ARPG;
 using UnityEngine;
+using UnityEngine.UI;
 using YooAsset;
 
 public class Main : MonoBehaviour
@@ -11,12 +12,14 @@ public class Main : MonoBehaviour
     public ResourcePackage package = null;
 
     //网络相关
-    public string defaultHostServer = "http://192.168.3.133:8080/CDN/PC/v1.0";
-    public string fallbackHostServer = "http://192.168.3.133:8080/CDN/PC/v1.0";
+    public string defaultHostServer = "http://192.168.3.133:8080/CDN/PC/ARPGv1.0";
+    public string fallbackHostServer = "http://192.168.3.133:8080/CDN/PC/ARPGv1.0";
     //下载相关
     public int downloadingMaxNum = 10;
     public int failedTryAgain = 3;
     public ResourceDownloaderOperation downloader;
+
+    [SerializeField] BootPanel bootPanel;
 
     void Awake()
     {
@@ -49,10 +52,7 @@ public class Main : MonoBehaviour
             Debug.LogWarning(initializationOperation.Error);
             yield break;
         }
-        else
-        {
-            Debug.Log("初始化成功");
-        }
+        bootPanel.SetProgress(0.2f, "初始化资源系统...");
 
         //2.获取资源版本
         var operation = package.RequestPackageVersionAsync();
@@ -62,11 +62,8 @@ public class Main : MonoBehaviour
             Debug.LogWarning(operation.Error);
             yield break;
         }
-        else
-        {
-            Debug.Log($"请求的版本:{operation.PackageVersion}");
-            packageVersion = operation.PackageVersion;
-        }
+        packageVersion = operation.PackageVersion;
+        bootPanel.SetProgress(0.4f, "获取资源版本...");
 
         //3.获取文件清单
         var operationManifest = package.UpdatePackageManifestAsync(packageVersion);
@@ -76,45 +73,47 @@ public class Main : MonoBehaviour
             Debug.LogWarning(operationManifest.Error);
             yield break;
         }
-        else
-        {
-            Debug.Log("更新资源清单成功");
-        }
+        bootPanel.SetProgress(0.6f, "更新资源清单...");
 
         //4.创建下载器
         downloader = package.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
         if (downloader.TotalDownloadCount == 0)
         {
-            Debug.Log("没有需要更新的文件");
+            bootPanel.SetProgress(1.0f, "无需更新，正在进入游戏...");
             UpdateDone();
             yield break;
         }
-        else
-        {
-            int count = downloader.TotalDownloadCount;
-            long bytes = downloader.TotalDownloadBytes;
-            Debug.Log($"需要更新{count}个文件,大小是{bytes / 1024 / 1024}MB");
-        }
-
         //5.开始下载
+        int count = downloader.TotalDownloadCount;
+        long mb = downloader.TotalDownloadBytes / 1024 / 1024;
+        bootPanel.SetProgress(0.65f, $"检测到 {count} 个文件 ({mb}MB) 待更新");
+
+        GameArchitecture.Interface.GetSystem<IUISystem>().ShowPanel<TipPanel>(tip =>
+        {
+            tip.GetControl<Button>("btnClose").gameObject.SetActive(false);
+            tip.SetTipInfo($"检测到 {count} 个文件待更新，共 {mb}MB，是否立即下载？",
+                () => StartCoroutine(StartDownload()));
+        });
+        yield break;
+    }
+
+    IEnumerator StartDownload()
+    {
         downloader.DownloadUpdateCallback = ProgressCallBack;
         downloader.BeginDownload();
         yield return downloader;
+
         if (downloader.Status != EOperationStatus.Succeed)
         {
             Debug.LogWarning(downloader.Error);
             yield break;
         }
-        else
-        {
-            Debug.Log("下载成功");
-        }
 
-        //6.清理过期缓存文件
+        bootPanel.SetProgress(0.98f, "清理旧缓存...");
         var operationClear = package.ClearCacheFilesAsync(EFileClearMode.ClearUnusedBundleFiles);
         operationClear.Completed += Operation_Completed;
-
     }
+
     //文件清理完成
     private void Operation_Completed(AsyncOperationBase @base)
     {
@@ -124,23 +123,21 @@ public class Main : MonoBehaviour
     //下载进度回调
     private void ProgressCallBack(DownloadUpdateData data)
     {
-        Debug.Log($"需要更新{data.TotalDownloadCount}个文件,当前已更新{data.CurrentDownloadCount}," +
-        $"大小是{data.TotalDownloadBytes / 1024 / 1024}MB,已下载{data.CurrentDownloadBytes / 1024 / 1024}MB");
+        if (data.TotalDownloadBytes > 0)
+        {
+            float t = (float)data.CurrentDownloadBytes / data.TotalDownloadBytes;
+            bootPanel.SetProgress(0.65f + t * 0.3f,
+                $"正在下载 ({data.CurrentDownloadCount}/{data.TotalDownloadCount})");
+        }
     }
-
 
     //热更新结束
     private void UpdateDone()
     {
-        Debug.Log("热更新结束");
-        GameArchitecture.Interface.SendCommand<InitBeginSceneCommand>();
+        bootPanel.SetProgress(1.0f, "加载完成，正在进入游戏...");
+        GameArchitecture.Interface.SendCommand<TransitionToBeginSceneCommand>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     /// <summary>
     /// 远端资源地址查询服务类
     /// </summary>

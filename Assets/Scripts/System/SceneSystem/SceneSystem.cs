@@ -4,6 +4,7 @@ using Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YooAsset;
 
 namespace ARPG
 {
@@ -16,9 +17,11 @@ namespace ARPG
     {
         private const float FadeOutDuration = 0.3f;
         private const float FadeInDuration = 0.5f;
+        private const string PackageName = "DefaultPackage";
 
         private ITickSystem tickSystem;
         private CanvasGroup fadeCanvasGroup;
+        private SceneHandle currentSceneHandle;
 
         protected override void OnInit()
         {
@@ -71,10 +74,13 @@ namespace ARPG
             // 淡出 (透明→黑屏)
             yield return FadeCoroutine(0f, 1f, FadeOutDuration);
 
-            // 加载场景
-            var ao = SceneManager.LoadSceneAsync(sceneName);
-            while (!ao.isDone)
-                yield return null;
+            // 释放上一个场景的 Bundle 引用
+            currentSceneHandle?.Release();
+
+            // 通过 YooAsset 加载场景
+            currentSceneHandle = YooAssets.GetPackage(PackageName)
+                .LoadSceneAsync(sceneName, LoadSceneMode.Single);
+            yield return currentSceneHandle;
 
             // 黑屏期间执行回调（初始化场景：实例化玩家、配置摄像机等）
             callback?.Invoke();

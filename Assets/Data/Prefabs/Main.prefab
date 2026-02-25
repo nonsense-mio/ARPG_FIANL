@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 483749158814639741}
   - component: {fileID: 5138990006753278744}
+  - component: {fileID: 7247295819499837921}
   m_Layer: 0
   m_Name: Main
   m_TagString: Untagged
@@ -42,5 +43,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11a8397c194aac540b8f840c48618452, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playMode: 2
+  packageName: DefaultPackage
+  packageVersion: 
+  defaultHostServer: http://192.168.3.133:8080/CDN/PC/ARPGv1.0
+  fallbackHostServer: http://192.168.3.133:8080/CDN/PC/ARPGv1.0
+  downloadingMaxNum: 10
+  failedTryAgain: 3
+--- !u!114 &7247295819499837921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6355587902791905003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d011a137ae9174ebc115772095e6fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

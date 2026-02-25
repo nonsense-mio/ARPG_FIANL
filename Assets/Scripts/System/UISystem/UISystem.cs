@@ -14,7 +14,10 @@ namespace ARPG
     {
         #region 内部类型
 
-        private abstract class BasePanelInfo { }
+        private abstract class BasePanelInfo
+        {
+            public abstract void Clear(IAssetLoader assetLoader, string panelName);
+        }
 
         private class PanelInfo<T> : BasePanelInfo where T : BasePanel
         {
@@ -25,6 +28,21 @@ namespace ARPG
             public PanelInfo(UnityAction<T> callBack)
             {
                 this.callBack += callBack;
+            }
+
+            public override void Clear(IAssetLoader assetLoader, string panelName)
+            {
+                if (panel != null)
+                {
+                    panel.HideMe();
+                    GameObject.Destroy(panel.gameObject);
+                }
+                else
+                {
+                    isHide = true;
+                    callBack = null;
+                }
+                assetLoader.Unload($"ui/{panelName}");
             }
         }
 
@@ -115,7 +133,9 @@ namespace ARPG
             //加载面板
             assetLoader.LoadAsync<GameObject>($"ui/{panelName}", (res) =>
             {
-                PanelInfo<T> panelInfo = panelDic[panelName] as PanelInfo<T>;
+                if (!panelDic.TryGetValue(panelName, out var info))
+                    return;
+                PanelInfo<T> panelInfo = info as PanelInfo<T>;
                 //异步加载结束前就想要隐藏
                 if (panelInfo.isHide)
                 {
@@ -164,6 +184,13 @@ namespace ARPG
                     }
                 }
             }
+        }
+
+        public void ClearAllPanels()
+        {
+            foreach (var kvp in panelDic)
+                kvp.Value.Clear(assetLoader, kvp.Key);
+            panelDic.Clear();
         }
 
         public void GetPanel<T>(UnityAction<T> callBack) where T : BasePanel
