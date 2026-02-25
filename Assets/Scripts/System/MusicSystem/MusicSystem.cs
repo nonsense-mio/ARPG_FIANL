@@ -14,13 +14,15 @@ namespace ARPG
         private float bgmVolume;
 
         private readonly List<AudioSource> activeSounds = new List<AudioSource>();
+        //缓存加载过的AudioClip
+        private readonly Dictionary<string, AudioClip> clipCache = new Dictionary<string, AudioClip>();
         private float soundVolume;
         private bool soundEnabled;
         private bool isClearing;
 
         private IPoolSystem poolSystem;
         private IAssetLoader assetLoader;
-        private string _currentBgmKey;
+        private string currentBgmKey;
 
         private const string SoundObjPoolPath = "Sound/soundObj";
         private const string MusicBundleName = "music";
@@ -82,9 +84,9 @@ namespace ARPG
         #region BGM
         public void PlayBGM(string name)
         {
-            if (_currentBgmKey != null)
-                assetLoader.Unload($"{MusicBundleName}/{_currentBgmKey}");
-            _currentBgmKey = name;
+            if (currentBgmKey != null)
+                assetLoader.Unload($"{MusicBundleName}/{currentBgmKey}");
+            currentBgmKey = name;
 
             assetLoader.LoadAsync<AudioClip>($"{MusicBundleName}/{name}", (clip) =>
             {
@@ -120,27 +122,37 @@ namespace ARPG
         #endregion
 
         #region SFX
-        public void PlaySound(string name, bool isLoop = false, bool isSync = false,
-                              UnityAction<AudioSource> callBack = null)
+        public void PlaySound(string name, bool isLoop = false, bool isSync = false, UnityAction<AudioSource> callBack = null)
         {
             if (!soundEnabled)
                 return;
 
-            assetLoader.LoadAsync<AudioClip>($"{SoundBundleName}/{name}", (clip) =>
+            if (clipCache.TryGetValue(name, out var cachedClip))
             {
-                AudioSource source = poolSystem.Spawn(SoundObjPoolPath).GetComponent<AudioSource>();
-                source.Stop();
-                source.clip = clip;
-                source.loop = isLoop;
-                source.volume = soundVolume;
-                source.mute = !soundEnabled;
-                source.Play();
+                SpawnAndPlay(cachedClip, isLoop, callBack);
+            }
+            else
+            {
+                assetLoader.LoadAsync<AudioClip>($"{SoundBundleName}/{name}", (clip) =>
+                {
+                    clipCache[name] = clip;
+                    SpawnAndPlay(clip, isLoop, callBack);
+                });
+            }
+        }
 
-                if (!activeSounds.Contains(source))
-                    activeSounds.Add(source);
-
-                callBack?.Invoke(source);
-            });
+        private void SpawnAndPlay(AudioClip clip, bool isLoop, UnityAction<AudioSource> callBack)
+        {
+            AudioSource source = poolSystem.Spawn(SoundObjPoolPath).GetComponent<AudioSource>();
+            source.Stop();
+            source.clip = clip;
+            source.loop = isLoop;
+            source.volume = soundVolume;
+            source.mute = !soundEnabled;
+            source.Play();
+            if (!activeSounds.Contains(source))
+                activeSounds.Add(source);
+            callBack?.Invoke(source);
         }
 
         public void StopSound(AudioSource source)
@@ -186,14 +198,19 @@ namespace ARPG
                 poolSystem.Recycle(activeSounds[i].gameObject);
             }
             activeSounds.Clear();
+            //卸载音效资源
+            foreach (var name in clipCache.Keys)
+                assetLoader.Unload($"{SoundBundleName}/{name}");
+            clipCache.Clear();
             isClearing = false;
 
             bgmSource.Stop();
             bgmSource.clip = null;
-            if (_currentBgmKey != null)
+            //卸载背景音乐
+            if (currentBgmKey != null)
             {
-                assetLoader.Unload($"{MusicBundleName}/{_currentBgmKey}");
-                _currentBgmKey = null;
+                assetLoader.Unload($"{MusicBundleName}/{currentBgmKey}");
+                currentBgmKey = null;
             }
         }
         #endregion

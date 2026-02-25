@@ -59,6 +59,7 @@ namespace ARPG
                 foreach (var handle in list)
                     handle.Release();
             _handles.Clear();
+            YooAssets.GetPackage(_packageName).UnloadUnusedAssetsAsync();
         }
 
         private void TrackHandle(string location, AssetHandle handle)

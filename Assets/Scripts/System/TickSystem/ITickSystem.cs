@@ -7,7 +7,6 @@ namespace ARPG
 {
     /// <summary>
     /// Tick 系统接口 - 提供 Unity 生命周期回调注册 + 协程托管
-    /// 替代 MonoMgr 的 AddUpdateListener / StartCoroutine 等 API
     /// </summary>
     public interface ITickSystem : ISystem
     {

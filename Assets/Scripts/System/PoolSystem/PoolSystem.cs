@@ -160,6 +160,7 @@ namespace ARPG
             poolContainers[prefabPath].Clear();
             poolContainers.Remove(prefabPath);
             prefabs.Remove(prefabPath);
+            assetLoader.Unload(prefabPath);
         }
 
         // 清空所有池 (GameObject 池 + 泛型池)
@@ -167,9 +168,10 @@ namespace ARPG
         {
             // 清理 GameObject 池
             foreach (var container in poolContainers.Values)
-            {
                 container.Clear();
-            }
+
+            foreach (var path in prefabs.Keys)
+                assetLoader.Unload(path);
 
             poolContainers.Clear();
             prefabs.Clear();
