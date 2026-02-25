@@ -120,6 +120,7 @@ namespace ARPG
                 if (panelInfo.isHide)
                 {
                     panelDic.Remove(panelName);
+                    assetLoader.Unload($"ui/{panelName}");
                     return;
                 }
                 //实例化面板并根据 CanvasType 路由到对应 Canvas
@@ -155,6 +156,7 @@ namespace ARPG
                     {
                         GameObject.Destroy(panelInfo.panel.gameObject);
                         panelDic.Remove(panelName);
+                        assetLoader.Unload($"ui/{panelName}");
                     }
                     else
                     {

@@ -10,6 +10,7 @@ namespace ARPG
             this.GetSystem<IMusicSystem>().ClearAllSounds();
             this.GetSystem<IPoolSystem>().ClearAllPools();
             this.GetSystem<ITaskSystem>().ClearTasks();
+            this.GetUtility<IAssetLoader>().UnloadAll();
         }
     }
 }

@@ -7,7 +7,6 @@ namespace ARPG
 {
     /// <summary>
     /// 音乐系统实现 - 管理 BGM 和 SFX 的播放/回收
-    /// 替代原 MusicMgr (BaseManager 单例)
     /// </summary>
     public class MusicSystem : AbstractSystem, IMusicSystem
     {
@@ -21,6 +20,7 @@ namespace ARPG
 
         private IPoolSystem poolSystem;
         private IAssetLoader assetLoader;
+        private string _currentBgmKey;
 
         private const string SoundObjPoolPath = "Sound/soundObj";
         private const string MusicBundleName = "music";
@@ -82,6 +82,10 @@ namespace ARPG
         #region BGM
         public void PlayBGM(string name)
         {
+            if (_currentBgmKey != null)
+                assetLoader.Unload($"{MusicBundleName}/{_currentBgmKey}");
+            _currentBgmKey = name;
+
             assetLoader.LoadAsync<AudioClip>($"{MusicBundleName}/{name}", (clip) =>
             {
                 bgmSource.clip = clip;
