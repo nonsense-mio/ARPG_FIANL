@@ -40,7 +40,6 @@ namespace ARPG
                 containerRoot = new GameObject($"Pool_{name}");
                 containerRoot.transform.SetParent(parent, false);
             }
-            //AddToActiveList(activeObj);
         }
 
         /// <summary>

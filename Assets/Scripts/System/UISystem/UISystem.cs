@@ -29,7 +29,7 @@ namespace ARPG
             {
                 this.callBack += callBack;
             }
-
+            //卸载面板资源
             public override void Clear(IAssetLoader assetLoader, string panelName)
             {
                 if (panel != null)
