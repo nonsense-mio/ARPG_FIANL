@@ -1,0 +1,176 @@
+using System.Collections.Generic;
+using Framework;
+using UnityEngine;
+
+namespace ARPG
+{
+    /// <summary>
+    /// 背包物品分类
+    /// </summary>
+    public enum InventoryCategory
+    {
+        All, Weapon, Helmet, Body, Leg, Hand, Consumable, Spell
+    }
+
+    public class BagPanel : BasePanel
+    {
+        public RectTransform content;
+        CustomSV<Item_SO, BagItem> sv;
+
+        private InventoryCategory? pendingCategory;
+
+        //用于存储外部传入的"选择物品后要做什么"的回调
+        private System.Action<Item_SO> onEquipCallback;
+
+        private IInventoryModel inventoryModel;
+
+        protected override void Awake()
+        {
+            base.Awake();
+            inventoryModel = this.GetModel<IInventoryModel>();
+
+            sv = new CustomSV<Item_SO, BagItem>();
+            sv.InitItemResName("UI/btnBagItem");
+            sv.InitItemSizeAndNum(138, 130, 4);
+            sv.InitContentAndSVH(content, 1000);
+            sv.AddListener(OnItemClick);
+        }
+
+        // 提供给外部设置回调的方法
+        public void SetSelectCallback(System.Action<Item_SO> callback)
+        {
+            this.onEquipCallback = callback;
+        }
+
+        public void Update()
+        {
+            //滚动列表的更新
+            sv.CheckShowOrHide();
+        }
+
+        public override void ShowMe()
+        {
+            HandleRequestInits();
+        }
+
+        public override void HideMe()
+        {
+            sv.ClearItem();
+            //关闭面板时，必须清空回调，防止状态污染
+            onEquipCallback = null;
+            // 避免下次 ShowMe 意外触发旧请求
+            pendingCategory = null;
+        }
+
+        #region 初始化背包相关
+
+        private List<Item_SO> ConvertIDsToItems(BindableList<int> ids)
+        {
+            var items = new List<Item_SO>(ids.Count);
+            foreach (int id in ids)
+            {
+                if (!inventoryModel.IsEmptySlot(id))
+                {
+                    var item = ItemDataBase.Instance.GetItemByID(id);
+                    if (item != null)
+                        items.Add(item);
+                }
+            }
+            return items;
+        }
+
+        /// <summary>
+        /// 根据分类获取对应的 ID 列表
+        /// </summary>
+        private BindableList<int> GetIDsForCategory(InventoryCategory category)
+        {
+            switch (category)
+            {
+                case InventoryCategory.Weapon:     return inventoryModel.WeaponIDs;
+                case InventoryCategory.Helmet:     return inventoryModel.HelmetIDs;
+                case InventoryCategory.Body:       return inventoryModel.BodyIDs;
+                case InventoryCategory.Leg:        return inventoryModel.LegIDs;
+                case InventoryCategory.Hand:       return inventoryModel.HandIDs;
+                case InventoryCategory.Consumable: return inventoryModel.ConsumableIDs;
+                case InventoryCategory.Spell:      return inventoryModel.SpellIDs;
+                default:                           return null;
+            }
+        }
+
+        private void InitAllInventory()
+        {
+            var all = new List<Item_SO>();
+            all.AddRange(ConvertIDsToItems(inventoryModel.WeaponIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.HelmetIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.BodyIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.LegIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.HandIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.ConsumableIDs));
+            all.AddRange(ConvertIDsToItems(inventoryModel.SpellIDs));
+            sv.InitInfos(all);
+        }
+
+        /// <summary>
+        /// 外部调用：请求在面板完成 ShowMe 后初始化指定分类的背包显示
+        /// </summary>
+        public void RequestInitInventory(InventoryCategory category)
+        {
+            pendingCategory = category;
+        }
+
+        /// <summary>
+        /// 向后兼容：请求初始化全部背包
+        /// </summary>
+        public void RequestInitAllInventory() => RequestInitInventory(InventoryCategory.All);
+
+        private void HandleRequestInits()
+        {
+            if (pendingCategory == null) return;
+            var cat = pendingCategory.Value;
+            pendingCategory = null;
+
+            if (cat == InventoryCategory.All)
+            {
+                InitAllInventory();
+            }
+            else
+            {
+                sv.InitInfos(ConvertIDsToItems(GetIDsForCategory(cat)));
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 点击背包格子时触发的逻辑
+        /// </summary>
+        /// <param name="item">被点击的物品数据</param>
+        private void OnItemClick(Item_SO item)
+        {
+            Debug.Log("点击了物品：" + item.itemName);
+
+            //如果有回调，说明是处于"选择模式"（比如从装备面板跳过来的）
+            if (onEquipCallback != null)
+            {
+                onEquipCallback(item);
+                // 执行完回调后，关闭背包面板，刷新显示
+                //选完装备就关闭背包回装备面板
+                this.GetSystem<IUISystem>().HidePanel<BagPanel>();
+                this.GetSystem<IUISystem>().ShowPanel<EquipPanel>(callBack: (equipPanel) =>
+                {
+                    equipPanel.Refresh();
+                });
+                //更新快捷栏UI显示
+                this.GetSystem<IUISystem>().GetPanel<GamePanel>((panel) =>
+                {
+                    panel.UpdateAllQuickSlots();
+                });
+            }
+            else
+            {
+                // 否则是"查看模式"，什么都不做，或者显示详情
+                Debug.Log("当前是查看模式，不执行装备逻辑");
+            }
+        }
+    }
+}

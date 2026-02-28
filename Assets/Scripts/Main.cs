@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ARPG;
+using Framework;
 using HybridCLR;
 using UnityEngine;
 using UnityEngine.UI;
@@ -214,7 +215,7 @@ public class Main : MonoBehaviour
 
     /// <summary>
     /// 补充 AOT 元数据 → 加载热更 DLL → 通过 IGameLauncher 进入游戏。
-    /// Editor 下跳过 DLL 加载（HotUpdate 程序集已由 Unity 自动载入），直接使用 AOT GameLauncher。
+    /// Editor 下跳过 DLL 加载（HotUpdate 程序集已由 Unity 自动载入）。
     /// </summary>
     private IEnumerator LoadAndEnterGame()
     {
@@ -240,24 +241,40 @@ public class Main : MonoBehaviour
             (dllHandle.AssetObject as TextAsset).bytes);
         dllHandle.Release();
 
-        // 3. 优先在热更程序集中查找 GameLauncher；找不到则回退到 AOT 版本
-        Type launcherType = hotUpdateAss.GetType("ARPG.GameLauncher")
-                            ?? typeof(GameLauncher);
+        // 3. 在热更程序集中查找 GameLauncher
+        Type launcherType = hotUpdateAss.GetType("ARPG.GameLauncher");
+        if (launcherType == null)
+        {
+            Debug.LogError("热更程序集中未找到 ARPG.GameLauncher，无法启动游戏。");
+            yield break;
+        }
 #else
         // Editor：HotUpdate 程序集已由 Unity 自动加载，从 AppDomain 中查找
         Assembly hotUpdateAss = AppDomain.CurrentDomain.GetAssemblies()
             .FirstOrDefault(a => a.GetName().Name == "HotUpdate");
         if (hotUpdateAss == null)
         {
-            Debug.LogError("未找到 HotUpdate 程序集，请检查 HotUpdate.asmdef 配置。回退到 AOT GameLauncher。");
+            Debug.LogError("未找到 HotUpdate 程序集，请检查 HotUpdate.asmdef 配置。");
+            yield break;
         }
-        Type launcherType = hotUpdateAss?.GetType("ARPG.GameLauncher")
-                            ?? typeof(GameLauncher);
+        Type launcherType = hotUpdateAss.GetType("ARPG.GameLauncher");
+        if (launcherType == null)
+        {
+            Debug.LogError("HotUpdate 程序集中未找到 ARPG.GameLauncher。");
+            yield break;
+        }
 #endif
 
-        // 4. 启动游戏（通过 IGameLauncher 接口，不直接依赖 GameArchitecture）
+        // 4. 注册 LaunchGameEvent 监听 — AOT 侧响应热更发来的启动事件
+        var arch = GameArchitecture.Interface;
+        arch.RegisterEvent<LaunchGameEvent>(e =>
+        {
+            arch.SendCommand<TransitionToBeginSceneCommand>();
+        }).UnRegisterWhenGameObjectDestroyed(gameObject);
+
+        // 5. 启动游戏 — 热更 GameLauncher 通过 IArchitecture 发送 LaunchGameEvent
         IGameLauncher launcher = (IGameLauncher)Activator.CreateInstance(launcherType);
-        launcher.Launch();
+        launcher.Launch(arch);
     }
 
     /// <summary>
