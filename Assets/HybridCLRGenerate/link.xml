@@ -1,20 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
   <assembly fullname="GameFramework">
+    <type fullname="ARPG.ActivateBossFightRequestEvent" preserve="all" />
+    <type fullname="ARPG.BossDefeatedRequestEvent" preserve="all" />
+    <type fullname="ARPG.BossFightManager" preserve="all" />
+    <type fullname="ARPG.BossHudChangedEvent" preserve="all" />
+    <type fullname="ARPG.BossHudData" preserve="all" />
+    <type fullname="ARPG.EnemyManager" preserve="all" />
+    <type fullname="ARPG.FogWall" preserve="all" />
     <type fullname="ARPG.IGameLauncher" preserve="all" />
+    <type fullname="ARPG.IMusicSystem" preserve="all" />
+    <type fullname="ARPG.ISceneStateModel" preserve="all" />
     <type fullname="ARPG.LaunchGameEvent" preserve="all" />
+    <type fullname="Framework.AbstractCommand" preserve="all" />
+    <type fullname="Framework.CanGetModelExtension" preserve="all" />
+    <type fullname="Framework.CanGetSystemExtension" preserve="all" />
+    <type fullname="Framework.CanSendEventExtension" preserve="all" />
     <type fullname="Framework.IArchitecture" preserve="all" />
+    <type fullname="Framework.ICanGetModel" preserve="all" />
+    <type fullname="Framework.ICanGetSystem" preserve="all" />
+    <type fullname="Framework.ICanSendEvent" preserve="all" />
+    <type fullname="Framework.IUnRegister" preserve="all" />
   </assembly>
   <assembly fullname="System">
     <type fullname="System.CodeDom.Compiler.GeneratedCodeAttribute" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableAttribute" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableState" preserve="all" />
   </assembly>
+  <assembly fullname="UnityEngine.CoreModule">
+    <type fullname="UnityEngine.Behaviour" preserve="all" />
+    <type fullname="UnityEngine.Object" preserve="all" />
+  </assembly>
   <assembly fullname="mscorlib">
+    <type fullname="System.Action`1" preserve="all" />
     <type fullname="System.Array" preserve="all" />
     <type fullname="System.Byte" preserve="all" />
+    <type fullname="System.Collections.Generic.List`1" preserve="all" />
+    <type fullname="System.Collections.Generic.List`1/Enumerator" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute" preserve="all" />
     <type fullname="System.Diagnostics.DebuggableAttribute/DebuggingModes" preserve="all" />
+    <type fullname="System.IDisposable" preserve="all" />
+    <type fullname="System.Nullable`1" preserve="all" />
     <type fullname="System.Object" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilationRelaxationsAttribute" preserve="all" />
     <type fullname="System.Runtime.CompilerServices.CompilerGeneratedAttribute" preserve="all" />

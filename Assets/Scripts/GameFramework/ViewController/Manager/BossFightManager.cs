@@ -55,7 +55,7 @@ namespace ARPG
         /// </summary>
         public void ActivateBossFight()
         {
-            this.SendCommand(new ActivateBossFightCommand(this));
+            this.SendEvent(new ActivateBossFightRequestEvent { BossFight = this });
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace ARPG
         /// </summary>
         public void BossHasBeenDefeated()
         {
-            this.SendCommand(new BossDefeatedCommand(this));
+            this.SendEvent(new BossDefeatedRequestEvent { BossFight = this });
         }
 
 

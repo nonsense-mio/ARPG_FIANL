@@ -11,6 +11,18 @@ namespace ARPG
     {
         public void Launch(IArchitecture architecture)
         {
+            // 注册 Boss 战桥接事件处理器（AOT 发送事件 → HotUpdate 执行 Command）
+            architecture.RegisterEvent<ActivateBossFightRequestEvent>(e =>
+            {
+                architecture.SendCommand(new ActivateBossFightCommand(e.BossFight));
+            });
+
+            architecture.RegisterEvent<BossDefeatedRequestEvent>(e =>
+            {
+                architecture.SendCommand(new BossDefeatedCommand(e.BossFight));
+            });
+
+            // 通知 AOT 侧启动游戏（触发 TransitionToBeginSceneCommand）
             architecture.SendEvent(new LaunchGameEvent());
         }
     }
