@@ -7,7 +7,7 @@ namespace ARPG
     {
         protected override void OnExecute()
         {
-            this.GetSystem<IMusicSystem>().PlayBGM("BeginScene1");
+            this.SendCommand(new PlayBGMCommand("BeginScene1"));
             this.GetSystem<IUISystem>().ShowPanel<BeginPanel>();
         }
     }

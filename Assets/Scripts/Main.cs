@@ -12,7 +12,6 @@ using YooAsset;
 
 public class Main : MonoBehaviour
 {
-    public EPlayMode playMode = EPlayMode.HostPlayMode;
     public string packageName = "DefaultPackage";
     public string packageVersion = "";
     public ResourcePackage package = null;
@@ -69,31 +68,6 @@ public class Main : MonoBehaviour
         }
         bootPanel.SetProgress(0.2f, "初始化资源系统...");
 
-        // EditorSimulateMode / OfflinePlayMode 不需要远程版本检查
-        // 但仍需 RequestPackageVersion + UpdatePackageManifest 才能激活 Manifest
-        if (playMode != EPlayMode.HostPlayMode)
-        {
-            var localVersionOp = package.RequestPackageVersionAsync();
-            yield return localVersionOp;
-            if (localVersionOp.Status != EOperationStatus.Succeed)
-            {
-                ShowRetryDialog("获取本地版本失败", localVersionOp.Error);
-                yield break;
-            }
-
-            var localManifestOp = package.UpdatePackageManifestAsync(localVersionOp.PackageVersion);
-            yield return localManifestOp;
-            if (localManifestOp.Status != EOperationStatus.Succeed)
-            {
-                ShowRetryDialog("加载本地清单失败", localManifestOp.Error);
-                yield break;
-            }
-
-            bootPanel.SetProgress(1.0f, "正在进入游戏...");
-            UpdateDone();
-            yield break;
-        }
-
         // 2. 获取资源版本
         var operation = package.RequestPackageVersionAsync();
         yield return operation;
@@ -139,35 +113,13 @@ public class Main : MonoBehaviour
         });
     }
 
-    /// <summary>
-    /// 根据 playMode 创建对应的初始化参数。
-    /// EditorSimulateMode 仅在 Editor 下可用；Build 中会 fallback 到 OfflinePlayMode。
-    /// </summary>
     private InitializeParameters CreateInitParameters()
     {
-        switch (playMode)
-        {
-#if UNITY_EDITOR
-            case EPlayMode.EditorSimulateMode:
-                var buildResult = EditorSimulateModeHelper.SimulateBuild(packageName);
-                var editorParams = new EditorSimulateModeParameters();
-                editorParams.EditorFileSystemParameters =
-                    FileSystemParameters.CreateDefaultEditorFileSystemParameters(buildResult.PackageRootDirectory);
-                return editorParams;
-#endif
-            case EPlayMode.OfflinePlayMode:
-                var offlineParams = new OfflinePlayModeParameters();
-                offlineParams.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
-                return offlineParams;
-
-            case EPlayMode.HostPlayMode:
-            default:
-                IRemoteServices remoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
-                var hostParams = new HostPlayModeParameters();
-                hostParams.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
-                hostParams.CacheFileSystemParameters = FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteServices);
-                return hostParams;
-        }
+        IRemoteServices remoteServices = new RemoteServices(defaultHostServer, fallbackHostServer);
+        var hostParams = new HostPlayModeParameters();
+        hostParams.BuildinFileSystemParameters = FileSystemParameters.CreateDefaultBuildinFileSystemParameters();
+        hostParams.CacheFileSystemParameters = FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteServices);
+        return hostParams;
     }
 
     IEnumerator StartDownload()

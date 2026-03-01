@@ -50,7 +50,7 @@ public class DialogueActionHelper : ARPGController
 
     public void RebuildHome()
     {
-        this.GetSystem<IMusicSystem>().PlayBGM("Home");
+        this.SendCommand(new PlayBGMCommand("Home"));
     }
 
 }

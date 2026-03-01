@@ -9,7 +9,6 @@ namespace ARPG
         protected override void OnExecute()
         {
             var assetLoader = this.GetUtility<IAssetLoader>();
-            var musicSystem = this.GetSystem<IMusicSystem>();
             var uiSystem = this.GetSystem<IUISystem>();
             var saveSystem = this.GetSystem<ISaveSystem>();
 
@@ -20,7 +19,7 @@ namespace ARPG
 
             LoadNPC(assetLoader);
 
-            musicSystem.PlayBGM("GameScene1");
+            this.SendCommand(new PlayBGMCommand("GameScene1"));
             //加载摄像机以及玩家
             GameObject cameraObj = GameObject.Instantiate(assetLoader.LoadSync<GameObject>("character/PlayerCamera"));
             CameraMgr cameraMgr = cameraObj.GetComponent<CameraMgr>();
