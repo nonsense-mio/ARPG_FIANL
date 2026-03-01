@@ -30,6 +30,9 @@ namespace ARPG
             // 2) 同步 IInventoryModel (根据ID范围自动分类)
             var model = this.GetModel<IInventoryModel>();
             model.AddItem(item.itemID);
+
+            // 3) 局部保存背包数据
+            this.GetSystem<ISaveSystem>().SaveInventoryData();
         }
     }
 }

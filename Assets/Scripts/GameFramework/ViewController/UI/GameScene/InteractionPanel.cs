@@ -135,7 +135,8 @@ namespace ARPG
 
         public override void ShowMe()
         {
-
+            SetActive(sliderBossHP, false);
+            SetActive(txtBossName, false);
         }
     }
 

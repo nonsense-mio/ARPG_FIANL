@@ -89,10 +89,11 @@ namespace ARPG
 
                 task.CheckTaskProgress();
 
-                // 如果刚完成，同步完成状态到 Model
+                // 如果刚完成，同步完成状态到 Model 并发送事件
                 if (task.isCompleted)
                 {
                     model.CompleteTask(task.taskName);
+                    this.SendEvent(new TaskCompletedEvent(task.taskName));
                 }
             }
         }

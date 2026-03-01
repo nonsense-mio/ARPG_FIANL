@@ -10,7 +10,6 @@ namespace ARPG
     {
         protected override void OnExecute()
         {
-            this.GetSystem<IUISystem>().ClearAllPanels();
             this.SendCommand(new SaveGameCommand());
             this.SendCommand(new ClearGameInfoCommand());
             this.GetSystem<ITimerSystem>().ClearAllTimers();

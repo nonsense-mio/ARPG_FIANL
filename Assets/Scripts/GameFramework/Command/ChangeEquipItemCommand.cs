@@ -37,6 +37,9 @@ namespace ARPG
             // 2) 同步 IInventoryModel (从运行时读回最终状态)
             var model = this.GetModel<IInventoryModel>();
             SyncModelFromRuntime(model, inventory);
+
+            // 3) 局部保存背包数据
+            this.GetSystem<ISaveSystem>().SaveInventoryData();
         }
 
         /// <summary>

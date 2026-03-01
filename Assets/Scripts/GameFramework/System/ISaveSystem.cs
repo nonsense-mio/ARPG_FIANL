@@ -21,6 +21,9 @@ namespace ARPG
         void SaveCurrentGame();
         void DeleteSave(int slotIndex);
 
+        void SaveTaskData();
+        void SaveInventoryData();
+
         void StartPlayTimer();
         void StopPlayTimer();
     }

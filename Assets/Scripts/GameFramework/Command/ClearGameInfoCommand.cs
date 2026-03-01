@@ -6,6 +6,7 @@ namespace ARPG
     {
         protected override void OnExecute()
         {
+            this.GetSystem<IUISystem>().ClearAllPanels();
             this.GetSystem<ISaveSystem>().StopPlayTimer();
             this.GetSystem<IMusicSystem>().ClearAllSounds();
             this.GetSystem<IPoolSystem>().ClearAllPools();

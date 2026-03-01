@@ -29,6 +29,11 @@ namespace ARPG
             storage = this.GetUtility<IStorage>();
             tickSystem = this.GetSystem<ITickSystem>();
             SlotInfo = storage.LoadData<SaveSlotInfo>(SLOT_INFO_FILE);
+
+            // 任务关键节点自动保存
+            this.RegisterEvent<TaskStartedEvent>(_ => SaveTaskData());
+            this.RegisterEvent<TaskCompletedEvent>(_ => SaveTaskData());
+            this.RegisterEvent<TaskTurnedInEvent>(_ => SaveTaskData());
         }
 
         public bool HasAnySave() => SlotInfo.HasAnySave();
@@ -140,6 +145,40 @@ namespace ARPG
             storage.SaveData(taskData, TASK_DATA_FILE + suffix);
             storage.SaveData(sceneStateData, SCENE_STATE_FILE + suffix);
             storage.SaveData(SlotInfo, SLOT_INFO_FILE);
+        }
+
+        /// <summary>
+        /// 局部保存：仅写入任务数据到当前槽位
+        /// </summary>
+        public void SaveTaskData()
+        {
+            if (CurrentSlotIndex < 0) return;
+
+            // 同步 TaskSystem 运行时状态到 TaskModel
+            var taskSystem = this.GetSystem<ITaskSystem>();
+            taskSystem.SyncToModel();
+
+            // 收集 TaskGiver 进度
+            var taskModel = this.GetModel<ITaskModel>();
+            foreach (var giver in Object.FindObjectsOfType<TaskGiver>())
+                taskModel.SetGiverProgress(giver.GetGiverId(), giver.CurrentTaskIndex);
+
+            // 导出并写入文件
+            var taskData = new TaskData();
+            taskModel.SaveData(taskData);
+            storage.SaveData(taskData, TASK_DATA_FILE + $"_{CurrentSlotIndex}");
+        }
+
+        /// <summary>
+        /// 局部保存：仅写入背包数据到当前槽位
+        /// </summary>
+        public void SaveInventoryData()
+        {
+            if (CurrentSlotIndex < 0) return;
+
+            var inventoryData = new PlayerInventoryData();
+            this.GetModel<IInventoryModel>().SaveData(inventoryData);
+            storage.SaveData(inventoryData, INVENTORY_DATA_FILE + $"_{CurrentSlotIndex}");
         }
 
         /// <summary>

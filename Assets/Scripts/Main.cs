@@ -36,10 +36,6 @@ public class Main : MonoBehaviour
     // 约定路径：Assets/AB/HotDll/{name}.dll.bytes
     [SerializeField] List<string> aotMetadataDlls = new List<string>();
 
-    void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
 
     IEnumerator Start()
     {

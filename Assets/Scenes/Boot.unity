@@ -971,7 +971,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11a8397c194aac540b8f840c48618452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playMode: 2
   packageName: DefaultPackage
   packageVersion: 
   defaultHostServer: http://192.168.3.133:8080/CDN/PC/ARPGv1.0
@@ -982,7 +981,9 @@ MonoBehaviour:
   confirmDialog: {fileID: 9091273337434573863}
   confirmText: {fileID: 8709016468209320816}
   btnConfirm: {fileID: 5393540090953655218}
-  aotMetadataDlls: []
+  aotMetadataDlls:
+  - GameFramework
+  - mscorlib
 --- !u!222 &5189663656398881376
 CanvasRenderer:
   m_ObjectHideFlags: 0
