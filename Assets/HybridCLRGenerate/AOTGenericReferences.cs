@@ -5,6 +5,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// {{ AOT assemblies
 	public static readonly IReadOnlyList<string> PatchedAOTAssemblyList = new List<string>
 	{
+		"GameFramework.dll",
 	};
 	// }}
 
@@ -16,5 +17,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 
 	public void RefMethods()
 	{
+		// System.Void Framework.IArchitecture.SendEvent<ARPG.LaunchGameEvent>(ARPG.LaunchGameEvent)
 	}
 }

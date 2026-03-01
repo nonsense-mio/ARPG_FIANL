@@ -69,9 +69,26 @@ public class Main : MonoBehaviour
         }
         bootPanel.SetProgress(0.2f, "初始化资源系统...");
 
-        // EditorSimulateMode / OfflinePlayMode 不需要远程版本检查，直接进入游戏
+        // EditorSimulateMode / OfflinePlayMode 不需要远程版本检查
+        // 但仍需 RequestPackageVersion + UpdatePackageManifest 才能激活 Manifest
         if (playMode != EPlayMode.HostPlayMode)
         {
+            var localVersionOp = package.RequestPackageVersionAsync();
+            yield return localVersionOp;
+            if (localVersionOp.Status != EOperationStatus.Succeed)
+            {
+                ShowRetryDialog("获取本地版本失败", localVersionOp.Error);
+                yield break;
+            }
+
+            var localManifestOp = package.UpdatePackageManifestAsync(localVersionOp.PackageVersion);
+            yield return localManifestOp;
+            if (localManifestOp.Status != EOperationStatus.Succeed)
+            {
+                ShowRetryDialog("加载本地清单失败", localManifestOp.Error);
+                yield break;
+            }
+
             bootPanel.SetProgress(1.0f, "正在进入游戏...");
             UpdateDone();
             yield break;

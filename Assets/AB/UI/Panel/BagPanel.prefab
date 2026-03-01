@@ -204,7 +204,6 @@ GameObject:
   - component: {fileID: 2338239585863616828}
   - component: {fileID: 1453666548596045016}
   - component: {fileID: 1360304816991509711}
-  - component: {fileID: 7846332602842297630}
   - component: {fileID: 4063662150435703522}
   m_Layer: 5
   m_Name: Viewport
@@ -271,19 +270,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7846332602842297630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7545479508842827174}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShowMaskGraphic: 0
 --- !u!114 &4063662150435703522
 MonoBehaviour:
   m_ObjectHideFlags: 0

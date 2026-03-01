@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
+  <assembly fullname="GameFramework">
+    <type fullname="ARPG.IGameLauncher" preserve="all" />
+    <type fullname="ARPG.LaunchGameEvent" preserve="all" />
+    <type fullname="Framework.IArchitecture" preserve="all" />
+  </assembly>
   <assembly fullname="System">
     <type fullname="System.CodeDom.Compiler.GeneratedCodeAttribute" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableAttribute" preserve="all" />
     <type fullname="System.ComponentModel.EditorBrowsableState" preserve="all" />
-  </assembly>
-  <assembly fullname="UnityEngine.CoreModule">
-    <type fullname="UnityEngine.Debug" preserve="all" />
   </assembly>
   <assembly fullname="mscorlib">
     <type fullname="System.Array" preserve="all" />
