@@ -11,6 +11,7 @@ namespace ARPG
     {
         public void Launch(IArchitecture architecture)
         {
+            UnityEngine.Debug.Log("[HotUpdate] GameLauncher.Launch() 执行");
             // 注册 Boss 战桥接事件处理器（AOT 发送事件 → HotUpdate 执行 Command）
             architecture.RegisterEvent<ActivateBossFightRequestEvent>(e =>
             {

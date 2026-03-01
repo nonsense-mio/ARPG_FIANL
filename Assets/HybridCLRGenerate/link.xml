@@ -29,6 +29,7 @@
   </assembly>
   <assembly fullname="UnityEngine.CoreModule">
     <type fullname="UnityEngine.Behaviour" preserve="all" />
+    <type fullname="UnityEngine.Debug" preserve="all" />
     <type fullname="UnityEngine.Object" preserve="all" />
   </assembly>
   <assembly fullname="mscorlib">

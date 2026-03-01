@@ -187,7 +187,7 @@ public class Main : MonoBehaviour
         bootPanel.SetProgress(1.0f, "加载热更模块...");
         yield return null;
 
-#if !UNITY_EDITOR
+//#if !UNITY_EDITOR
         // 1. 补充 AOT 泛型元数据
         foreach (string dllName in aotMetadataDlls)
         {
@@ -213,22 +213,22 @@ public class Main : MonoBehaviour
             Debug.LogError("热更程序集中未找到 ARPG.GameLauncher，无法启动游戏。");
             yield break;
         }
-#else
-        // Editor：HotUpdate 程序集已由 Unity 自动加载，从 AppDomain 中查找
-        Assembly hotUpdateAss = AppDomain.CurrentDomain.GetAssemblies()
-            .FirstOrDefault(a => a.GetName().Name == "HotUpdate");
-        if (hotUpdateAss == null)
-        {
-            Debug.LogError("未找到 HotUpdate 程序集，请检查 HotUpdate.asmdef 配置。");
-            yield break;
-        }
-        Type launcherType = hotUpdateAss.GetType("ARPG.GameLauncher");
-        if (launcherType == null)
-        {
-            Debug.LogError("HotUpdate 程序集中未找到 ARPG.GameLauncher。");
-            yield break;
-        }
-#endif
+// #else
+//         // Editor：HotUpdate 程序集已由 Unity 自动加载，从 AppDomain 中查找
+//         Assembly hotUpdateAss = AppDomain.CurrentDomain.GetAssemblies()
+//             .FirstOrDefault(a => a.GetName().Name == "HotUpdate");
+//         if (hotUpdateAss == null)
+//         {
+//             Debug.LogError("未找到 HotUpdate 程序集，请检查 HotUpdate.asmdef 配置。");
+//             yield break;
+//         }
+//         Type launcherType = hotUpdateAss.GetType("ARPG.GameLauncher");
+//         if (launcherType == null)
+//         {
+//             Debug.LogError("HotUpdate 程序集中未找到 ARPG.GameLauncher。");
+//             yield break;
+//         }
+// #endif
 
         // 4. 注册 LaunchGameEvent 监听 — AOT 侧响应热更发来的启动事件
         var arch = GameArchitecture.Interface;
