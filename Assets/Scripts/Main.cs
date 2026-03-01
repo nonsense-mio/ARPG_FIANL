@@ -42,7 +42,7 @@ public class Main : MonoBehaviour
         yield return null;
         yield return InitializeAndUpdate();
     }
-
+    #region 热更新流程
     /// <summary>
     /// 初始化→版本检查→下载流程。
     /// </summary>
@@ -94,7 +94,7 @@ public class Main : MonoBehaviour
             yield break;
         }
 
-        // 5. 弹出下载确认（直接操作 Bootstrap 场景 UI，不经过 UISystem）
+        // 5. 弹出下载确认
         int count = downloader.TotalDownloadCount;
         string sizeText = FormatBytes(downloader.TotalDownloadBytes);
         bootPanel.SetProgress(0.65f, $"检测到 {count} 个文件 ({sizeText}) 待更新");
@@ -108,6 +108,7 @@ public class Main : MonoBehaviour
             StartCoroutine(StartDownload());
         });
     }
+    #endregion
 
     private InitializeParameters CreateInitParameters()
     {
@@ -117,7 +118,7 @@ public class Main : MonoBehaviour
         hostParams.CacheFileSystemParameters = FileSystemParameters.CreateDefaultCacheFileSystemParameters(remoteServices);
         return hostParams;
     }
-
+    #region 资源下载
     IEnumerator StartDownload()
     {
         downloader.DownloadUpdateCallback = ProgressCallBack;
@@ -139,6 +140,7 @@ public class Main : MonoBehaviour
             UpdateDone();
         };
     }
+    #endregion
 
     private void ProgressCallBack(DownloadUpdateData data)
     {
@@ -179,15 +181,13 @@ public class Main : MonoBehaviour
     }
 
     /// <summary>
-    /// 补充 AOT 元数据 → 加载热更 DLL → 通过 IGameLauncher 进入游戏。
-    /// Editor 下跳过 DLL 加载（HotUpdate 程序集已由 Unity 自动载入）。
+    /// 补充 AOT 元数据 → 加载热更 DLL → 通过 IGameLauncher 进入游戏。。
     /// </summary>
     private IEnumerator LoadAndEnterGame()
     {
         bootPanel.SetProgress(1.0f, "加载热更模块...");
         yield return null;
 
-//#if !UNITY_EDITOR
         // 1. 补充 AOT 泛型元数据
         foreach (string dllName in aotMetadataDlls)
         {
@@ -213,22 +213,6 @@ public class Main : MonoBehaviour
             Debug.LogError("热更程序集中未找到 ARPG.GameLauncher，无法启动游戏。");
             yield break;
         }
-// #else
-//         // Editor：HotUpdate 程序集已由 Unity 自动加载，从 AppDomain 中查找
-//         Assembly hotUpdateAss = AppDomain.CurrentDomain.GetAssemblies()
-//             .FirstOrDefault(a => a.GetName().Name == "HotUpdate");
-//         if (hotUpdateAss == null)
-//         {
-//             Debug.LogError("未找到 HotUpdate 程序集，请检查 HotUpdate.asmdef 配置。");
-//             yield break;
-//         }
-//         Type launcherType = hotUpdateAss.GetType("ARPG.GameLauncher");
-//         if (launcherType == null)
-//         {
-//             Debug.LogError("HotUpdate 程序集中未找到 ARPG.GameLauncher。");
-//             yield break;
-//         }
-// #endif
 
         // 4. 注册 LaunchGameEvent 监听 — AOT 侧响应热更发来的启动事件
         var arch = GameArchitecture.Interface;
