@@ -39,10 +39,10 @@ namespace ARPG
             cameraMgr.inputMgr = player.inputMgr;
             cameraMgr.playerManager = player;
             //面板管理
-            uiSystem.HidePanel<BeginPanel>(true);
-            uiSystem.HidePanel<SavePanel>(true);
             uiSystem.ShowPanel<GamePanel>();
             uiSystem.ShowPanel<InteractionPanel>();
+            uiSystem.HidePanel<BeginPanel>(true);
+            uiSystem.HidePanel<SavePanel>(true);
             //开始计时
             saveSystem.StartPlayTimer();
         }

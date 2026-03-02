@@ -977,6 +977,7 @@ MonoBehaviour:
   fallbackHostServer: http://192.168.3.133:8080/CDN/PC/ARPGv1.0
   downloadingMaxNum: 10
   failedTryAgain: 3
+  eventObj: {fileID: 2471033418221867524}
   bootPanel: {fileID: 1163123835}
   confirmDialog: {fileID: 9091273337434573863}
   confirmText: {fileID: 8709016468209320816}

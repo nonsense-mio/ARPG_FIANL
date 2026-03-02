@@ -112,8 +112,8 @@ namespace ARPG
             Init();
             UpdateProjectedPlayerLevel();
             btnLevUp.onClick.AddListener(ConfirmPlayerLevelUpStats);
-            sliderHealth.Select();
-            sliderHealth.OnSelect(null);
+            btnLevUp.Select();
+            btnLevUp.OnSelect(null);
             sliderHealth.onValueChanged.AddListener(UpdateHealthLevelSlider);
             sliderStamina.onValueChanged.AddListener(UpdateStaminaLevelSlider);
             sliderFocus.onValueChanged.AddListener(UpdateFocusLevelSlider);
@@ -272,8 +272,9 @@ namespace ARPG
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            Debug.Log("123");
             if (EventSystem.current.currentSelectedGameObject == null)
-                sliderHealth.Select();
+                btnLevUp.Select();
         }
     }
 }

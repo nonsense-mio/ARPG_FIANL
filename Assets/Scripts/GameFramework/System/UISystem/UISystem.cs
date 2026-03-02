@@ -3,6 +3,7 @@ using Framework;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
 namespace ARPG
 {
@@ -94,9 +95,11 @@ namespace ARPG
             InitCanvasLayers(E_UICanvas.Static, staticCanvas);
             InitCanvasLayers(E_UICanvas.Overlay, overlayCanvas);
 
-            //动态创建EventSystem (通过 YooAsset 同步加载)
-            uiEventSystem = GameObject.Instantiate(assetLoader.LoadSync<GameObject>("ui_bootstrap/EventSystem")).GetComponent<EventSystem>();
-            GameObject.DontDestroyOnLoad(uiEventSystem.gameObject);
+            //程序化创建EventSystem (避免 Bundle 依赖包级别 InputActionAsset 在场景切换时被卸载)
+            var eventSystemGo = new GameObject("EventSystem");
+            uiEventSystem = eventSystemGo.AddComponent<EventSystem>();
+            eventSystemGo.AddComponent<InputSystemUIInputModule>();
+            GameObject.DontDestroyOnLoad(eventSystemGo);
         }
 
         private void InitCanvasLayers(E_UICanvas type, Canvas canvas)

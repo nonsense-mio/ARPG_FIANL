@@ -23,6 +23,7 @@ public class Main : MonoBehaviour
     public int downloadingMaxNum = 10;
     public int failedTryAgain = 3;
     public ResourceDownloaderOperation downloader;
+    [SerializeField] GameObject eventObj;
 
     [SerializeField] BootPanel bootPanel;
 
@@ -174,9 +175,10 @@ public class Main : MonoBehaviour
             StartCoroutine(InitializeAndUpdate());
         });
     }
-
+    #region  热更新结束
     private void UpdateDone()
     {
+        DestroyImmediate(eventObj);
         StartCoroutine(LoadAndEnterGame());
     }
 
@@ -225,6 +227,7 @@ public class Main : MonoBehaviour
         IGameLauncher launcher = (IGameLauncher)Activator.CreateInstance(launcherType);
         launcher.Launch(arch);
     }
+    #endregion
 
     /// <summary>
     /// 将字节数格式化为可读字符串 (KB / MB)。

@@ -33,7 +33,7 @@ namespace ARPG
             // 显示 Boss HUD
             bossFight.PublishBossHud();
 
-            // 热更测试：Boss 战 BGM 切换
+            // Boss 战 BGM 切换
             this.GetSystem<IMusicSystem>().PlayBGM("Boss1");
         }
     }
