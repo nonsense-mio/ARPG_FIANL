@@ -36,7 +36,7 @@ namespace ARPG
             sceneStateModel.SetBossDefeated(bossFight.BossID, true);
 
             // 热更测试：Boss 击败后恢复场景 BGM
-            this.GetSystem<IMusicSystem>().PlayBGM("Win");
+            this.GetSystem<IMusicSystem>().PlayBGM("End");
         }
     }
 }

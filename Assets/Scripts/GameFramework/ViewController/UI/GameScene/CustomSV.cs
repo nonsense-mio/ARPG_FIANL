@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using ARPG;
 using UnityEngine;
-using UnityEngine.Events; // 引入 UnityAction
-using UnityEngine.UI;     // 引入 Button
+using UnityEngine.Events; 
+using UnityEngine.UI;     
 
 namespace ARPG
 {

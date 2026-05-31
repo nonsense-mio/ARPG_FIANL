@@ -34,7 +34,7 @@ namespace ARPG
             bossFight.PublishBossHud();
 
             // Boss 战 BGM 切换
-            this.GetSystem<IMusicSystem>().PlayBGM("Boss1");
+            this.GetSystem<IMusicSystem>().PlayBGM("Boss2");
         }
     }
 }

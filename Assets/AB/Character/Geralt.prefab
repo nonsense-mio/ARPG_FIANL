@@ -39109,7 +39109,6 @@ GameObject:
   - component: {fileID: 49392239507612634}
   - component: {fileID: 8193671467616353875}
   - component: {fileID: 5340531595028923994}
-  - component: {fileID: 7403651917685932179}
   - component: {fileID: 4898431005416371960}
   - component: {fileID: 8956078685205163742}
   - component: {fileID: 8231772767006221566}
@@ -39226,23 +39225,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &7403651917685932179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4822967242229007417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efdbb0ef2c3783c42a99a48b138cb9c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  radius: 0.6
-  interactionPrompt: "\u4EA4\u4E92"
-  soundEffectName: 
-  animationName: Pick Up Item
-  currentData: {fileID: 11400000, guid: 8f45f6c5661e8c945a42d7c954357df0, type: 2}
 --- !u!114 &4898431005416371960
 MonoBehaviour:
   m_ObjectHideFlags: 0

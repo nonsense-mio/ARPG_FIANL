@@ -7,7 +7,6 @@ namespace ARPG
 {
     /// <summary>
     /// 任务系统实现 - 管理运行时任务对象和事件处理
-    /// 替代原 TaskManager (SingletonAutoMono)
     /// </summary>
     public class TaskSystem : AbstractSystem, ITaskSystem
     {

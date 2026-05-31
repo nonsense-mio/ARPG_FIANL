@@ -23,11 +23,6 @@ public class PlayerData
     public float zPos;
 
 
-    //用json存储宝箱开启状态 LitJson字典的键必须是string类型
-    public Dictionary<string, bool> chestDic = new Dictionary<string, bool>();
-    //篝火激活状态
-    public Dictionary<string, bool> bonfireDic = new Dictionary<string, bool>();
-
     //当前激活的复活点篝火ID
     public string lastRestedBonfireID = "";
 

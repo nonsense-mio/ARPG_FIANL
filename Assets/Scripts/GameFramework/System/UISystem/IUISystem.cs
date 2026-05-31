@@ -16,7 +16,6 @@ namespace ARPG
 
     /// <summary>
     /// UI系统接口 - 管理面板的显示/隐藏/获取
-    /// 替代原 UIMgr (BaseManager 单例)
     /// </summary>
     public interface IUISystem : ISystem
     {
@@ -31,7 +30,7 @@ namespace ARPG
         void HidePanel<T>(bool isDestroy = false) where T : BasePanel;
 
         /// <summary>
-        /// 获取面板 (异步安全: 如面板正在加载, 会在加载完成后回调)
+        /// 获取面板 
         /// </summary>
         void GetPanel<T>(UnityAction<T> callBack) where T : BasePanel;
 
