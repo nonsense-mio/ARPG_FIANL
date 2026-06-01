@@ -1,0 +1,1166 @@
+{
+    "FileVersion": "2025.9.30",
+    "EnableAddressable": true,
+    "SupportExtensionless": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "ReplaceAssetPathWithAddress": false,
+    "OutputNameStyle": 0,
+    "BuildBundleType": 1,
+    "BuildPipeline": "EditorSimulateBuildPipeline",
+    "PackageName": "DefaultPackage",
+    "PackageVersion": "Simulate",
+    "PackageNote": "2026/6/1 19:01:24",
+    "AssetList": [
+        {
+            "Address": "Ciri",
+            "AssetPath": "Assets/AB/Character/Ciri.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "CiriPos",
+            "AssetPath": "Assets/AB/Character/CiriPos.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Geralt",
+            "AssetPath": "Assets/AB/Character/Geralt.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "GeraltPos",
+            "AssetPath": "Assets/AB/Character/GeraltPos.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "NPC",
+            "AssetPath": "Assets/AB/Character/NPC.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 5,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Player",
+            "AssetPath": "Assets/AB/Character/Player.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "PlayerCamera",
+            "AssetPath": "Assets/AB/Character/PlayerCamera.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Cube",
+            "AssetPath": "Assets/AB/Cube.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "ItemDataBase",
+            "AssetPath": "Assets/AB/Data/ItemDataBase.asset",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 8,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "PoolWarmupConfig",
+            "AssetPath": "Assets/AB/Data/PoolWarmupConfig.asset",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 8,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Archer",
+            "AssetPath": "Assets/AB/Enemy/Archer.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 9,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Axe",
+            "AssetPath": "Assets/AB/Enemy/Axe.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 10,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "BossEnemy",
+            "AssetPath": "Assets/AB/Enemy/BossEnemy.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 11,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "FixedArcher",
+            "AssetPath": "Assets/AB/Enemy/FixedArcher.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 12,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Shield",
+            "AssetPath": "Assets/AB/Enemy/Shield.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 13,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Sword",
+            "AssetPath": "Assets/AB/Enemy/Sword.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 14,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Blood",
+            "AssetPath": "Assets/AB/FX/Blood.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "BombFX",
+            "AssetPath": "Assets/AB/FX/BombFX.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Fire Ball Warm Up",
+            "AssetPath": "Assets/AB/FX/Fire Ball Warm Up.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "FireBall",
+            "AssetPath": "Assets/AB/FX/FireBall.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "FireBallImpact",
+            "AssetPath": "Assets/AB/FX/FireBallImpact.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "HealFX",
+            "AssetPath": "Assets/AB/FX/HealFX.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "PhaseShift",
+            "AssetPath": "Assets/AB/FX/PhaseShift.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Poison",
+            "AssetPath": "Assets/AB/FX/Poison.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Recover",
+            "AssetPath": "Assets/AB/FX/Recover.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Slash",
+            "AssetPath": "Assets/AB/FX/Slash.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Slash_Boss",
+            "AssetPath": "Assets/AB/FX/Slash_Boss.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Slash_Player",
+            "AssetPath": "Assets/AB/FX/Slash_Player.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "SpellWarmUp",
+            "AssetPath": "Assets/AB/FX/SpellWarmUp.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 15,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "HotUpdate.dll",
+            "AssetPath": "Assets/AB/HotDll/HotUpdate.dll.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "mscorlib.dll",
+            "AssetPath": "Assets/AB/HotDll/mscorlib.dll.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "System.Core.dll",
+            "AssetPath": "Assets/AB/HotDll/System.Core.dll.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "System.dll",
+            "AssetPath": "Assets/AB/HotDll/System.dll.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Unity.Animation.Rigging.dll",
+            "AssetPath": "Assets/AB/HotDll/Unity.Animation.Rigging.dll.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Unity.InputSystem.dll",
+            "AssetPath": "Assets/AB/HotDll/Unity.InputSystem.dll.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UnityEngine.CoreModule.dll",
+            "AssetPath": "Assets/AB/HotDll/UnityEngine.CoreModule.dll.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UnityEngine.JSONSerializeModule.dll",
+            "AssetPath": "Assets/AB/HotDll/UnityEngine.JSONSerializeModule.dll.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "YooAsset.dll",
+            "AssetPath": "Assets/AB/HotDll/YooAsset.dll.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 16,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Potion_Blue",
+            "AssetPath": "Assets/AB/Item/Potion_Blue.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 17,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Potion_Lagoon",
+            "AssetPath": "Assets/AB/Item/Potion_Lagoon.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 17,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Potion_Red",
+            "AssetPath": "Assets/AB/Item/Potion_Red.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 17,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "WeaponPickUp",
+            "AssetPath": "Assets/AB/Item/WeaponPickUp.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 17,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "BeginScene1",
+            "AssetPath": "Assets/AB/Music/BeginScene1.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 18,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "BGM1",
+            "AssetPath": "Assets/AB/Music/BGM1.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 19,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Boss1",
+            "AssetPath": "Assets/AB/Music/Boss1.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 20,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Boss2",
+            "AssetPath": "Assets/AB/Music/Boss2.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 21,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "End",
+            "AssetPath": "Assets/AB/Music/End.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 22,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "GameScene1",
+            "AssetPath": "Assets/AB/Music/GameScene1.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 23,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Home",
+            "AssetPath": "Assets/AB/Music/Home.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 24,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Win",
+            "AssetPath": "Assets/AB/Music/Win.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 25,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Arrow_Live_Model",
+            "AssetPath": "Assets/AB/Projectile/Arrow_Live_Model.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 26,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Arrow_Loaded_Model 2",
+            "AssetPath": "Assets/AB/Projectile/Arrow_Loaded_Model 2.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 26,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Arrow_Loaded_Model",
+            "AssetPath": "Assets/AB/Projectile/Arrow_Loaded_Model.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 26,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Arrow_Penetrated_Model",
+            "AssetPath": "Assets/AB/Projectile/Arrow_Penetrated_Model.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 26,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Fire Ball Projectile",
+            "AssetPath": "Assets/AB/Projectile/Fire Ball Projectile.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 26,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "FireBomb",
+            "AssetPath": "Assets/AB/Projectile/FireBomb.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 26,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "FireBomb_Live",
+            "AssetPath": "Assets/AB/Projectile/FireBomb_Live.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 26,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "BeginScene",
+            "AssetPath": "Assets/AB/Scene/BeginScene.unity",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 27,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "GameScene",
+            "AssetPath": "Assets/AB/Scene/GameScene.unity",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 28,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "activeFire",
+            "AssetPath": "Assets/AB/SFX/activeFire.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "attack1",
+            "AssetPath": "Assets/AB/SFX/attack1.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "bomb_explosion",
+            "AssetPath": "Assets/AB/SFX/bomb_explosion.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "damage1",
+            "AssetPath": "Assets/AB/SFX/damage1.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "damage2",
+            "AssetPath": "Assets/AB/SFX/damage2.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "fireball",
+            "AssetPath": "Assets/AB/SFX/fireball.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "fireball_hit",
+            "AssetPath": "Assets/AB/SFX/fireball_hit.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "heal",
+            "AssetPath": "Assets/AB/SFX/heal.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "hero_nail_art_charge_complete",
+            "AssetPath": "Assets/AB/SFX/hero_nail_art_charge_complete.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "hero_nail_art_charge_initiate",
+            "AssetPath": "Assets/AB/SFX/hero_nail_art_charge_initiate.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "hero_nail_art_great_slash",
+            "AssetPath": "Assets/AB/SFX/hero_nail_art_great_slash.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "interact",
+            "AssetPath": "Assets/AB/SFX/interact.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "phase_shift",
+            "AssetPath": "Assets/AB/SFX/phase_shift.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "saveGame",
+            "AssetPath": "Assets/AB/SFX/saveGame.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "slash1",
+            "AssetPath": "Assets/AB/SFX/slash1.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "slash2",
+            "AssetPath": "Assets/AB/SFX/slash2.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "slash3",
+            "AssetPath": "Assets/AB/SFX/slash3.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "stalactite_death",
+            "AssetPath": "Assets/AB/SFX/stalactite_death.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_Confirm",
+            "AssetPath": "Assets/AB/SFX/UI_Confirm.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_Select",
+            "AssetPath": "Assets/AB/SFX/UI_Select.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 29,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "soundObj",
+            "AssetPath": "Assets/AB/Sound/soundObj.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 30,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UICamera",
+            "AssetPath": "Assets/AB/UI/Boot/UICamera.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 31,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UIRoot",
+            "AssetPath": "Assets/AB/UI/Boot/UIRoot.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 31,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "BagPanel",
+            "AssetPath": "Assets/AB/UI/Panel/BagPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "BeginPanel",
+            "AssetPath": "Assets/AB/UI/Panel/BeginPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "DialoguePanel",
+            "AssetPath": "Assets/AB/UI/Panel/DialoguePanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "EquipPanel",
+            "AssetPath": "Assets/AB/UI/Panel/EquipPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "GamePanel",
+            "AssetPath": "Assets/AB/UI/Panel/GamePanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "InteractionPanel",
+            "AssetPath": "Assets/AB/UI/Panel/InteractionPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "ItemStatsPanel",
+            "AssetPath": "Assets/AB/UI/Panel/ItemStatsPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "LevelUpPanel",
+            "AssetPath": "Assets/AB/UI/Panel/LevelUpPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "PlayerStatsPanel",
+            "AssetPath": "Assets/AB/UI/Panel/PlayerStatsPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "SavePanel",
+            "AssetPath": "Assets/AB/UI/Panel/SavePanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "SettingPanel",
+            "AssetPath": "Assets/AB/UI/Panel/SettingPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "TaskPanel",
+            "AssetPath": "Assets/AB/UI/Panel/TaskPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "TipPanel",
+            "AssetPath": "Assets/AB/UI/Panel/TipPanel.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 32,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "btnBagItem",
+            "AssetPath": "Assets/AB/UI/Widget/btnBagItem.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 33,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "btnTaskName",
+            "AssetPath": "Assets/AB/UI/Widget/btnTaskName.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 33,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "InteractionItem",
+            "AssetPath": "Assets/AB/UI/Widget/InteractionItem.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 33,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "InteractionTips",
+            "AssetPath": "Assets/AB/UI/Widget/InteractionTips.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 33,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Option",
+            "AssetPath": "Assets/AB/UI/Widget/Option.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 33,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "TaskRequirement",
+            "AssetPath": "Assets/AB/UI/Widget/TaskRequirement.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 33,
+            "DependBundleIDs": []
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "assets_ab.bundle",
+            "UnityCRC": 0,
+            "FileHash": "c95fea33c0dc775d8aa9fffeaa80501f",
+            "FileCRC": 0,
+            "FileSize": 3008,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_character_ciri.bundle",
+            "UnityCRC": 0,
+            "FileHash": "cd9f7e234adf352575482e945ee758c0",
+            "FileCRC": 0,
+            "FileSize": 2051918,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_character_ciripos.bundle",
+            "UnityCRC": 0,
+            "FileHash": "721ba7846c8bfec68f848a4b3852c623",
+            "FileCRC": 0,
+            "FileSize": 924,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_character_geralt.bundle",
+            "UnityCRC": 0,
+            "FileHash": "c13569bd46a7d3927ef4f0e2ee840135",
+            "FileCRC": 0,
+            "FileSize": 2050250,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_character_geraltpos.bundle",
+            "UnityCRC": 0,
+            "FileHash": "67b9a36fe118a98620319af63f669ea0",
+            "FileCRC": 0,
+            "FileSize": 938,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_character_npc.bundle",
+            "UnityCRC": 0,
+            "FileHash": "8637c28ffe56454f3b7516b94136f46e",
+            "FileCRC": 0,
+            "FileSize": 2020292,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_character_player.bundle",
+            "UnityCRC": 0,
+            "FileHash": "70792b8280e74835a9109dea6f193ccd",
+            "FileCRC": 0,
+            "FileSize": 2056149,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_character_playercamera.bundle",
+            "UnityCRC": 0,
+            "FileHash": "cc5e334cae8f7e8d3342958ea225cab3",
+            "FileCRC": 0,
+            "FileSize": 5510,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_data.bundle",
+            "UnityCRC": 0,
+            "FileHash": "d9768a21e88fe1f990ce00f5a6db8aed",
+            "FileCRC": 0,
+            "FileSize": 3640,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_enemy_archer.bundle",
+            "UnityCRC": 0,
+            "FileHash": "bd30074f919c51117898bf20182b9f50",
+            "FileCRC": 0,
+            "FileSize": 135429,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_enemy_axe.bundle",
+            "UnityCRC": 0,
+            "FileHash": "41454fa3207c2f33af218f1ff5953eea",
+            "FileCRC": 0,
+            "FileSize": 135337,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_enemy_bossenemy.bundle",
+            "UnityCRC": 0,
+            "FileHash": "6c21008565128330b714ddcaf495129b",
+            "FileCRC": 0,
+            "FileSize": 133048,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_enemy_fixedarcher.bundle",
+            "UnityCRC": 0,
+            "FileHash": "d60bf76d8a74b0c7091c42dbea40b65a",
+            "FileCRC": 0,
+            "FileSize": 135359,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_enemy_shield.bundle",
+            "UnityCRC": 0,
+            "FileHash": "5ad37ed6a04d902115346f61d9246daf",
+            "FileCRC": 0,
+            "FileSize": 135486,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_enemy_sword.bundle",
+            "UnityCRC": 0,
+            "FileHash": "3efddc8325c4b6ff3cb90ecc1571744e",
+            "FileCRC": 0,
+            "FileSize": 135318,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_fx.bundle",
+            "UnityCRC": 0,
+            "FileHash": "c2aabe4aeb8ad09abf5f5cc20e1a1f4c",
+            "FileCRC": 0,
+            "FileSize": 7551977,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_hotdll.bundle",
+            "UnityCRC": 0,
+            "FileHash": "faeb591b63bd6bcf7253ac285e1c62a6",
+            "FileCRC": 0,
+            "FileSize": 5020160,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_item.bundle",
+            "UnityCRC": 0,
+            "FileHash": "2f4999e822890f1881c3d1e38ef1ebe9",
+            "FileCRC": 0,
+            "FileSize": 481639,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_music_beginscene1.bundle",
+            "UnityCRC": 0,
+            "FileHash": "fcbcf9898e32512daa83a9a68a66ecc8",
+            "FileCRC": 0,
+            "FileSize": 14429564,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_music_bgm1.bundle",
+            "UnityCRC": 0,
+            "FileHash": "ddcbb5f4d63a47e75cd37ba1877b16a4",
+            "FileCRC": 0,
+            "FileSize": 2362093,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_music_boss1.bundle",
+            "UnityCRC": 0,
+            "FileHash": "3b6a788323cd731e43a2055430af22cf",
+            "FileCRC": 0,
+            "FileSize": 19816592,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_music_boss2.bundle",
+            "UnityCRC": 0,
+            "FileHash": "2e9caa5b2520a81cc1e4d74b83b5b354",
+            "FileCRC": 0,
+            "FileSize": 3709083,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_music_end.bundle",
+            "UnityCRC": 0,
+            "FileHash": "ccd5d44ffbb66db1022550337c6131c8",
+            "FileCRC": 0,
+            "FileSize": 2330863,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_music_gamescene1.bundle",
+            "UnityCRC": 0,
+            "FileHash": "8ff5fcb4df0686e701ffccc5c2d36d4c",
+            "FileCRC": 0,
+            "FileSize": 18300680,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_music_home.bundle",
+            "UnityCRC": 0,
+            "FileHash": "de5723afecbbd9019a00bfd2af4d828c",
+            "FileCRC": 0,
+            "FileSize": 4692332,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_music_win.bundle",
+            "UnityCRC": 0,
+            "FileHash": "001db062273da7e08bb44735f1810185",
+            "FileCRC": 0,
+            "FileSize": 2028887,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_projectile.bundle",
+            "UnityCRC": 0,
+            "FileHash": "d209b302bc8ebdcdb867fa0116afc53d",
+            "FileCRC": 0,
+            "FileSize": 734536,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_scene_beginscene.bundle",
+            "UnityCRC": 0,
+            "FileHash": "5050bfb2f757ec65cbd63b36ad93c893",
+            "FileCRC": 0,
+            "FileSize": 11783054,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_scene_gamescene.bundle",
+            "UnityCRC": 0,
+            "FileHash": "90bbd79dcdf6daedbb18d9ed363799c0",
+            "FileCRC": 0,
+            "FileSize": 12523279,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_sfx.bundle",
+            "UnityCRC": 0,
+            "FileHash": "b79591fbce0c618e4db200264d99d581",
+            "FileCRC": 0,
+            "FileSize": 4271339,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_sound.bundle",
+            "UnityCRC": 0,
+            "FileHash": "18bfa47aaa0aa8aa700227eb5a1fc13d",
+            "FileCRC": 0,
+            "FileSize": 3022,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_ui_boot.bundle",
+            "UnityCRC": 0,
+            "FileHash": "ac85bb5cb7adf7e76d0b7bd9e5c71c9f",
+            "FileCRC": 0,
+            "FileSize": 14879,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_ui_panel.bundle",
+            "UnityCRC": 0,
+            "FileHash": "5f371d232cd823f7125a0a135235718e",
+            "FileCRC": 0,
+            "FileSize": 607503,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_ab_ui_widget.bundle",
+            "UnityCRC": 0,
+            "FileHash": "9e8905de779196a7e420523731dea4ed",
+            "FileCRC": 0,
+            "FileSize": 38039,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        }
+    ]
+}
