@@ -3,28 +3,18 @@ using Framework;
 namespace ARPG
 {
     /// <summary>
-    /// 热更版游戏启动器 — 在 HotUpdate 程序集中，可通过热更修改启动逻辑。
-    /// Main.cs 通过反射找到此类，调用 Launch(architecture) 启动游戏。
-    /// 通过 LaunchGameEvent 桥接到 AOT 层的 Command（TransitionToBeginSceneCommand）。
+    /// 热更版游戏启动器 — 位于热更程序集，可随热更修改启动逻辑。
+    /// Main.cs(AOT) 通过反射找到此类并调用无参 Launch()。
+    /// 全部启动接线都在此完成，因此 AOT 引导层无需了解任何 QFramework 类型。
     /// </summary>
     public class GameLauncher : IGameLauncher
     {
-        public void Launch(IArchitecture architecture)
+        public void Launch()
         {
             UnityEngine.Debug.Log("[HotUpdate] GameLauncher.Launch() 执行");
-            // 注册 Boss 战桥接事件处理器（AOT 发送事件 → HotUpdate 执行 Command）
-            architecture.RegisterEvent<ActivateBossFightRequestEvent>(e =>
-            {
-                architecture.SendCommand(new ActivateBossFightCommand(e.BossFight));
-            });
-
-            architecture.RegisterEvent<BossDefeatedRequestEvent>(e =>
-            {
-                architecture.SendCommand(new BossDefeatedCommand(e.BossFight));
-            });
-
-            // 通知 AOT 侧启动游戏（触发 TransitionToBeginSceneCommand）
-            architecture.SendEvent(new LaunchGameEvent());
+            // 进入开始场景。游戏逻辑已全在热更程序集内，触发器可直接 SendCommand，
+            // 无需任何 AOT↔热更事件桥（原 Boss 桥接已移除）。
+            GameArchitecture.Interface.SendCommand<TransitionToBeginSceneCommand>();
         }
     }
 }

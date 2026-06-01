@@ -2,7 +2,13 @@
     "name": "HotUpdate",
     "rootNamespace": "",
     "references": [
-        "GameFramework"
+        "Bootstrap",
+        "YooAsset",
+        "Unity.InputSystem",
+        "InputActions",
+        "Unity.Animation.Rigging",
+        "Unity.TextMeshPro",
+        "DOTween.Modules"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

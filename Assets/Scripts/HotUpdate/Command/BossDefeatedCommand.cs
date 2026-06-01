@@ -3,12 +3,12 @@ using Framework;
 namespace ARPG
 {
     /// <summary>
-    /// Boss 击败命令 (HotUpdate) — 可通过热更修改击败后行为。
-    /// 由 BossDefeatedRequestEvent 桥接事件触发。
+    /// Boss 击败命令 — 由 BossFightManager.BossHasBeenDefeated() 直接发起。
     /// </summary>
     public class BossDefeatedCommand : AbstractCommand
     {
         private readonly BossFightManager bossFight;
+        public BossDefeatedCommand(){}
 
         public BossDefeatedCommand(BossFightManager bossFight)
         {

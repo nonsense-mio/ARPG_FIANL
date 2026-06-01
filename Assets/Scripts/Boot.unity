@@ -973,7 +973,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   packageName: DefaultPackage
   packageVersion: 
-  defaultHostServer: http://192.168.3.133:8080/CDN/PC/ARPGv1.0
+  defaultHostServer: http://192.168.1.3:8080/CDN/PC/ARPGv1.0
   fallbackHostServer: http://192.168.3.133:8080/CDN/PC/ARPGv1.0
   downloadingMaxNum: 10
   failedTryAgain: 3
@@ -983,8 +983,14 @@ MonoBehaviour:
   confirmText: {fileID: 8709016468209320816}
   btnConfirm: {fileID: 5393540090953655218}
   aotMetadataDlls:
-  - GameFramework
   - mscorlib
+  - System.Core
+  - System
+  - Unity.Animation.Rigging
+  - Unity.InputSystem
+  - UnityEngine.CoreModule
+  - UnityEngine.JSONSerializeModule
+  - YooAsset
 --- !u!222 &5189663656398881376
 CanvasRenderer:
   m_ObjectHideFlags: 0

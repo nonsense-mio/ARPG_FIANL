@@ -11,7 +11,7 @@ namespace ARPG
     public class SoundSystem : AbstractSystem, ISoundSystem
     {
         private static readonly string[] DamageSounds = { "damage1", "damage2" };
-        private static readonly string[] SlashSounds = { "slash1", "slash2", "slash3" };
+        private static readonly string[] SlashSounds = { "slash1", "slash2", "slash3","activeFire" };
         private const string HealSound = "heal";
         private const string PhaseShiftSound = "phase_shift";
         private const string FireballCastSound = "fireball";

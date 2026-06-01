@@ -3,13 +3,12 @@ using Framework;
 namespace ARPG
 {
     /// <summary>
-    /// 激活 Boss 战命令 (HotUpdate) — 可通过热更修改 Boss 战激活逻辑。
-    /// 由 ActivateBossFightRequestEvent 桥接事件触发。
+    /// 激活 Boss 战命令 — 由 BossFightManager.ActivateBossFight() 直接发起。
     /// </summary>
     public class ActivateBossFightCommand : AbstractCommand
     {
         private readonly BossFightManager bossFight;
-
+        public ActivateBossFightCommand(){}
         public ActivateBossFightCommand(BossFightManager bossFight)
         {
             this.bossFight = bossFight;

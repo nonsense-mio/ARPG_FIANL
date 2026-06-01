@@ -1,14 +1,7 @@
 {
-    "name": "GameFramework",
+    "name": "Bootstrap",
     "rootNamespace": "",
-    "references": [
-        "YooAsset",
-        "Unity.InputSystem",
-        "InputActions",
-        "Unity.Animation.Rigging",
-        "Unity.TextMeshPro",
-        "DOTween.Modules"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

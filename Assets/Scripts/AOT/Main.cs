@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ARPG;
-using Framework;
 using HybridCLR;
 using UnityEngine;
 using UnityEngine.UI;
@@ -190,6 +189,14 @@ public class Main : MonoBehaviour
         bootPanel.SetProgress(1.0f, "加载热更模块...");
         yield return null;
 
+        Type launcherType;
+#if UNITY_EDITOR
+        // 编辑器下热更程序集已被 Unity 正常加载，绝不能再 Assembly.Load(bytes)，
+        // 否则会产生第二份类型副本导致类型不一致。直接从已加载程序集中查找。
+        launcherType = AppDomain.CurrentDomain.GetAssemblies()
+            .Select(a => a.GetType("ARPG.GameLauncher"))
+            .FirstOrDefault(t => t != null);
+#else
         // 1. 补充 AOT 泛型元数据
         foreach (string dllName in aotMetadataDlls)
         {
@@ -201,31 +208,24 @@ public class Main : MonoBehaviour
             metaHandle.Release();
         }
 
-        // 2. 加载热更 DLL
+        // 2. 加载热更 DLL（HotUpdate 为唯一热更程序集）
         AssetHandle dllHandle = package.LoadAssetSync<TextAsset>(
             "Assets/AB/HotDll/HotUpdate.dll.bytes");
         Assembly hotUpdateAss = Assembly.Load(
             (dllHandle.AssetObject as TextAsset).bytes);
         dllHandle.Release();
 
-        // 3. 在热更程序集中查找 GameLauncher
-        Type launcherType = hotUpdateAss.GetType("ARPG.GameLauncher");
+        launcherType = hotUpdateAss.GetType("ARPG.GameLauncher");
+#endif
+        // 3. 校验并启动 —— AOT 侧只认 IGameLauncher，全部启动接线在热更侧 GameLauncher 内完成
         if (launcherType == null)
         {
-            Debug.LogError("热更程序集中未找到 ARPG.GameLauncher，无法启动游戏。");
+            Debug.LogError("未找到 ARPG.GameLauncher，无法启动游戏。");
             yield break;
         }
 
-        // 4. 注册 LaunchGameEvent 监听 — AOT 侧响应热更发来的启动事件
-        var arch = GameArchitecture.Interface;
-        arch.RegisterEvent<LaunchGameEvent>(e =>
-        {
-            arch.SendCommand<TransitionToBeginSceneCommand>();
-        }).UnRegisterWhenGameObjectDestroyed(gameObject);
-
-        // 5. 启动游戏 — 热更 GameLauncher 通过 IArchitecture 发送 LaunchGameEvent
         IGameLauncher launcher = (IGameLauncher)Activator.CreateInstance(launcherType);
-        launcher.Launch(arch);
+        launcher.Launch();
     }
     #endregion
 
